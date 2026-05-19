@@ -13,3 +13,5 @@ The backend now sends email through delegated Microsoft Graph access so it can u
 5. Start the backend, then visit `http://localhost:3001/api/auth/microsoft/start` once to connect the Outlook account.
 6. Set `GRAPH_CONTACT_RECIPIENT` to the inbox that should receive collaboration form emails.
 7. After auth succeeds, the backend stores refresh tokens under `backend/data/graph-tokens.json`.
+
+test fixed git config user.email
