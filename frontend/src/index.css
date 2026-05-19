@@ -1,0 +1,92 @@
+@import 'tailwindcss';
+
+:root {
+  font-family: 'DM Sans', sans-serif;
+  color: #6d4c5e;
+  background: #fff8f4;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100svh;
+  background:
+    radial-gradient(circle at top left, rgba(255, 222, 233, 0.72), transparent 28%),
+    radial-gradient(circle at top right, rgba(249, 198, 215, 0.35), transparent 22%),
+    linear-gradient(180deg, #fffaf7 0%, #fff8f4 48%, #fff2ef 100%);
+}
+
+#root {
+  min-height: 100svh;
+}
+
+::selection {
+  background: rgba(201, 116, 143, 0.22);
+  color: #5b2d42;
+}
+
+p {
+  margin: 0;
+}
+
+.note-float {
+  animation: note-float 7s ease-in-out infinite;
+}
+
+.note-float-slow {
+  animation: note-float 9s ease-in-out infinite;
+}
+
+.note-float-reverse {
+  animation: note-float-reverse 8s ease-in-out infinite;
+}
+
+.note-float-delay-1 {
+  animation-delay: 0.8s;
+}
+
+.note-float-delay-2 {
+  animation-delay: 1.6s;
+}
+
+.note-float-delay-3 {
+  animation-delay: 2.2s;
+}
+
+.note-float-delay-4 {
+  animation-delay: 2.8s;
+}
+
+@keyframes note-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-3deg);
+  }
+
+  50% {
+    transform: translate3d(0, -14px, 0) rotate(4deg);
+  }
+}
+
+@keyframes note-float-reverse {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(3deg);
+  }
+
+  50% {
+    transform: translate3d(0, -18px, 0) rotate(-5deg);
+  }
+}
