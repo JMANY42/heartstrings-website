@@ -1,0 +1,73 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      # 1️⃣ Checkout the repo
+      - uses: actions/checkout@v4
+
+      # 2️⃣ Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.19.0'
+
+      # 3️⃣ Install dependencies & build React app
+      - name: Install & Build React App
+        run: |
+          cd frontend
+          npm install
+          npm run build
+
+      # 4️⃣ Determine server based on branch
+      - name: Determine server
+        run: |
+          echo "ssh_uri=${{ secrets.SSH_SERVER_IP }}" >> $GITHUB_ENV
+          echo "target=/var/www/heartstrings-website" >> $GITHUB_ENV
+
+      - uses: Boostport/setup-cloudflare-warp@v1
+        with:
+          organization: davidpersonal
+          auth_client_id: ${{ secrets.CLOUDFLARE_AUTH_CLIENT_ID }}
+          auth_client_secret: ${{ secrets.CLOUDFLARE_AUTH_CLIENT_SECRET }}
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.SSH_SERVER_IP }} >> ~/.ssh/known_hosts
+
+      # 5️⃣ Deploy the React build to the server
+      - name: Deploy React App to Server
+        run: |
+          echo "Deploying React app to $env server"
+
+          # Copies into seperate folder because of permission issues with scp
+          # Copy dist 
+          scp -r -O ~/work/heartstrings-website/heartstrings-website/frontend/dist ${{ secrets.SERVER_USER }}@${{ secrets.SSH_SERVER_IP }}:~
+  
+          # Copy backend
+          scp -r -O ~/work/heartstrings-website/heartstrings-website/backend ${{ secrets.SERVER_USER }}@${{ secrets.SSH_SERVER_IP }}:~
+
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SSH_SERVER_IP }} << EOF
+            # Make sure target directory exists
+            sudo mkdir -p $target
+
+            # Copy into correct directory
+            sudo cp -r dist $target && rm -rf dist
+            sudo cp -r backend $target && rm -rf backend
+
+            # install any new dependencies
+            cd $target/backend && npm ci
+
+            # restart nginx and pm2
+            sudo nginx -t && sudo systemctl reload nginx
+            pm2 reload $target/backend/ecosystem.config.cjs
+          EOF
