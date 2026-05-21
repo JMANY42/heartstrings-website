@@ -1,7 +1,7 @@
 module.exports = {
     name: "production",
     script: "./server.js",
-    cwd: "/home/jmany42/Projects/heartstrings-website/backend/dist",
+    cwd: "/var/www/heartstrings-website/backend/dist",
     watch: false, // production should not auto-reload
     instances: 1, // single instance; can use cluster if needed
     exec_mode: "cluster", // Enable cluster mode for better performance
