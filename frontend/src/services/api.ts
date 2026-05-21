@@ -1,4 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+const API_BASE_URL = import.meta.env.MODE === 'production'
+        ? '/api'
+        : 'http://localhost:5003/api';
 
 export type JoinFormData = {
   name: string
@@ -31,7 +33,7 @@ async function handleApiResponse(response: Response): Promise<ApiResponse> {
 
 export const api = {
   async submitJoinForm(data: JoinFormData): Promise<ApiResponse> {
-    const response = await fetch(`${API_BASE_URL}/api/join`, {
+    const response = await fetch(`${API_BASE_URL}/join`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -43,7 +45,7 @@ export const api = {
   },
 
   async submitCollaborateForm(data: CollaborateFormData): Promise<ApiResponse> {
-    const response = await fetch(`${API_BASE_URL}/api/contact`, {
+    const response = await fetch(`${API_BASE_URL}/contact`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
