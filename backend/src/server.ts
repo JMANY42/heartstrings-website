@@ -1,6 +1,6 @@
 import { app } from './app.js'
 
-const port = Number(process.env.PORT ?? 3001)
+const port = Number(process.env.PORT ?? 5003)
 const debugEnabled = process.env.DEBUG === 'true' || process.env.NODE_ENV !== 'production'
 
 if (debugEnabled) {

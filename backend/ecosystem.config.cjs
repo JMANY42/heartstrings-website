@@ -1,13 +1,13 @@
 module.exports = {
     name: "production",
-    script: "./src/index.js",
-    cwd: "/var/www/heartstrings-website/backend/",
+    script: "./server.js",
+    cwd: "/home/jmany42/Projects/heartstrings-website/backend/dist",
     watch: false, // production should not auto-reload
     instances: 1, // single instance; can use cluster if needed
     exec_mode: "cluster", // Enable cluster mode for better performance
     env: {
-    NODE_ENV: "production",
-    PORT: 5002
+        NODE_ENV: "production",
+        PORT: 5003
     },
     // Logging
     error_file: "/var/www/heartstrings-website/backend/logs/error.log",

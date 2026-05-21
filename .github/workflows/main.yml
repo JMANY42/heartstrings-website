@@ -26,6 +26,11 @@ jobs:
           cd frontend
           npm install
           npm run build
+          
+          # build backend
+          cd ../backend
+          npm install
+          npm run build
 
       # 4️⃣ Determine server based on branch
       - name: Determine server
@@ -50,10 +55,10 @@ jobs:
           echo "Deploying React app to $env server"
 
           # Copies into seperate folder because of permission issues with scp
-          # Copy dist 
+          # Copy frontend/dist 
           scp -r -O ~/work/heartstrings-website/heartstrings-website/frontend/dist ${{ secrets.SERVER_USER }}@${{ secrets.SSH_SERVER_IP }}:~
   
-          # Copy backend
+          # Copy backend/dist
           scp -r -O ~/work/heartstrings-website/heartstrings-website/backend ${{ secrets.SERVER_USER }}@${{ secrets.SSH_SERVER_IP }}:~
 
           ssh ${{ secrets.SERVER_USER }}@${{ secrets.SSH_SERVER_IP }} << EOF
@@ -64,7 +69,7 @@ jobs:
             sudo cp -r dist $target && rm -rf dist
             sudo cp -r backend $target && rm -rf backend
 
-            # install any new dependencies
+            # install any new dependencies (might not need this anymore)
             cd $target/backend && npm ci
 
             # restart nginx and pm2
