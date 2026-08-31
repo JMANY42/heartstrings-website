@@ -1,47 +1,46 @@
 import { motion } from 'framer-motion'
 
-const galleryItems = [
-  {
-    seed: 'melody',
-    caption: 'A phrase lifted softly into the room.',
-    className: 'md:col-span-3 md:row-span-2',
-  },
-  {
-    seed: 'violin',
-    caption: 'A violin line held like a private conversation.',
-    className: 'md:col-span-3',
-  },
-  {
-    seed: 'concert',
-    caption: 'Small concerts shaped around patient comfort.',
-    className: 'md:col-span-2',
-  },
-  {
-    seed: 'ensemble',
-    caption: 'Listening becomes the first instrument.',
-    className: 'md:col-span-2 md:row-span-2',
-  },
-  {
-    seed: 'music',
-    caption: 'Warm harmonies and a quiet sense of arrival.',
-    className: 'md:col-span-2',
-  },
-  {
-    seed: 'strings',
-    caption: 'Strings that meet the ear with tenderness.',
-    className: 'md:col-span-4',
-  },
-  {
-    seed: 'quartet',
-    caption: 'Quartet textures turning into calm.',
-    className: 'md:col-span-2',
-  },
-  {
-    seed: 'notes',
-    caption: 'Notes that linger with the people who need them.',
-    className: 'md:col-span-2',
-  },
+const imageModules = import.meta.glob<string>(
+  '../assets/gallery/image_*.{jpg,jpeg,png,webp,avif,gif}',
+  { eager: true, import: 'default', query: '?url' },
+)
+
+const imageNumber = (path: string) => {
+  const match = path.match(/image_(\d+)\./)
+  return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER
+}
+
+const images = Object.entries(imageModules)
+  .sort(([a], [b]) => imageNumber(a) - imageNumber(b))
+  .map(([path, src]) => ({ src, number: imageNumber(path) }))
+
+const captions = [
+  'A phrase lifted softly into the room.',
+  'A violin line held like a private conversation.',
+  'Small concerts shaped around patient comfort.',
+  'Listening becomes the first instrument.',
+  'Warm harmonies and a quiet sense of arrival.',
+  'Strings that meet the ear with tenderness.',
+  'Quartet textures turning into calm.',
+  'Notes that linger with the people who need them.',
 ] as const
+
+const spans = [
+  'md:col-span-3 md:row-span-2',
+  'md:col-span-3',
+  'md:col-span-2',
+  'md:col-span-2 md:row-span-2',
+  'md:col-span-2',
+  'md:col-span-4',
+  'md:col-span-2',
+  'md:col-span-2',
+] as const
+
+const galleryItems = images.map((image, index) => ({
+  ...image,
+  caption: captions[index % captions.length],
+  className: spans[index % spans.length],
+}))
 
 const container = {
   hidden: { opacity: 0 },
@@ -63,6 +62,10 @@ const card = {
 }
 
 export function Gallery() {
+  if (galleryItems.length === 0) {
+    return null
+  }
+
   return (
     <section id="gallery" className="px-6 py-20 sm:px-8 lg:px-10 lg:py-28">
       <div className="mx-auto max-w-7xl">
@@ -90,12 +93,12 @@ export function Gallery() {
         >
           {galleryItems.map((item) => (
             <motion.article
-              key={item.seed}
+              key={item.src}
               variants={card}
               className={`group relative overflow-hidden rounded-[2rem] border border-brand-rose/35 bg-white shadow-[0_24px_70px_rgba(201,116,143,0.11)] ${item.className}`}
             >
               <img
-                src={`https://picsum.photos/seed/${item.seed}/600/400`}
+                src={item.src}
                 alt={item.caption}
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 loading="lazy"
