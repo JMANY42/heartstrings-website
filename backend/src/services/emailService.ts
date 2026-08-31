@@ -139,6 +139,23 @@ function detailCard(rows: string[]): string {
       </div>`
 }
 
+/**
+ * Builds a mailto: URL that opens a brand-new message, so answering a submitter
+ * never carries the notification thread along with it.
+ */
+function mailtoLink(address: string, subject: string, body: string): string {
+  const params = new URLSearchParams({ subject, body })
+  // URLSearchParams encodes spaces as "+", which mail clients show literally.
+  return `mailto:${encodeURIComponent(address)}?${params.toString().replace(/\+/g, '%20')}`
+}
+
+function buttonLink(href: string, label: string): string {
+  return `
+      <p style="margin: 0 0 16px 0;">
+        <a href="${escapeHtml(href)}" style="display: inline-block; padding: 12px 22px; border-radius: 999px; background: #c9748f; color: #ffffff; font-weight: bold; text-decoration: none;">${escapeHtml(label)}</a>
+      </p>`
+}
+
 async function sendTemplatedEmail<TField extends string>(
   template: EmailTemplate<TField>,
   payload: Partial<Record<TField, unknown>>,
@@ -330,8 +347,20 @@ const contactTemplate: EmailTemplate<'name' | 'email' | 'organization' | 'messag
         ${escapeHtmlWithBreaks(message)}
       </div>
 
+      ${sectionHeading('Answer them')}
       ${paragraph(
-        `Reply to this email to answer ${escapeHtml(name)} directly &mdash; their address is already set as the reply-to.`,
+        `Use the button below instead of replying here. It opens a new, empty email addressed to ${escapeHtml(name)}, so this notification and the form submission stay out of the conversation.`,
+      )}
+      ${buttonLink(
+        mailtoLink(
+          email,
+          `${ORGANIZATION_NAME} at UT Dallas`,
+          `Hi ${name},\n\nThank you for reaching out to ${ORGANIZATION_NAME} about working together with ${organization}.\n\n`,
+        ),
+        `Email ${name}`,
+      )}
+      ${paragraph(
+        `If the button does not open your mail app, start a new message to <a href="mailto:${escapeHtml(email)}" style="color: #c9748f;">${escapeHtml(email)}</a>.`,
       )}
     `
 
@@ -339,12 +368,15 @@ const contactTemplate: EmailTemplate<'name' | 'email' | 'organization' | 'messag
         <p style="margin: 0;">
           Sent automatically by the ${ORGANIZATION_NAME} website collaboration form.
           The contents above were written by the submitter and have not been verified.
+          Replies to this notification stay in the ${ORGANIZATION_NAME} mailbox and are not
+          delivered to the submitter.
         </p>`
 
     return {
       to: contactRecipient,
       subject: `Collaboration request from ${toSubjectFragment(organization)}`,
-      replyTo: email,
+      // No replyTo: an accidental reply must not reach the submitter with this
+      // notification quoted underneath it.
       heading: 'New collaboration request',
       content,
       footer,
