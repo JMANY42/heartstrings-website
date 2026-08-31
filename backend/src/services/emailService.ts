@@ -348,9 +348,6 @@ const contactTemplate: EmailTemplate<'name' | 'email' | 'organization' | 'messag
       </div>
 
       ${sectionHeading('Answer them')}
-      ${paragraph(
-        `Use the button below instead of replying here. It opens a new, empty email addressed to ${escapeHtml(name)}, so this notification and the form submission stay out of the conversation.`,
-      )}
       ${buttonLink(
         mailtoLink(
           email,
