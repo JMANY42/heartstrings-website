@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import { contactService } from '../services/contactService.js'
+import { emailService } from '../services/emailService.js'
 
 const debugEnabled = process.env.DEBUG === 'true' || process.env.NODE_ENV !== 'production'
 
@@ -15,7 +15,7 @@ export async function handleContactRequest(request: Request, response: Response)
   }
 
   try {
-    const result = await contactService.handleRequest(request.body)
+    const result = await emailService.sendContactEmail(request.body)
     if (debugEnabled) {
       console.debug('[DEBUG][contactController] Request handled', {
         status: result.status,
