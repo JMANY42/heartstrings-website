@@ -15,14 +15,11 @@ const images = Object.entries(imageModules)
   .map(([path, src]) => ({ src, number: imageNumber(path) }))
 
 const captions = [
-  'A phrase lifted softly into the room.',
-  'A violin line held like a private conversation.',
-  'Small concerts shaped around patient comfort.',
-  'Listening becomes the first instrument.',
-  'Warm harmonies and a quiet sense of arrival.',
-  'Strings that meet the ear with tenderness.',
-  'Quartet textures turning into calm.',
-  'Notes that linger with the people who need them.',
+  'After performing at LifeCare Hospitals of North Texas ',
+  'Making a poster to recruit new members',
+  'After performing at Hope Loge Dallas',
+  'Group photo to celebrate a successful performance',
+  'Performing at Pioneer Place Senior Housing',
 ] as const
 
 // Every tile is a square: the column span always matches the row span, so the
