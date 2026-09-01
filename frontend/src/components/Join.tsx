@@ -9,7 +9,7 @@ const joinSchema = z.object({
   name: z.string().min(2, 'Please share a name.'),
   email: z.string().email('Please enter a valid email.'),
   instrument: z.string().min(2, 'Please share your instrument.'),
-  experienceLevel: z.enum(['Beginner', 'Intermediate', 'Advanced', 'Conservatory-trained']),
+  experienceLevel: z.enum(['Beginner', 'Intermediate', 'Advanced']),
 })
 
 type JoinFormValues = z.infer<typeof joinSchema>
@@ -175,7 +175,6 @@ export function Join() {
                 <option>Beginner</option>
                 <option>Intermediate</option>
                 <option>Advanced</option>
-                <option>Conservatory-trained</option>
               </select>
             </FormField>
 
