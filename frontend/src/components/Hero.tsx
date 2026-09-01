@@ -47,7 +47,7 @@ export function Hero() {
               variants={item}
               className="mb-6 inline-flex rounded-full border border-brand-rose/60 bg-white/55 px-4 py-2 text-xs font-medium uppercase tracking-[0.34em] text-brand-deep shadow-[0_14px_40px_rgba(201,116,143,0.08)]"
             >
-              College chamber ensemble
+              University chamber ensemble
             </motion.p>
 
             <motion.h1
@@ -110,7 +110,7 @@ export function Hero() {
                     around the human pace of healing.
                   </p>
 
-                  <div className="mt-8 flex items-end justify-between">
+                  <div className="mt-6 flex items-end justify-between">
                     <div>
                       <p className="text-[0.65rem] uppercase tracking-[0.3em] text-brand-deep/55">
                         Chamber music

@@ -60,7 +60,7 @@ export function About() {
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-[0.65rem] uppercase tracking-[0.3em] text-brand-deep/55">
-                    Ensemble note
+                    Heartstrings
                   </p>
                   <p className="mt-2 font-display text-3xl text-brand-deep">
                     Gentle, not distant.
@@ -89,11 +89,6 @@ export function About() {
               </div>
 
               <div className="mt-8 rounded-[1.75rem] border border-brand-rose/35 bg-[linear-gradient(180deg,rgba(255,255,255,0.85)_0%,rgba(255,248,244,0.92)_100%)] p-5">
-                <div className="flex items-center gap-3">
-                  <span className="h-2.5 w-2.5 rounded-full bg-brand-deep" />
-                  <span className="h-px flex-1 bg-brand-rose/55" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-brand-deep/55" />
-                </div>
                 <p className="mt-4 text-sm leading-7 text-brand-deep/72">
                   Rehearsed with care, performed with sensitivity, and shaped to
                   honor the atmosphere of each room.
