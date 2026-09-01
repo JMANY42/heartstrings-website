@@ -84,7 +84,7 @@ export function Testimonials() {
           viewport={{ once: true, amount: 0.15 }}
           tabIndex={0}
           aria-label="Testimonials, scroll horizontally to see more"
-          className="testimonial-rail -mx-6 flex list-none flex-col gap-5 px-6 sm:-mx-8 sm:px-8 md:mx-0 md:snap-x md:snap-mandatory md:flex-row md:overflow-x-auto md:px-0 md:pb-6"
+          className="testimonial-rail -mx-6 flex list-none flex-col gap-5 px-6 sm:-mx-8 sm:px-8 md:-mt-3 md:mx-0 md:snap-x md:snap-mandatory md:flex-row md:overflow-x-auto md:px-0 md:pb-6 md:pt-3"
         >
           {testimonials.map((testimonial) => (
             <motion.li
