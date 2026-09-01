@@ -1,6 +1,8 @@
 import { sendMailWithGraph } from './graphMailClient.js'
 import type { GraphMailRequest } from './graphMailClient.js'
 import { GraphAuthRequiredError } from './graphAuthService.js'
+import { recordSubmission } from './submissionStore.js'
+import type { SubmissionEmailStatus, SubmissionKind } from './submissionStore.js'
 
 const environment = process.env.NODE_ENV || 'testing'
 const debugEnabled = process.env.DEBUG === 'true' || process.env.NODE_ENV !== 'production'
@@ -57,6 +59,8 @@ type ComposedEmail = Omit<GraphMailRequest, 'html'> & {
 
 type EmailTemplate<TField extends string> = {
   kind: string
+  /** File under the data directory that every accepted submission is appended to. */
+  store: SubmissionKind
   requiredFields: readonly TField[]
   successMessage: string
   compose(fields: Record<TField, string>): ComposedEmail | ConfigurationError
@@ -180,60 +184,72 @@ async function sendTemplatedEmail<TField extends string>(
     }
   }
 
-  const composed = template.compose(fields)
+  // Anything past this point is a real submission, so it is saved to disk no
+  // matter how the email itself turns out.
+  let emailStatus: SubmissionEmailStatus = 'failed'
 
-  if (isConfigurationError(composed)) {
-    debugLog(`Configuration missing for ${template.kind} email`, {
-      reason: composed.configurationError,
-    })
-    return {
-      status: 500,
-      body: {
-        message: composed.configurationError,
-      },
-    }
-  }
-
-  const { heading, content, footer, ...mailOptions } = composed
-
-  debugLog(`Sending ${template.kind} email via Microsoft Graph`)
   try {
-    await sendMailWithGraph({
-      ...mailOptions,
-      html: renderEmailHtml(heading, content, footer),
-    })
-    debugLog(`${template.kind} email sent successfully`, {
-      ...template.logMetadata?.(fields),
-      environment,
-    })
-  } catch (error) {
-    if (error instanceof GraphAuthRequiredError) {
-      debugLog(
-        `Microsoft account authorization is required before sending ${template.kind} email`,
-      )
+    const composed = template.compose(fields)
+
+    if (isConfigurationError(composed)) {
+      emailStatus = 'not_configured'
+      debugLog(`Configuration missing for ${template.kind} email`, {
+        reason: composed.configurationError,
+      })
       return {
-        status: 503,
+        status: 500,
         body: {
-          message:
-            'Microsoft account authorization is required. Visit /api/auth/microsoft/start to connect the mailbox.',
+          message: composed.configurationError,
         },
       }
     }
 
-    throw error
-  }
+    const { heading, content, footer, ...mailOptions } = composed
 
-  return {
-    status: 200,
-    body: {
-      message: template.successMessage,
-      success: true,
-    },
+    debugLog(`Sending ${template.kind} email via Microsoft Graph`)
+    try {
+      await sendMailWithGraph({
+        ...mailOptions,
+        html: renderEmailHtml(heading, content, footer),
+      })
+      emailStatus = 'sent'
+      debugLog(`${template.kind} email sent successfully`, {
+        ...template.logMetadata?.(fields),
+        environment,
+      })
+    } catch (error) {
+      if (error instanceof GraphAuthRequiredError) {
+        emailStatus = 'authorization_required'
+        debugLog(
+          `Microsoft account authorization is required before sending ${template.kind} email`,
+        )
+        return {
+          status: 503,
+          body: {
+            message:
+              'Microsoft account authorization is required. Visit /api/auth/microsoft/start to connect the mailbox.',
+          },
+        }
+      }
+
+      throw error
+    }
+
+    return {
+      status: 200,
+      body: {
+        message: template.successMessage,
+        success: true,
+      },
+    }
+  } finally {
+    await recordSubmission(template.store, fields, emailStatus)
   }
 }
 
 const joinTemplate: EmailTemplate<'name' | 'email' | 'instrument' | 'experienceLevel'> = {
   kind: 'join',
+  store: 'join',
   requiredFields: ['name', 'email', 'instrument', 'experienceLevel'],
   successMessage: 'GroupMe link sent successfully.',
   logMetadata: ({ instrument, experienceLevel }) => ({ instrument, experienceLevel }),
@@ -320,6 +336,7 @@ const joinTemplate: EmailTemplate<'name' | 'email' | 'instrument' | 'experienceL
 
 const contactTemplate: EmailTemplate<'name' | 'email' | 'organization' | 'message'> = {
   kind: 'contact',
+  store: 'collaborate',
   requiredFields: ['name', 'email', 'organization', 'message'],
   successMessage: 'Email sent successfully.',
   logMetadata: ({ organization }) => ({ organization }),
