@@ -19,7 +19,7 @@ const captions = [
   'Presenting our organization on UTD\'s campus',
   'After performing at Orcharde Pointe Assisted Living',
   'Group photo to celebrate a successful performance',
-  'Performing at Pioneer Place Senior Housing',
+  'Performing at a pop-up concert for the Plano Community Home',
 ] as const
 
 // Every tile is a square: the column span always matches the row span, so the
