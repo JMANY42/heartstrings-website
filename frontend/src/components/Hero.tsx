@@ -45,7 +45,7 @@ export function Hero() {
           <div className="max-w-3xl">
             <motion.p
               variants={item}
-              className="mb-6 inline-flex rounded-full border border-brand-rose/60 bg-white/55 px-4 py-2 text-xs font-medium uppercase tracking-[0.34em] text-brand-deep shadow-[0_14px_40px_rgba(201,116,143,0.08)]"
+              className="mb-9 inline-flex rounded-full border border-brand-rose/60 bg-white/55 px-4 py-2 text-xs font-medium uppercase tracking-[0.34em] text-brand-deep shadow-[0_14px_40px_rgba(201,116,143,0.08)] sm:mb-6"
             >
               University chamber ensemble
             </motion.p>
@@ -91,7 +91,7 @@ export function Hero() {
               <div className="absolute inset-x-8 top-[4.75rem] h-px bg-brand-rose/35" />
               <div className="absolute inset-x-8 top-[8rem] h-px bg-brand-rose/25" />
 
-              <div className="relative rounded-[2rem] border border-brand-rose/40 bg-[radial-gradient(circle_at_top,rgba(255,222,233,0.72),transparent_45%),linear-gradient(180deg,rgba(255,252,249,0.92)_0%,rgba(255,247,243,0.98)_100%)] p-4 py-12 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] lg:aspect-[4/5] lg:p-6">
+              <div className="relative rounded-[2rem] border border-brand-rose/40 bg-[radial-gradient(circle_at_top,rgba(255,222,233,0.72),transparent_45%),linear-gradient(180deg,rgba(255,252,249,0.92)_0%,rgba(255,247,243,0.98)_100%)] p-2 py-12 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] sm:p-4 sm:py-14 lg:aspect-[4/5] lg:p-6">
                 {notes.map((note) => (
                   <span
                     key={note.symbol + note.className}
@@ -101,7 +101,7 @@ export function Hero() {
                   </span>
                 ))}
 
-                <div className="relative mx-auto w-full rounded-[2rem] border border-brand-rose/45 bg-white/58 p-5 shadow-[0_16px_46px_rgba(201,116,143,0.1)] backdrop-blur-sm sm:p-6 lg:absolute lg:left-1/2 lg:top-1/2 lg:w-[78%] lg:-translate-x-1/2 lg:-translate-y-1/2">
+                <div className="relative mx-auto w-[86%] rounded-[2rem] border border-brand-rose/45 bg-white/58 p-5 shadow-[0_16px_46px_rgba(201,116,143,0.1)] backdrop-blur-sm sm:p-6 lg:absolute lg:left-1/2 lg:top-1/2 lg:w-[78%] lg:-translate-x-1/2 lg:-translate-y-1/2">
                   <p className="font-display text-2xl italic text-brand-deep sm:text-4xl">
                     Music that feels close enough to hold.
                   </p>
@@ -119,7 +119,7 @@ export function Hero() {
                         In the room, with you.
                       </p>
                     </div>
-                    <div className="h-16 w-16 shrink-0 rounded-full border border-brand-rose/55 bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.85),rgba(255,222,233,0.65)_40%,rgba(249,198,215,0.4)_100%)]" />
+                    <div className="h-12 w-12 shrink-0 rounded-full border border-brand-rose/55 bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.85),rgba(255,222,233,0.65)_40%,rgba(249,198,215,0.4)_100%)] sm:h-16 sm:w-16" />
                   </div>
                 </div>
               </div>

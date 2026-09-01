@@ -89,7 +89,7 @@ export function About() {
               </div>
 
               <div className="mt-8 rounded-[1.75rem] border border-brand-rose/35 bg-[linear-gradient(180deg,rgba(255,255,255,0.85)_0%,rgba(255,248,244,0.92)_100%)] p-5">
-                <p className="mt-4 text-sm leading-7 text-brand-deep/72">
+                <p className="text-sm leading-7 text-brand-deep/72">
                   Rehearsed with care, performed with sensitivity, and shaped to
                   honor the atmosphere of each room.
                 </p>

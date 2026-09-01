@@ -37,10 +37,6 @@ body {
   color: #5b2d42;
 }
 
-p {
-  margin: 0;
-}
-
 .testimonial-rail {
   scrollbar-width: thin;
   scrollbar-color: rgba(201, 116, 143, 0.35) transparent;
