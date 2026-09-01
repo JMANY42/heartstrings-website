@@ -120,7 +120,7 @@ export function Gallery() {
 
               <div className="absolute inset-x-0 bottom-0 translate-y-4 p-5 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
                 <div className="rounded-[1.5rem] border border-white/45 bg-brand-pink/78 px-4 py-3 backdrop-blur-md">
-                  <p className="text-sm leading-6 text-brand-deep">
+                  <p className="text-sm leading-6 text-white">
                     {item.caption}
                   </p>
                 </div>
