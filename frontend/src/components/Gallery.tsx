@@ -113,9 +113,9 @@ export function Gallery() {
                 loading="lazy"
               />
 
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,222,233,0.03)_0%,rgba(249,198,215,0.12)_58%,rgba(168,73,102,0.35)_100%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="absolute inset-0 hidden bg-[linear-gradient(180deg,rgba(255,222,233,0.03)_0%,rgba(249,198,215,0.12)_58%,rgba(168,73,102,0.35)_100%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100 md:block" />
 
-              <div className="absolute inset-x-0 bottom-0 translate-y-4 p-5 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+              <div className="absolute inset-x-0 bottom-0 hidden translate-y-4 p-5 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 md:block">
                 <div className="rounded-[1.5rem] border border-white/45 bg-brand-pink/78 px-4 py-3 backdrop-blur-md">
                   <p className="text-sm leading-6 text-white">
                     {item.caption}
