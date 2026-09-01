@@ -79,7 +79,7 @@ export function Testimonials() {
     const handleWheel = (event: WheelEvent) => {
       const maxScroll = rail.scrollWidth - rail.clientWidth
 
-      // Stacked column on mobile: nothing to scroll, leave the page alone.
+      // Nothing overflowing: leave the page scroll alone.
       if (maxScroll <= 0) {
         return
       }
@@ -149,13 +149,13 @@ export function Testimonials() {
           viewport={{ once: true, amount: 0.15 }}
           tabIndex={0}
           aria-label="Testimonials, scroll horizontally to see more"
-          className="testimonial-rail -mx-6 flex list-none flex-col gap-5 px-6 sm:-mx-8 sm:px-8 md:-mt-3 md:mx-0 md:flex-row md:overflow-x-auto md:px-0 md:pb-6 md:pt-3"
+          className="testimonial-rail -mx-6 -mt-3 flex list-none flex-row gap-5 overflow-x-auto px-6 pb-6 pt-3 sm:-mx-8 sm:px-8 md:mx-0 md:px-0"
         >
           {testimonials.map((testimonial) => (
             <motion.li
               key={testimonial.name}
               variants={card}
-              className="flex shrink-0 flex-col rounded-[2rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.88)_0%,rgba(255,248,244,0.95)_100%)] p-7 shadow-[0_24px_70px_rgba(201,116,143,0.11)] transition-transform duration-500 md:w-[22rem] md:hover:-translate-y-1 lg:w-[24rem]"
+              className="flex shrink-0 flex-col rounded-[2rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.88)_0%,rgba(255,248,244,0.95)_100%)] w-[80vw] p-7 shadow-[0_24px_70px_rgba(201,116,143,0.11)] transition-transform duration-500 sm:w-[20rem] md:w-[22rem] md:hover:-translate-y-1 lg:w-[24rem]"
             >
               <p
                 className="font-display text-5xl leading-none text-brand-deep/30"
