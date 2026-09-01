@@ -16,8 +16,8 @@ const images = Object.entries(imageModules)
 
 const captions = [
   'After performing at LifeCare Hospitals of North Texas ',
-  'Making a poster to recruit new members',
-  'After performing at Hope Loge Dallas',
+  'Presenting our organization on UTD\'s campus',
+  'After performing at Orcharde Pointe Assisted Living',
   'Group photo to celebrate a successful performance',
   'Performing at Pioneer Place Senior Housing',
 ] as const
