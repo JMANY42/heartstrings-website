@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 
 const testimonials = [
@@ -58,7 +59,58 @@ const card = {
   },
 }
 
+// Wheel deltas arrive in pixels, lines or pages depending on the browser.
+const LINE_HEIGHT = 16
+
 export function Testimonials() {
+  const railRef = useRef<HTMLUListElement>(null)
+
+  // Turn a vertical wheel over the rail into horizontal scrolling, and hand the
+  // gesture back to the page once the rail has nothing left to give in that
+  // direction — so the reader is never trapped inside the section.
+  useEffect(() => {
+    const rail = railRef.current
+
+    if (!rail) {
+      return
+    }
+
+    const handleWheel = (event: WheelEvent) => {
+      const maxScroll = rail.scrollWidth - rail.clientWidth
+
+      // Stacked column on mobile: nothing to scroll, leave the page alone.
+      if (maxScroll <= 0) {
+        return
+      }
+
+      // A deliberate horizontal gesture (trackpad, tilt wheel) already works.
+      if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+        return
+      }
+
+      const delta =
+        event.deltaMode === WheelEvent.DOM_DELTA_LINE
+          ? event.deltaY * LINE_HEIGHT
+          : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
+            ? event.deltaY * rail.clientWidth
+            : event.deltaY
+
+      const atStart = delta < 0 && rail.scrollLeft <= 0
+      const atEnd = delta > 0 && rail.scrollLeft >= maxScroll - 1
+
+      if (atStart || atEnd) {
+        return
+      }
+
+      event.preventDefault()
+      rail.scrollLeft += delta
+    }
+
+    rail.addEventListener('wheel', handleWheel, { passive: false })
+
+    return () => rail.removeEventListener('wheel', handleWheel)
+  }, [])
+
   return (
     <section id="testimonials" className="px-6 py-20 sm:px-8 lg:px-10 lg:py-28">
       <div className="mx-auto max-w-7xl">
@@ -78,13 +130,14 @@ export function Testimonials() {
         </motion.div>
 
         <motion.ul
+          ref={railRef}
           variants={container}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
           tabIndex={0}
           aria-label="Testimonials, scroll horizontally to see more"
-          className="testimonial-rail -mx-6 flex list-none flex-col gap-5 px-6 sm:-mx-8 sm:px-8 md:-mt-3 md:mx-0 md:snap-x md:snap-mandatory md:flex-row md:overflow-x-auto md:px-0 md:pb-6 md:pt-3"
+          className="testimonial-rail -mx-6 flex list-none flex-col gap-5 px-6 sm:-mx-8 sm:px-8 md:-mt-3 md:mx-0 md:snap-x md:snap-proximity md:flex-row md:overflow-x-auto md:px-0 md:pb-6 md:pt-3"
         >
           {testimonials.map((testimonial) => (
             <motion.li
