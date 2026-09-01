@@ -84,6 +84,20 @@ export function Testimonials() {
         return
       }
 
+      // Browsers latch a continuous wheel gesture to the element it started
+      // over, so events keep arriving after the rail has scrolled past the
+      // pointer. Re-check the pointer against the rail on every event.
+      const bounds = rail.getBoundingClientRect()
+
+      if (
+        event.clientX < bounds.left ||
+        event.clientX > bounds.right ||
+        event.clientY < bounds.top ||
+        event.clientY > bounds.bottom
+      ) {
+        return
+      }
+
       // A deliberate horizontal gesture (trackpad, tilt wheel) already works.
       if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
         return
