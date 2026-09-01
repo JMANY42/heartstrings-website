@@ -40,7 +40,7 @@ export function Hero() {
           variants={container}
           initial="hidden"
           animate="visible"
-          className="grid w-full items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]"
+          className="grid w-full items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14"
         >
           <div className="max-w-3xl">
             <motion.p
@@ -52,7 +52,7 @@ export function Hero() {
 
             <motion.h1
               variants={item}
-              className="mb-4 font-display text-6xl leading-[0.88] tracking-[-0.04em] text-brand-deep sm:mb-5 sm:text-7xl lg:mb-6 lg:text-[7.75rem]"
+              className="mb-4 font-display text-[clamp(2.75rem,15.5vw,3.75rem)] leading-[0.88] tracking-[-0.04em] text-brand-deep sm:mb-5 sm:text-7xl lg:mb-6 lg:text-[7.75rem]"
             >
               Heartstrings
             </motion.h1>
@@ -64,7 +64,7 @@ export function Hero() {
               Bringing the healing power of music to those who need it most.
             </motion.p>
 
-            <motion.div variants={item} className="mt-10 flex flex-wrap gap-4">
+            <motion.div variants={item} className="mt-10 grid gap-3 sm:flex sm:flex-wrap sm:gap-4">
               <a
                 href="#join"
                 className="inline-flex items-center justify-center rounded-full bg-brand-deep px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-cream shadow-[0_20px_60px_rgba(201,116,143,0.28)] transition-transform hover:-translate-y-0.5 hover:bg-[#b75f7e]"
@@ -86,12 +86,12 @@ export function Hero() {
             aria-hidden="true"
           >
             <div className="absolute inset-0 rounded-[2.75rem] bg-brand-pink/28 blur-2xl" />
-            <div className="relative overflow-hidden rounded-[2.75rem] border border-white/65 bg-[linear-gradient(180deg,rgba(255,255,255,0.8)_0%,rgba(255,248,244,0.88)_100%)] p-6 shadow-[0_30px_90px_rgba(201,116,143,0.18)] backdrop-blur-sm sm:p-8">
+            <div className="relative overflow-hidden rounded-[2.75rem] border border-white/65 bg-[linear-gradient(180deg,rgba(255,255,255,0.8)_0%,rgba(255,248,244,0.88)_100%)] p-4 shadow-[0_30px_90px_rgba(201,116,143,0.18)] backdrop-blur-sm sm:p-6 lg:p-8">
               <div className="absolute inset-x-8 top-8 h-px bg-brand-rose/55" />
               <div className="absolute inset-x-8 top-[4.75rem] h-px bg-brand-rose/35" />
               <div className="absolute inset-x-8 top-[8rem] h-px bg-brand-rose/25" />
 
-              <div className="relative aspect-[4/5] rounded-[2rem] border border-brand-rose/40 bg-[radial-gradient(circle_at_top,rgba(255,222,233,0.72),transparent_45%),linear-gradient(180deg,rgba(255,252,249,0.92)_0%,rgba(255,247,243,0.98)_100%)] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
+              <div className="relative rounded-[2rem] border border-brand-rose/40 bg-[radial-gradient(circle_at_top,rgba(255,222,233,0.72),transparent_45%),linear-gradient(180deg,rgba(255,252,249,0.92)_0%,rgba(255,247,243,0.98)_100%)] p-4 py-12 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] lg:aspect-[4/5] lg:p-6">
                 {notes.map((note) => (
                   <span
                     key={note.symbol + note.className}
@@ -101,8 +101,8 @@ export function Hero() {
                   </span>
                 ))}
 
-                <div className="absolute left-1/2 top-1/2 w-[78%] -translate-x-1/2 -translate-y-1/2 rounded-[2rem] border border-brand-rose/45 bg-white/58 p-6 shadow-[0_16px_46px_rgba(201,116,143,0.1)] backdrop-blur-sm">
-                  <p className="font-display text-3xl italic text-brand-deep sm:text-4xl">
+                <div className="relative mx-auto w-full rounded-[2rem] border border-brand-rose/45 bg-white/58 p-5 shadow-[0_16px_46px_rgba(201,116,143,0.1)] backdrop-blur-sm sm:p-6 lg:absolute lg:left-1/2 lg:top-1/2 lg:w-[78%] lg:-translate-x-1/2 lg:-translate-y-1/2">
+                  <p className="font-display text-2xl italic text-brand-deep sm:text-4xl">
                     Music that feels close enough to hold.
                   </p>
                   <p className="mt-5 max-w-sm text-sm leading-7 text-brand-deep/70 sm:text-base">
@@ -110,7 +110,7 @@ export function Hero() {
                     around the human pace of healing.
                   </p>
 
-                  <div className="mt-6 flex items-end justify-between">
+                  <div className="mt-6 flex items-end justify-between gap-4">
                     <div>
                       <p className="text-[0.65rem] uppercase tracking-[0.3em] text-brand-deep/55">
                         Chamber music

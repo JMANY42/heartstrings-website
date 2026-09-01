@@ -62,11 +62,11 @@ export function About() {
                   <p className="text-[0.65rem] uppercase tracking-[0.3em] text-brand-deep/55">
                     Heartstrings
                   </p>
-                  <p className="mt-2 font-display text-3xl text-brand-deep">
+                  <p className="mt-2 font-display text-2xl text-brand-deep sm:text-3xl">
                     Gentle, not distant.
                   </p>
                 </div>
-                <div className="h-20 w-20 rounded-full border border-brand-rose/55 bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.85),rgba(255,222,233,0.65)_40%,rgba(249,198,215,0.4)_100%)]" />
+                <div className="h-16 w-16 shrink-0 rounded-full border border-brand-rose/55 sm:h-20 sm:w-20 bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.85),rgba(255,222,233,0.65)_40%,rgba(249,198,215,0.4)_100%)]" />
               </div>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2">

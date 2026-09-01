@@ -25,11 +25,13 @@ const captions = [
 // Every tile is a square: the column span always matches the row span, so the
 // grid stays square-on-square no matter how wide the viewport gets.
 // Two columns on small screens, six from `md` up.
-const smallSpans = [
-  'col-span-2 row-span-2',
-  'col-span-1 row-span-1',
-  'col-span-1 row-span-1',
-] as const
+//
+// Two-up leaves a hole whenever the count is odd, so in that case the first
+// tile runs full width and every following pair fills a row exactly.
+const smallSpan = (index: number, total: number) =>
+  total % 2 === 1 && index === 0
+    ? 'col-span-2 row-span-2'
+    : 'col-span-1 row-span-1'
 
 // A repeating cycle of sizes (3, 3, 2, 4, 2, 2, 2, 2) so neighbouring images
 // rarely share a footprint. Combined with dense auto-placement it packs the
@@ -48,7 +50,7 @@ const largeSpans = [
 const galleryItems = images.map((image, index) => ({
   ...image,
   caption: captions[index % captions.length],
-  className: `${smallSpans[index % smallSpans.length]} ${largeSpans[index % largeSpans.length]}`,
+  className: `${smallSpan(index, images.length)} ${largeSpans[index % largeSpans.length]}`,
 }))
 
 const container = {
