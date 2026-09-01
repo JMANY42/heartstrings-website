@@ -5,6 +5,7 @@ import { Gallery } from '@/components/Gallery'
 import { Hero } from '@/components/Hero'
 import { Join } from '@/components/Join'
 import { Navbar } from '@/components/Navbar'
+import { Testimonials } from '@/components/Testimonials'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <main>
         <Hero />
         <About />
+        <Testimonials />
         <Gallery />
         <Collaborate />
         <Join />

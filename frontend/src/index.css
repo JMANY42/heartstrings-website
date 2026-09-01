@@ -41,6 +41,28 @@ p {
   margin: 0;
 }
 
+.testimonial-rail {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 116, 143, 0.35) transparent;
+}
+
+.testimonial-rail::-webkit-scrollbar {
+  height: 6px;
+}
+
+.testimonial-rail::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.testimonial-rail::-webkit-scrollbar-thumb {
+  background: rgba(201, 116, 143, 0.28);
+  border-radius: 9999px;
+}
+
+.testimonial-rail::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 116, 143, 0.45);
+}
+
 .note-float {
   animation: note-float 7s ease-in-out infinite;
 }
