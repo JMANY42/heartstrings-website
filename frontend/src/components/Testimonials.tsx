@@ -65,9 +65,10 @@ const LINE_HEIGHT = 16
 export function Testimonials() {
   const railRef = useRef<HTMLUListElement>(null)
 
-  // Turn a vertical wheel over the rail into horizontal scrolling, and hand the
-  // gesture back to the page once the rail has nothing left to give in that
-  // direction — so the reader is never trapped inside the section.
+  // Turn a vertical wheel over the rail into horizontal scrolling. The gesture
+  // is only swallowed when the rail actually moved, so at either end — or if
+  // anything ever refuses the scroll — the page keeps scrolling normally and
+  // the reader is never trapped inside the section.
   useEffect(() => {
     const rail = railRef.current
 
@@ -95,15 +96,12 @@ export function Testimonials() {
             ? event.deltaY * rail.clientWidth
             : event.deltaY
 
-      const atStart = delta < 0 && rail.scrollLeft <= 0
-      const atEnd = delta > 0 && rail.scrollLeft >= maxScroll - 1
+      const before = rail.scrollLeft
+      rail.scrollLeft = before + delta
 
-      if (atStart || atEnd) {
-        return
+      if (rail.scrollLeft !== before) {
+        event.preventDefault()
       }
-
-      event.preventDefault()
-      rail.scrollLeft += delta
     }
 
     rail.addEventListener('wheel', handleWheel, { passive: false })
@@ -137,13 +135,13 @@ export function Testimonials() {
           viewport={{ once: true, amount: 0.15 }}
           tabIndex={0}
           aria-label="Testimonials, scroll horizontally to see more"
-          className="testimonial-rail -mx-6 flex list-none flex-col gap-5 px-6 sm:-mx-8 sm:px-8 md:-mt-3 md:mx-0 md:snap-x md:snap-proximity md:flex-row md:overflow-x-auto md:px-0 md:pb-6 md:pt-3"
+          className="testimonial-rail -mx-6 flex list-none flex-col gap-5 px-6 sm:-mx-8 sm:px-8 md:-mt-3 md:mx-0 md:flex-row md:overflow-x-auto md:px-0 md:pb-6 md:pt-3"
         >
           {testimonials.map((testimonial) => (
             <motion.li
               key={testimonial.name}
               variants={card}
-              className="flex shrink-0 flex-col rounded-[2rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.88)_0%,rgba(255,248,244,0.95)_100%)] p-7 shadow-[0_24px_70px_rgba(201,116,143,0.11)] transition-transform duration-500 md:w-[22rem] md:snap-start md:hover:-translate-y-1 lg:w-[24rem]"
+              className="flex shrink-0 flex-col rounded-[2rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.88)_0%,rgba(255,248,244,0.95)_100%)] p-7 shadow-[0_24px_70px_rgba(201,116,143,0.11)] transition-transform duration-500 md:w-[22rem] md:hover:-translate-y-1 lg:w-[24rem]"
             >
               <p
                 className="font-display text-5xl leading-none text-brand-deep/30"
