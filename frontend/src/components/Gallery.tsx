@@ -25,21 +25,33 @@ const captions = [
   'Notes that linger with the people who need them.',
 ] as const
 
-const spans = [
-  'md:col-span-3 md:row-span-2',
-  'md:col-span-3',
-  'md:col-span-2',
+// Every tile is a square: the column span always matches the row span, so the
+// grid stays square-on-square no matter how wide the viewport gets.
+// Two columns on small screens, six from `md` up.
+const smallSpans = [
+  'col-span-2 row-span-2',
+  'col-span-1 row-span-1',
+  'col-span-1 row-span-1',
+] as const
+
+// A repeating cycle of sizes (3, 3, 2, 4, 2, 2, 2, 2) so neighbouring images
+// rarely share a footprint. Combined with dense auto-placement it packs the
+// six-column grid without holes at five, eight and ten images.
+const largeSpans = [
+  'md:col-span-3 md:row-span-3',
+  'md:col-span-3 md:row-span-3',
   'md:col-span-2 md:row-span-2',
-  'md:col-span-2',
-  'md:col-span-4',
-  'md:col-span-2',
-  'md:col-span-2',
+  'md:col-span-4 md:row-span-4',
+  'md:col-span-2 md:row-span-2',
+  'md:col-span-2 md:row-span-2',
+  'md:col-span-2 md:row-span-2',
+  'md:col-span-2 md:row-span-2',
 ] as const
 
 const galleryItems = images.map((image, index) => ({
   ...image,
   caption: captions[index % captions.length],
-  className: spans[index % spans.length],
+  className: `${smallSpans[index % smallSpans.length]} ${largeSpans[index % largeSpans.length]}`,
 }))
 
 const container = {
@@ -89,18 +101,18 @@ export function Gallery() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
-          className="grid auto-rows-[190px] gap-5 md:grid-cols-6 md:auto-rows-[170px]"
+          className="grid grid-cols-2 grid-flow-row-dense gap-5 md:grid-cols-6"
         >
           {galleryItems.map((item) => (
             <motion.article
               key={item.src}
               variants={card}
-              className={`group relative overflow-hidden rounded-[2rem] border border-brand-rose/35 bg-white shadow-[0_24px_70px_rgba(201,116,143,0.11)] ${item.className}`}
+              className={`group relative aspect-square overflow-hidden rounded-[2rem] border border-brand-rose/35 bg-white shadow-[0_24px_70px_rgba(201,116,143,0.11)] ${item.className}`}
             >
               <img
                 src={item.src}
                 alt={item.caption}
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                 loading="lazy"
               />
 
