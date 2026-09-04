@@ -3,6 +3,7 @@ import { Collaborate } from '@/components/Collaborate'
 import { Footer } from '@/components/Footer'
 import { Gallery } from '@/components/Gallery'
 import { Hero } from '@/components/Hero'
+import { Impact } from '@/components/Impact'
 import { Join } from '@/components/Join'
 import { Navbar } from '@/components/Navbar'
 import { Testimonials } from '@/components/Testimonials'
@@ -19,6 +20,7 @@ function App() {
         <About />
         <Testimonials />
         <Gallery />
+        <Impact />
         <Collaborate />
         <Join />
       </main>
