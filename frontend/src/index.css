@@ -1,16 +1,29 @@
 @import 'tailwindcss';
 
-/* The one hover accent every button shares: a muted mauve, less saturated and a
-   shade more purple than the brand rose the buttons sit at, so the hover reads
-   as a settling rather than a jolt.
+/* Button colour.
 
-   It lives here rather than in tailwind.config.ts because Tailwind v4 no longer
-   picks that file up on its own — nothing in this stylesheet points at it with
-   `@config`, so the `brand-*` names it declares compile to nothing. A `@theme`
-   token is the one place a colour name in this project actually reaches the
-   generated CSS. */
+   `brand-hover` is the accent every button reaches for on hover: a dusty pink,
+   kept a good way below the rose the buttons sit at in saturation so the hover
+   reads as the button warming rather than lighting up.
+
+   The hero's call to action is the one button that does not take that accent.
+   It is the brightest thing on the page by design, so it sits at `brand-cta`
+   and hovers a step deeper and more saturated at `brand-cta-hover` — a pink
+   that is still pink at rest, where the accent only appears under the cursor.
+   Both are light enough that cream lettering would wash out on them, so the
+   button takes `brand-ink`, the plum already used for selected text, which
+   clears 4.5:1 against the button at rest and under the cursor alike.
+
+   These live here rather than in tailwind.config.ts because Tailwind v4 no
+   longer picks that file up on its own — nothing in this stylesheet points at
+   it with `@config`, so the `brand-*` names it declares compile to nothing. A
+   `@theme` token is the one place a colour name in this project actually
+   reaches the generated CSS. */
 @theme {
-  --color-brand-hover: #a2718f;
+  --color-brand-hover: #b87a94;
+  --color-brand-cta: #f2a0bd;
+  --color-brand-cta-hover: #f887ac;
+  --color-brand-ink: #5b2d42;
 }
 
 :root {

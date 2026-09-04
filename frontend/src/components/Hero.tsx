@@ -67,7 +67,7 @@ export function Hero() {
             <motion.div variants={item} className="mt-10 grid gap-3 sm:flex sm:flex-wrap sm:gap-4">
               <a
                 href="#join"
-                className="inline-flex items-center justify-center rounded-full bg-brand-deep px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-cream shadow-[0_20px_60px_rgba(201,116,143,0.28)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-hover"
+                className="inline-flex items-center justify-center rounded-full bg-brand-cta px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-ink shadow-[0_20px_60px_rgba(242,160,189,0.5)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-cta-hover hover:shadow-[0_26px_70px_rgba(248,135,172,0.6)]"
               >
                 Join the ensemble
               </a>
