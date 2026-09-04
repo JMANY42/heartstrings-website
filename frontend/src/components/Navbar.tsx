@@ -3,12 +3,12 @@ import { Menu, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const links = [
-  { label: 'About', href: '#about' },
-  { label: 'Testimonials', href: '#testimonials' },
-  { label: 'Gallery', href: '#gallery' },
-  { label: 'Impact', href: '#impact' },
-  { label: 'Collaborate', href: '#collaborate' },
-  { label: 'Join', href: '#join' },
+  { label: 'About', href: '/#about' },
+  { label: 'Testimonials', href: '/#testimonials' },
+  { label: 'Gallery', href: '/#gallery' },
+  { label: 'Impact', href: '/#impact' },
+  { label: 'Collaborate', href: '/#collaborate' },
+  { label: 'Join', href: '/#join' },
 ]
 
 export function Navbar() {
@@ -47,7 +47,7 @@ export function Navbar() {
     >
       <div className="mx-auto flex max-w-shell items-center justify-between px-6 py-4 sm:px-8 lg:px-10 xl:px-14">
         <a
-          href="#home"
+          href="/#home"
           className="font-display text-2xl font-semibold tracking-[0.12em] text-brand-deep transition-opacity hover:opacity-80 sm:text-3xl"
           onClick={() => setIsOpen(false)}
         >

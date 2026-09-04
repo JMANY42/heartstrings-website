@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 
+// The cards below are the same events the /events/<slug> pages are built from,
+// so a card and its page can never say different things.
+import { specialEvents } from '@/data/events'
+
 // ---------------------------------------------------------------------------
 // Impact figures — update these as the numbers grow.
 // NOTE: patientsUplifted and amountRaised are placeholders. Replace them with
@@ -26,18 +30,6 @@ const locations = [
   {
     name: 'UT Dallas campus',
     href: 'https://www.utdallas.edu/',
-  },
-]
-
-// `slug` is the collaborator's name, and drives the /events/:slug page each
-// card links to. Those pages don't exist yet.
-const specialEvents = [
-  {
-    slug: 'breaking-taboo',
-    title: 'Heartstrings × Breaking Taboo',
-    detail:
-      'A joint fundraiser for mental health awareness — an evening of chamber music in support of open conversation about mental health.',
-    featured: true,
   },
 ]
 
@@ -217,7 +209,7 @@ export function Impact() {
                       {event.title}
                     </p>
                     <p className="mx-auto mt-3 max-w-md text-base leading-7 text-brand-deep/75">
-                      {event.detail}
+                      {event.summary}
                     </p>
                     <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium tracking-[0.14em] text-brand-deep/70 transition group-hover:text-brand-deep">
                       Read more

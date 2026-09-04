@@ -15,6 +15,29 @@ The backend now sends email through delegated Microsoft Graph access so it can u
 7. After auth succeeds, the backend stores refresh tokens under `backend/data/graph-tokens.json`.
 8. Optionally set `PUBLIC_SITE_URL` to the public site address. It is shown in the footer of the join email so recipients can see where their address was entered, which helps Outlook treat the message as legitimate transactional mail.
 
+## Special event pages
+
+Each special event gets its own page at `/events/<slug>`. Everything a page
+shows — the collaborator, the objective, the detail rows, the ticket link, the
+guest speakers — comes from one entry in `frontend/src/data/events.ts`; add an
+entry there and the page exists, along with its card in the Impact section on
+the home page. The `details` list is an ordered set of rows, so an event can
+carry whatever fields it actually has rather than a fixed location/date/time.
+
+Photos for a page go in `frontend/src/assets/events/<slug>/`. The file named
+`highlight` becomes the wide photo at the top; the rest fill the photo rail.
+See the README in that folder.
+
+**Nginx must serve `index.html` for these paths.** The build has no file at
+`/events/<slug>`, so without a fallback a direct visit or a refresh 404s. The
+server block needs:
+
+```nginx
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
+
 ## Saved form submissions
 
 Every submission that passes validation is appended to a JSON file, so nothing is lost if the mailbox is unauthorized or Graph is down:

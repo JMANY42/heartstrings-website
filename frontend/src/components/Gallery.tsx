@@ -1,34 +1,8 @@
 import { motion } from 'framer-motion'
 
+import { galleryItems, type GalleryItem } from '../data/gallery'
 import { useHorizontalWheelScroll } from '../hooks/useHorizontalWheelScroll'
 import { useRailEdgeFade } from '../hooks/useRailEdgeFade'
-
-const imageModules = import.meta.glob<string>(
-  '../assets/gallery/image_*.{jpg,jpeg,png,webp,avif,gif}',
-  { eager: true, import: 'default', query: '?url' },
-)
-
-const imageNumber = (path: string) => {
-  const match = path.match(/image_(\d+)\./)
-  return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER
-}
-
-const images = Object.entries(imageModules)
-  .sort(([a], [b]) => imageNumber(a) - imageNumber(b))
-  .map(([path, src]) => ({ src, number: imageNumber(path) }))
-
-const captions = [
-  'After performing at LifeCare Hospitals of North Texas ',
-  'Presenting our organization on UTD\'s campus',
-  'After performing at Orcharde Pointe Assisted Living',
-  'Group photo to celebrate a successful performance',
-  'Performing at a pop-up concert for the Plano Community Home',
-] as const
-
-const galleryItems = images.map((image, index) => ({
-  ...image,
-  caption: captions[index % captions.length],
-}))
 
 const container = {
   hidden: { opacity: 0 },
@@ -49,32 +23,57 @@ const card = {
   },
 }
 
-export function Gallery() {
+type GalleryProps = {
+  /** Defaults to the home page photos. */
+  items?: GalleryItem[]
+  id?: string
+  /** Pass `null` to drop the small caps line above the heading. */
+  eyebrow?: string | null
+  /** Pass `null` to drop the display heading. With both null the rail stands
+      on its own, which is how the event pages show their photos. */
+  heading?: string | null
+  /** Screen reader name for the rail. */
+  label?: string
+}
+
+export function Gallery({
+  items = galleryItems,
+  id = 'gallery',
+  eyebrow = 'Gallery',
+  heading = 'Moments from the room',
+  label = 'Gallery, scroll horizontally to see more',
+}: GalleryProps = {}) {
   const railRef = useHorizontalWheelScroll<HTMLUListElement>()
 
   useRailEdgeFade(railRef)
 
-  if (galleryItems.length === 0) {
+  if (items.length === 0) {
     return null
   }
 
   return (
-    <section id="gallery" className="px-6 py-20 sm:px-8 lg:px-10 lg:py-28 xl:px-14">
+    <section id={id} className="px-6 py-20 sm:px-8 lg:px-10 lg:py-28 xl:px-14">
       <div className="mx-auto max-w-shell">
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.65, ease: 'easeOut' }}
-          className="mb-10 max-w-3xl"
-        >
-          <p className="text-xs font-medium uppercase tracking-[0.34em] text-brand-deep/55">
-            Gallery
-          </p>
-          <h2 className="mt-4 font-display text-4xl leading-[0.95] tracking-[-0.03em] text-brand-deep sm:text-5xl lg:text-6xl">
-            Moments from the room
-          </h2>
-        </motion.div>
+        {eyebrow || heading ? (
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.65, ease: 'easeOut' }}
+            className="mb-10 max-w-3xl"
+          >
+            {eyebrow ? (
+              <p className="text-xs font-medium uppercase tracking-[0.34em] text-brand-deep/55">
+                {eyebrow}
+              </p>
+            ) : null}
+            {heading ? (
+              <h2 className="mt-4 font-display text-4xl leading-[0.95] tracking-[-0.03em] text-brand-deep sm:text-5xl lg:text-6xl">
+                {heading}
+              </h2>
+            ) : null}
+          </motion.div>
+        ) : null}
 
         {/* Every tile is the same square, laid out on one horizontal rail. The
             negative margins let the rail bleed to the screen edge on small
@@ -96,10 +95,10 @@ export function Gallery() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
           tabIndex={0}
-          aria-label="Gallery, scroll horizontally to see more"
+          aria-label={label}
           className="scroll-rail scroll-rail-fade -mx-6 -mt-3 flex list-none flex-row gap-5 overflow-x-auto px-6 pb-6 pt-3 sm:-mx-8 sm:px-8 md:mx-0 md:px-0"
         >
-          {galleryItems.map((item) => (
+          {items.map((item) => (
             // The wide shadow reaches about 60px past a tile, which is what
             // keeps the band under the rail unbroken across the gaps. Only the
             // first tile's left side and the last tile's right side ever sit

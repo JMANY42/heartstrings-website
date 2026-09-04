@@ -1,12 +1,50 @@
-import { About } from '@/components/About'
-import { Collaborate } from '@/components/Collaborate'
+import { useEffect, useState } from 'react'
+
 import { Footer } from '@/components/Footer'
-import { Gallery } from '@/components/Gallery'
-import { Hero } from '@/components/Hero'
-import { Impact } from '@/components/Impact'
-import { Join } from '@/components/Join'
 import { Navbar } from '@/components/Navbar'
-import { Testimonials } from '@/components/Testimonials'
+import { findEvent } from '@/data/events'
+import { EventNotFound, EventPage } from '@/pages/EventPage'
+import { Home } from '@/pages/Home'
+
+/* Routing.
+
+   The site is the home page plus a page per special event, and every link
+   between them is a plain anchor, so there is nothing here to gain from a
+   router library: the path is read once at load, and the matching page is
+   rendered. `popstate` is listened for so the back and forward buttons still
+   land on the right page if a restored history entry is served from the
+   browser's cache rather than re-requested.
+
+   Deploy note: because /events/<slug> has no file of its own in the build, the
+   web server has to serve index.html for it. See the README. */
+const eventPath = /^\/events\/([^/]+)\/?$/
+
+function usePathname() {
+  const [pathname, setPathname] = useState(() => window.location.pathname)
+
+  useEffect(() => {
+    const handlePopState = () => setPathname(window.location.pathname)
+
+    window.addEventListener('popstate', handlePopState)
+
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
+  return pathname
+}
+
+function Page() {
+  const pathname = usePathname()
+  const match = eventPath.exec(pathname)
+
+  if (!match) {
+    return <Home />
+  }
+
+  const event = findEvent(decodeURIComponent(match[1]))
+
+  return event ? <EventPage event={event} /> : <EventNotFound />
+}
 
 function App() {
   return (
@@ -16,13 +54,7 @@ function App() {
       <div className="pointer-events-none absolute right-[-8rem] top-[32rem] -z-10 h-80 w-80 rounded-full bg-brand-rose/30 blur-3xl" />
       <Navbar />
       <main>
-        <Hero />
-        <About />
-        <Testimonials />
-        <Gallery />
-        <Impact />
-        <Collaborate />
-        <Join />
+        <Page />
       </main>
       <Footer />
     </div>
