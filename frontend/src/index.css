@@ -63,26 +63,37 @@ body {
    `useRailEdgeFade` writes the two widths from the live scroll position: the
    right edge is faded while there is still rail to reach, the left only once
    the reader has scrolled off the start, and each one grows in over its own
-   width so an edge appears gradually rather than snapping on. At 0 the two
-   stops of that side collapse onto each other and the mask is fully opaque
-   there, which is what leaves the first and last tile crisp at either end. */
+   width so an edge appears gradually rather than snapping on. At 0 the stops
+   of that side all collapse onto each other and the mask is fully opaque
+   there, which is what leaves the first and last tile crisp at either end.
+
+   The stops trace a smoothstep curve (3t^2 - 2t^3) across each fade rather
+   than a straight ramp. A two-stop ramp reaches full opacity at a corner —
+   the alpha stops climbing all at once — and that kink reads as a line down
+   the tile. Easing it in and out at both ends leaves no edge to see, and
+   fading over a short distance keeps it a soft edge rather than a wash. */
 .scroll-rail-fade {
   --rail-fade-left: 0px;
   --rail-fade-right: 0px;
-  -webkit-mask-image: linear-gradient(
+  --rail-fade-mask: linear-gradient(
     to right,
-    transparent 0,
-    #000 var(--rail-fade-left),
-    #000 calc(100% - var(--rail-fade-right)),
-    transparent 100%
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0.06) calc(var(--rail-fade-left) * 0.15),
+    rgba(0, 0, 0, 0.22) calc(var(--rail-fade-left) * 0.3),
+    rgba(0, 0, 0, 0.5) calc(var(--rail-fade-left) * 0.5),
+    rgba(0, 0, 0, 0.78) calc(var(--rail-fade-left) * 0.7),
+    rgba(0, 0, 0, 0.94) calc(var(--rail-fade-left) * 0.85),
+    rgb(0, 0, 0) var(--rail-fade-left),
+    rgb(0, 0, 0) calc(100% - var(--rail-fade-right)),
+    rgba(0, 0, 0, 0.94) calc(100% - var(--rail-fade-right) * 0.85),
+    rgba(0, 0, 0, 0.78) calc(100% - var(--rail-fade-right) * 0.7),
+    rgba(0, 0, 0, 0.5) calc(100% - var(--rail-fade-right) * 0.5),
+    rgba(0, 0, 0, 0.22) calc(100% - var(--rail-fade-right) * 0.3),
+    rgba(0, 0, 0, 0.06) calc(100% - var(--rail-fade-right) * 0.15),
+    rgba(0, 0, 0, 0) 100%
   );
-  mask-image: linear-gradient(
-    to right,
-    transparent 0,
-    #000 var(--rail-fade-left),
-    #000 calc(100% - var(--rail-fade-right)),
-    transparent 100%
-  );
+  -webkit-mask-image: var(--rail-fade-mask);
+  mask-image: var(--rail-fade-mask);
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }

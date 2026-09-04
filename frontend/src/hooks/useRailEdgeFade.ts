@@ -1,7 +1,9 @@
 import { useEffect, type RefObject } from 'react'
 
-// Keep in step with the fade width baked into `.scroll-rail-fade`.
-const FADE_WIDTH = 64
+// How far a fully grown fade reaches. `.scroll-rail-fade` shapes the curve
+// across it; this is the only place its length is set. Short on purpose — far
+// enough to take the hard edge off a tile, not so far it washes one out.
+const FADE_WIDTH = 40
 
 // Feed a horizontal rail's scroll position back into the mask that softens its
 // edges: the trailing edge fades while there is more to reach, the leading edge
