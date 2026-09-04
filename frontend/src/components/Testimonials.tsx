@@ -1,5 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useMemo, useRef } from 'react'
+import type { CSSProperties } from 'react'
 import { motion } from 'framer-motion'
+
+import { useBoxSize } from '../hooks/useBoxSize'
+import { useCircleTextFit } from '../hooks/useCircleTextFit'
+import { fitTextToCircle, layoutCircleCloud } from '../lib/circleCloud'
 
 const testimonials = [
   {
@@ -38,17 +43,66 @@ const testimonials = [
     name: 'Ayesha Karim',
     role: 'Family member, Rosewood Care',
   },
+  {
+    quote:
+      'My father had not spoken much in months. He hummed along to the Bach. I will not forget that sound.',
+    name: 'Ayesha Karim',
+    role: 'Family member, Rosewood Care',
+  },
+  {
+    quote:
+      'My father had not spoken much in months. He hummed along to the Bach. I will not forget that sound.',
+    name: 'Ayesha Karim',
+    role: 'Family member, Rosewood Care',
+  },
+  {
+    quote:
+      'My father had not spoken much in months. He hummed along to the Bach. I will not forget that sound.',
+    name: 'Ayesha Karim',
+    role: 'Family member, Rosewood Care',
+  }, {
+    quote:
+      'My father had not spoken much in months. He hummed along to the Bach. I will asdf asdfasdf not forget that sound.',
+    name: 'Ayesha Karim',
+    role: 'Family member, Rosewood Care',
+  }, {
+    quote:
+      'My father had not spoken much in months. He hummed along to the Bach. I will asdf asdfasdf not forget that sound.',
+    name: 'Ayesha Karim',
+    role: 'Family member, Rosewood Care',
+  },{
+    quote:
+      'My father had not spoken much in months. He hummed along to the Bach. I will not forget that sound.',
+    name: 'Ayesha Karim',
+    role: 'Family member, Rosewood Care',
+  }
+
 ] as const
 
-const container = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.12,
-    },
-  },
-}
+// The shape of the screen assumed before one has been measured. Landscape,
+// because most of them are.
+const ASSUMED_ASPECT = 1.5
+
+// Rounds the measured shape of the screen, so that dragging a window edge does
+// not repack the cloud for every pixel.
+const ASPECT_QUANTUM = 50
+
+// The most circles the cloud will ever draw. Past this the quotes are still in
+// the file, but the cloud stops: more than ten and they are too small to read
+// and too many to take in.
+const MAX_BUBBLES = 15
+
+const shown = testimonials.slice(0, MAX_BUBBLES)
+
+// The attribution is set at 58% of the quote's size — small enough to stay
+// subordinate, large enough to read where there is room for it — so each of its
+// characters takes about a third of the area one of the quote's does.
+const ATTRIBUTION_SCALE = 0.58
+const ATTRIBUTION_WEIGHT = ATTRIBUTION_SCALE * ATTRIBUTION_SCALE
+
+// The whole cloud animates in together, so the stagger has to shorten as the
+// count grows or the last circle arrives long after the reader has looked away.
+const ENTRANCE = 1.2
 
 const card = {
   hidden: { opacity: 0, y: 22 },
@@ -59,126 +113,165 @@ const card = {
   },
 }
 
-// Wheel deltas arrive in pixels, lines or pages depending on the browser.
-const LINE_HEIGHT = 16
-
 export function Testimonials() {
-  const railRef = useRef<HTMLUListElement>(null)
+  const frameRef = useRef<HTMLDivElement>(null)
+  const cloudRef = useRef<HTMLDivElement>(null)
 
-  // Turn a vertical wheel over the rail into horizontal scrolling. The gesture
-  // is only swallowed when the rail actually moved, so at either end — or if
-  // anything ever refuses the scroll — the page keeps scrolling normally and
-  // the reader is never trapped inside the section.
-  useEffect(() => {
-    const rail = railRef.current
-
-    if (!rail) {
-      return
+  // The circles are sized for the shape of the space they are going into, so
+  // the packing has to be redone when the window changes it. The frame is
+  // measured rather than the cloud, because the cloud's own size is set from
+  // the answer.
+  const frame = useBoxSize(frameRef)
+  const aspect = useMemo(() => {
+    if (frame.width === 0 || frame.height === 0) {
+      return ASSUMED_ASPECT
     }
 
-    const handleWheel = (event: WheelEvent) => {
-      const maxScroll = rail.scrollWidth - rail.clientWidth
+    return (
+      Math.round((frame.width / frame.height) * ASPECT_QUANTUM) / ASPECT_QUANTUM
+    )
+  }, [frame])
 
-      // Nothing overflowing: leave the page scroll alone.
-      if (maxScroll <= 0) {
-        return
+  const cloud = useMemo(
+    () => layoutCircleCloud(shown.length, aspect),
+    [aspect],
+  )
+
+  // The largest box of the packed cluster's shape that fits. Nothing is
+  // stretched to reach the edges; the slack becomes margin, and the flex row
+  // around it does the centring.
+  const width = Math.min(frame.width, frame.height * cloud.aspect)
+
+  const items = useMemo(() => {
+    const sizes = cloud.circles.map((circle) => circle.size)
+    const smallest = Math.min(...sizes)
+    const largest = Math.max(...sizes)
+
+    return shown.map((testimonial, index) => {
+      const circle = cloud.circles[index]
+
+      // Where this circle sits in the size range, 0 for the outermost and 1 for
+      // the one nearest the title. Everything else about a quote — its
+      // typeface, how dark it is set, how firm its ring is — reads off this one
+      // number, so the cloud has a front and a back rather than N equal voices.
+      const depth =
+        largest === smallest ? 1 : (circle.size - smallest) / (largest - smallest)
+      const attribution = `${testimonial.name} · ${testimonial.role}`
+
+      // The nearer half of the cloud is set in the display serif, which is
+      // narrower than the sans and so fills its circle at a larger size.
+      const face = depth > 0.5 ? 'display' : 'sans'
+
+      return {
+        ...testimonial,
+        attribution,
+        circle,
+        quoteSize: fitTextToCircle(
+          testimonial.quote.length + attribution.length * ATTRIBUTION_WEIGHT,
+          face,
+        ),
+        className: [
+          face === 'display' ? 'font-display' : 'font-sans',
+          depth > 0.66
+            ? 'border-brand-rose/55 text-brand-deep'
+            : depth > 0.33
+              ? 'border-brand-rose/45 text-brand-deep/85'
+              : 'border-brand-rose/35 text-brand-deep/65',
+        ].join(' '),
       }
+    })
+  }, [cloud])
 
-      // Browsers latch a continuous wheel gesture to the element it started
-      // over, so events keep arriving after the rail has scrolled past the
-      // pointer. Re-check the pointer against the rail on every event.
-      const bounds = rail.getBoundingClientRect()
+  const container = useMemo(
+    () => ({
+      hidden: { opacity: 0 },
+      visible: {
+        opacity: 1,
+        transition: {
+          staggerChildren: Math.min(0.12, ENTRANCE / shown.length),
+        },
+      },
+    }),
+    [],
+  )
 
-      if (
-        event.clientX < bounds.left ||
-        event.clientX > bounds.right ||
-        event.clientY < bounds.top ||
-        event.clientY > bounds.bottom
-      ) {
-        return
-      }
+  // The sizes above are a starting point; this trims them to what the fonts
+  // actually measure.
+  useCircleTextFit(cloudRef, `${items.length}:${aspect}`)
 
-      // A deliberate horizontal gesture (trackpad, tilt wheel) already works.
-      if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
-        return
-      }
+  if (items.length === 0) {
+    return null
+  }
 
-      const delta =
-        event.deltaMode === WheelEvent.DOM_DELTA_LINE
-          ? event.deltaY * LINE_HEIGHT
-          : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
-            ? event.deltaY * rail.clientWidth
-            : event.deltaY
-
-      const before = rail.scrollLeft
-      rail.scrollLeft = before + delta
-
-      if (rail.scrollLeft !== before) {
-        event.preventDefault()
-      }
-    }
-
-    rail.addEventListener('wheel', handleWheel, { passive: false })
-
-    return () => rail.removeEventListener('wheel', handleWheel)
-  }, [])
-
+  // Exactly one screen tall, less the fixed navbar across the top, so the title
+  // lands in the middle of what the reader can actually see and no circle is
+  // ever cut off by an edge.
   return (
-    <section id="testimonials" className="px-6 py-20 sm:px-8 lg:px-10 lg:py-28">
-      <div className="mx-auto max-w-7xl">
+    <section
+      id="testimonials"
+      className="flex h-[100svh] w-full items-center justify-center px-3 pb-3 pt-[4.75rem] sm:px-5 sm:pb-5"
+    >
+      <div
+        ref={frameRef}
+        className="flex h-full w-full items-center justify-center"
+      >
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.65, ease: 'easeOut' }}
-          className="mb-10 max-w-3xl"
-        >
-          <p className="text-xs font-medium uppercase tracking-[0.34em] text-brand-deep/55">
-            Testimonials
-          </p>
-          <h2 className="mt-4 font-display text-4xl leading-[0.95] tracking-[-0.03em] text-brand-deep sm:text-5xl lg:text-6xl">
-            Words from the rooms we visit
-          </h2>
-        </motion.div>
-
-        <motion.ul
-          ref={railRef}
+          ref={cloudRef}
           variants={container}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
-          tabIndex={0}
-          aria-label="Testimonials, scroll horizontally to see more"
-          className="testimonial-rail -mx-6 -mt-3 flex list-none flex-row gap-5 overflow-x-auto px-6 pb-6 pt-3 sm:-mx-8 sm:px-8 md:mx-0 md:px-0"
+          className="cloud"
+          style={{ width, height: width / cloud.aspect }}
         >
-          {testimonials.map((testimonial) => (
-            <motion.li
-              key={testimonial.name}
+          <motion.div
+            variants={card}
+            className="cloud-title text-center"
+            style={{ '--w': `${cloud.titleWidth}%` } as CSSProperties}
+          >
+            <p className="font-medium uppercase tracking-[0.34em] text-brand-deep/55 text-[clamp(0.5rem,2.4cqw,0.75rem)]">
+              Testimonials
+            </p>
+            <h2 className="mt-[0.35em] font-display leading-[0.95] tracking-[-0.03em] text-brand-deep text-[clamp(0.85rem,13cqw,5rem)]">
+              Words from the patients we visit
+            </h2>
+          </motion.div>
+
+          {/* Keyed by position: the same person can leave more than one quote,
+              so a name is not a unique key. */}
+          {items.map((testimonial, index) => (
+            <motion.figure
+              key={index}
               variants={card}
-              className="flex shrink-0 flex-col rounded-[2rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.88)_0%,rgba(255,248,244,0.95)_100%)] w-[80vw] p-7 shadow-[0_24px_70px_rgba(201,116,143,0.11)] transition-transform duration-500 sm:w-[20rem] md:w-[22rem] md:hover:-translate-y-1 lg:w-[24rem]"
+              data-circle
+              className={`cloud-circle flex aspect-square items-center justify-center rounded-full border bg-[linear-gradient(180deg,rgba(255,255,255,0.88)_0%,rgba(255,248,244,0.95)_100%)] text-center shadow-[0_24px_70px_rgba(201,116,143,0.11)] transition-shadow duration-500 hover:shadow-[0_30px_80px_rgba(201,116,143,0.2)] ${testimonial.className}`}
+              style={
+                {
+                  '--x': `${testimonial.circle.left}%`,
+                  '--y': `${testimonial.circle.top}%`,
+                  '--d': `${testimonial.circle.size}%`,
+                } as CSSProperties
+              }
             >
-              <p
-                className="font-display text-5xl leading-none text-brand-deep/30"
-                aria-hidden="true"
+              <div
+                data-circle-text
+                className="mx-auto w-fit max-w-[72cqw]"
+                style={{ fontSize: `${testimonial.quoteSize}cqw` }}
               >
-                “
-              </p>
+                <blockquote className="leading-[1.3] hyphens-auto">
+                  “{testimonial.quote}”
+                </blockquote>
 
-              <blockquote className="mt-2 flex-1 text-lg leading-8 text-brand-deep/78">
-                {testimonial.quote}
-              </blockquote>
-
-              <div className="mt-7 border-t border-brand-rose/40 pt-5">
-                <p className="font-display text-2xl text-brand-deep">
-                  {testimonial.name}
-                </p>
-                <p className="mt-1 text-xs uppercase tracking-[0.24em] text-brand-deep/55">
-                  {testimonial.role}
-                </p>
+                <figcaption
+                  className="mt-[0.9em] font-sans uppercase leading-[1.4] tracking-[0.18em] text-brand-deep/55"
+                  style={{ fontSize: `${ATTRIBUTION_SCALE}em` }}
+                >
+                  {testimonial.attribution}
+                </figcaption>
               </div>
-            </motion.li>
+            </motion.figure>
           ))}
-        </motion.ul>
+        </motion.div>
       </div>
     </section>
   )

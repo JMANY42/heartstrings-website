@@ -37,26 +37,100 @@ body {
   color: #5b2d42;
 }
 
-.testimonial-rail {
+.scroll-rail {
   scrollbar-width: thin;
   scrollbar-color: rgba(201, 116, 143, 0.35) transparent;
 }
 
-.testimonial-rail::-webkit-scrollbar {
+.scroll-rail::-webkit-scrollbar {
   height: 6px;
 }
 
-.testimonial-rail::-webkit-scrollbar-track {
+.scroll-rail::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.testimonial-rail::-webkit-scrollbar-thumb {
+.scroll-rail::-webkit-scrollbar-thumb {
   background: rgba(201, 116, 143, 0.28);
   border-radius: 9999px;
 }
 
-.testimonial-rail::-webkit-scrollbar-thumb:hover {
+.scroll-rail::-webkit-scrollbar-thumb:hover {
   background: rgba(201, 116, 143, 0.45);
+}
+
+/* Soften the ends of a horizontal rail instead of cutting the tiles off square.
+   `useRailEdgeFade` writes the two widths from the live scroll position: the
+   right edge is faded while there is still rail to reach, the left only once
+   the reader has scrolled off the start, and each one grows in over its own
+   width so an edge appears gradually rather than snapping on. At 0 the stops
+   of that side all collapse onto each other and the mask is fully opaque
+   there, which is what leaves the first and last tile crisp at either end.
+
+   The stops trace a smoothstep curve (3t^2 - 2t^3) across each fade rather
+   than a straight ramp. A two-stop ramp reaches full opacity at a corner —
+   the alpha stops climbing all at once — and that kink reads as a line down
+   the tile. Easing it in and out at both ends leaves no edge to see, and
+   fading over a short distance keeps it a soft edge rather than a wash. */
+.scroll-rail-fade {
+  --rail-fade-left: 0px;
+  --rail-fade-right: 0px;
+  --rail-fade-mask: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0.06) calc(var(--rail-fade-left) * 0.15),
+    rgba(0, 0, 0, 0.22) calc(var(--rail-fade-left) * 0.3),
+    rgba(0, 0, 0, 0.5) calc(var(--rail-fade-left) * 0.5),
+    rgba(0, 0, 0, 0.78) calc(var(--rail-fade-left) * 0.7),
+    rgba(0, 0, 0, 0.94) calc(var(--rail-fade-left) * 0.85),
+    rgb(0, 0, 0) var(--rail-fade-left),
+    rgb(0, 0, 0) calc(100% - var(--rail-fade-right)),
+    rgba(0, 0, 0, 0.94) calc(100% - var(--rail-fade-right) * 0.85),
+    rgba(0, 0, 0, 0.78) calc(100% - var(--rail-fade-right) * 0.7),
+    rgba(0, 0, 0, 0.5) calc(100% - var(--rail-fade-right) * 0.5),
+    rgba(0, 0, 0, 0.22) calc(100% - var(--rail-fade-right) * 0.3),
+    rgba(0, 0, 0, 0.06) calc(100% - var(--rail-fade-right) * 0.15),
+    rgba(0, 0, 0, 0) 100%
+  );
+  -webkit-mask-image: var(--rail-fade-mask);
+  mask-image: var(--rail-fade-mask);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* Testimonial word cloud. The section is exactly one screen tall; circleCloud.ts
+   packs the circles for the shape of that screen, leaving them tight against one
+   another, and the cloud is then sized in JS to the largest box of the shape the
+   packing settled into that fits, and centred. Every centre and diameter is a
+   percentage of that box, so the cloud can never run past an edge. The title sits at the centre of the box
+   — the packing keeps the box symmetric about it — which is what leaves every
+   circle, top and bottom, inside the screen.
+
+   Centring uses the `translate` property rather than `transform`, so the
+   entrance animation, which writes `transform`, still composes with it. Each
+   circle and the title are their own containers, so their text can be sized in
+   `cqw` and fill them at whatever size the packing gave them. */
+.cloud {
+  position: relative;
+}
+
+.cloud-title,
+.cloud-circle {
+  position: absolute;
+  translate: -50% -50%;
+  container-type: inline-size;
+}
+
+.cloud-title {
+  left: 50%;
+  top: 50%;
+  width: var(--w);
+}
+
+.cloud-circle {
+  left: var(--x);
+  top: var(--y);
+  width: var(--d);
 }
 
 .note-float {
