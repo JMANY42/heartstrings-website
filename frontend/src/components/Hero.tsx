@@ -67,13 +67,13 @@ export function Hero() {
             <motion.div variants={item} className="mt-10 grid gap-3 sm:flex sm:flex-wrap sm:gap-4">
               <a
                 href="#join"
-                className="inline-flex items-center justify-center rounded-full bg-brand-cta px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-ink shadow-[0_20px_60px_rgba(242,160,189,0.5)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-cta-hover hover:shadow-[0_26px_70px_rgba(248,135,172,0.6)]"
+                className="inline-flex items-center justify-center rounded-full bg-brand-cta px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-ink shadow-[0_18px_45px_rgba(224,143,169,0.32)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-cta-hover hover:shadow-[0_22px_55px_rgba(216,121,151,0.42)]"
               >
                 Join the ensemble
               </a>
               <a
                 href="#about"
-                className="inline-flex items-center justify-center rounded-full border border-brand-rose/70 bg-white/55 px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-deep transition duration-300 ease-out hover:-translate-y-1 hover:border-brand-hover/50 hover:bg-brand-hover/15"
+                className="inline-flex items-center justify-center rounded-full border border-brand-rose/70 bg-white/55 px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-deep transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-hover"
               >
                 Discover our mission
               </a>

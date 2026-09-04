@@ -2,17 +2,19 @@
 
 /* Button colour.
 
-   `brand-hover` is the accent every button reaches for on hover: a dusty pink,
-   kept a good way below the rose the buttons sit at in saturation so the hover
-   reads as the button warming rather than lighting up.
+   `brand-hover` is the soft pink every button reaches for on hover. It lands a
+   couple of points off the `rose` in tailwind.config.ts, which is the palette's
+   own soft pink — earlier passes sat this accent much deeper and further round
+   the wheel, where the low saturation read as mauve rather than pink. Kept this
+   light it is unmistakably pink, and the label the buttons inherit from :root
+   clears 4.8:1 on it, so it can be laid on solid rather than as a tint.
 
-   The hero's call to action is the one button that does not take that accent.
-   It is the brightest thing on the page by design, so it sits at `brand-cta`
-   and hovers a step deeper and more saturated at `brand-cta-hover` — a pink
-   that is still pink at rest, where the accent only appears under the cursor.
-   Both are light enough that cream lettering would wash out on them, so the
-   button takes `brand-ink`, the plum already used for selected text, which
-   clears 4.5:1 against the button at rest and under the cursor alike.
+   The hero's call to action is the one button that carries a colour at rest
+   rather than only under the cursor, so it takes the same hue a few steps
+   deeper: enough to hold the eye without the glare the brighter pink it used to
+   sit at gave it. It hovers deeper still. Both are far too light for cream
+   lettering, so the button takes `brand-ink`, a plum deep enough to clear 4.5:1
+   against the hover as well as the rest state.
 
    These live here rather than in tailwind.config.ts because Tailwind v4 no
    longer picks that file up on its own — nothing in this stylesheet points at
@@ -20,10 +22,10 @@
    `@theme` token is the one place a colour name in this project actually
    reaches the generated CSS. */
 @theme {
-  --color-brand-hover: #b87a94;
-  --color-brand-cta: #f2a0bd;
-  --color-brand-cta-hover: #f887ac;
-  --color-brand-ink: #5b2d42;
+  --color-brand-hover: #f5c2d3;
+  --color-brand-cta: #e08fa9;
+  --color-brand-cta-hover: #d87997;
+  --color-brand-ink: #47202f;
 }
 
 :root {
