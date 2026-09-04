@@ -63,6 +63,13 @@ export function EventPage({ event }: { event: SpecialEvent }) {
           >
             {event.title}
           </motion.h1>
+          {/* Whose evening this is — the two names, always in this order. */}
+          <motion.p
+            variants={fadeUp}
+            className="mt-4 text-sm font-medium uppercase tracking-[0.26em] text-brand-deep/60 sm:text-base"
+          >
+            Heartstrings &times; {event.collaborator.name}
+          </motion.p>
           {event.tagline ? (
             <motion.p
               variants={fadeUp}

@@ -208,6 +208,9 @@ export function Impact() {
                     <p className="mt-4 font-display text-3xl leading-tight text-brand-deep sm:text-4xl">
                       {event.title}
                     </p>
+                    <p className="mt-2 text-xs font-medium uppercase tracking-[0.24em] text-brand-deep/60 sm:text-sm">
+                      Heartstrings &times; {event.collaborator.name}
+                    </p>
                     <p className="mx-auto mt-3 max-w-md text-base leading-7 text-brand-deep/75">
                       {event.summary}
                     </p>
