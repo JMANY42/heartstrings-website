@@ -152,8 +152,8 @@ export function Impact() {
               </ul>
             </motion.div>
 
-            {/* Right — the headline stat, then the special events */}
-            <div className="space-y-10">
+            {/* Right — the headline stat */}
+            <div>
               <motion.div
                 ref={statRef}
                 variants={fadeUp}
@@ -185,51 +185,56 @@ export function Impact() {
                 </div>
               </motion.div>
 
-              <motion.div variants={fadeUp} className="text-center">
-                <h3 className="font-display text-4xl leading-tight text-brand-deep sm:text-5xl lg:text-6xl">
-                  Special events &amp; collaborations
-                </h3>
-
-                <ul className="mt-6 space-y-4">
-                  {specialEvents.map((event) => (
-                    <li key={event.slug}>
-                      <a
-                        href={`/events/${event.slug}`}
-                        className={
-                          event.featured
-                            ? 'group relative block overflow-hidden rounded-[2rem] border border-brand-deep/25 bg-[linear-gradient(180deg,rgba(255,222,233,0.72)_0%,rgba(255,248,244,0.96)_100%)] p-6 shadow-[0_24px_70px_rgba(201,116,143,0.16)] transition duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_32px_90px_rgba(201,116,143,0.22)] focus-visible:-translate-y-1 focus-visible:outline-none sm:p-8'
-                            : 'group block rounded-[2rem] border border-brand-rose/40 bg-white/70 p-6 transition duration-300 ease-out hover:-translate-y-1 hover:bg-white/90 focus-visible:-translate-y-1 focus-visible:outline-none sm:p-8'
-                        }
-                      >
-                        {event.featured ? (
-                          <span className="inline-flex items-center rounded-full border border-brand-deep/25 bg-white/70 px-4 py-1.5 text-[0.65rem] uppercase tracking-[0.24em] text-brand-deep/70">
-                            Featured
-                          </span>
-                        ) : null}
-                        <p className="mt-4 font-display text-3xl leading-tight text-brand-deep sm:text-4xl">
-                          {event.title}
-                        </p>
-                        <p className="mx-auto mt-3 max-w-md text-base leading-7 text-brand-deep/75">
-                          {event.detail}
-                        </p>
-                        <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium tracking-[0.14em] text-brand-deep/70 transition group-hover:text-brand-deep">
-                          Read more
-                          <ArrowUpRight
-                            className="h-4 w-4 transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-
-                <p className="mt-5 text-sm leading-7 text-brand-deep/60">
-                  More collaborations are in the works — check back soon.
-                </p>
-              </motion.div>
             </div>
           </div>
+
+          {/* Full width, centered on the page — not tucked into a column. */}
+          <motion.div
+            variants={fadeUp}
+            className="mx-auto mt-16 max-w-3xl text-center lg:mt-24"
+          >
+            <h3 className="font-display text-4xl leading-tight text-brand-deep sm:text-5xl lg:text-6xl">
+              Special events &amp; collaborations
+            </h3>
+
+            <ul className="mt-8 space-y-4">
+              {specialEvents.map((event) => (
+                <li key={event.slug}>
+                  <a
+                    href={`/events/${event.slug}`}
+                    className={
+                      event.featured
+                        ? 'group relative block overflow-hidden rounded-[2rem] border border-brand-deep/25 bg-[linear-gradient(180deg,rgba(255,222,233,0.72)_0%,rgba(255,248,244,0.96)_100%)] p-6 shadow-[0_24px_70px_rgba(201,116,143,0.16)] transition duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_32px_90px_rgba(201,116,143,0.22)] focus-visible:-translate-y-1 focus-visible:outline-none sm:p-8'
+                        : 'group block rounded-[2rem] border border-brand-rose/40 bg-white/70 p-6 transition duration-300 ease-out hover:-translate-y-1 hover:bg-white/90 focus-visible:-translate-y-1 focus-visible:outline-none sm:p-8'
+                    }
+                  >
+                    {event.featured ? (
+                      <span className="inline-flex items-center rounded-full border border-brand-deep/25 bg-white/70 px-4 py-1.5 text-[0.65rem] uppercase tracking-[0.24em] text-brand-deep/70">
+                        Featured
+                      </span>
+                    ) : null}
+                    <p className="mt-4 font-display text-3xl leading-tight text-brand-deep sm:text-4xl">
+                      {event.title}
+                    </p>
+                    <p className="mx-auto mt-3 max-w-md text-base leading-7 text-brand-deep/75">
+                      {event.detail}
+                    </p>
+                    <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium tracking-[0.14em] text-brand-deep/70 transition group-hover:text-brand-deep">
+                      Read more
+                      <ArrowUpRight
+                        className="h-4 w-4 transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            <p className="mt-5 text-sm leading-7 text-brand-deep/60">
+              More collaborations are in the works — check back soon.
+            </p>
+          </motion.div>
         </motion.div>
       </div>
     </section>
