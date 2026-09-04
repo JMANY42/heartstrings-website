@@ -101,10 +101,32 @@ body {
    than a straight ramp. A two-stop ramp reaches full opacity at a corner —
    the alpha stops climbing all at once — and that kink reads as a line down
    the tile. Easing it in and out at both ends leaves no edge to see, and
-   fading over a short distance keeps it a soft edge rather than a wash. */
+   fading over a short distance keeps it a soft edge rather than a wash.
+
+   Top and bottom are faded for a different reason. A rail that scrolls
+   sideways still clips vertically — `overflow-x: auto` computes `overflow-y`
+   to `auto`, never `visible` — so the soft shadow each tile casts is cut off
+   square at the rail's padding edge, and because the shadow is offset
+   downwards it is still near full strength where the bottom edge cuts it.
+   That left a tinted band under the tiles that ended in a hard line across
+   the section, reading as a background that didn't match the page. The two
+   fades cover exactly the rail's own vertical padding — the strips either
+   side of the tiles, where nothing but the shadow is ever drawn — so the
+   shadow dissolves into the page instead of being sliced, and the tiles
+   themselves, which start where the padding ends, stay untouched.
+   `useRailEdgeFade` measures the padding, so the fades follow it. */
 .scroll-rail-fade {
   --rail-fade-left: 0px;
   --rail-fade-right: 0px;
+  --rail-fade-top: 0px;
+  --rail-fade-bottom: 0px;
+  --rail-scrollbar: 0px;
+  /* Where the rail stops drawing its contents: the padding box, less the
+     scrollbar when the platform reserves room for one rather than floating it
+     over the top. The mask covers the whole box, scrollbar included, so the
+     bottom fade has to end here — run it to the box instead and it washes the
+     scrollbar out along with the shadow. */
+  --rail-fade-end: calc(100% - var(--rail-scrollbar));
   --rail-fade-mask: linear-gradient(
     to right,
     rgba(0, 0, 0, 0) 0,
@@ -122,8 +144,33 @@ body {
     rgba(0, 0, 0, 0.06) calc(100% - var(--rail-fade-right) * 0.15),
     rgba(0, 0, 0, 0) 100%
   );
-  -webkit-mask-image: var(--rail-fade-mask);
-  mask-image: var(--rail-fade-mask);
+  --rail-fade-mask-y: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0.06) calc(var(--rail-fade-top) * 0.15),
+    rgba(0, 0, 0, 0.22) calc(var(--rail-fade-top) * 0.3),
+    rgba(0, 0, 0, 0.5) calc(var(--rail-fade-top) * 0.5),
+    rgba(0, 0, 0, 0.78) calc(var(--rail-fade-top) * 0.7),
+    rgba(0, 0, 0, 0.94) calc(var(--rail-fade-top) * 0.85),
+    rgb(0, 0, 0) var(--rail-fade-top),
+    rgb(0, 0, 0) calc(var(--rail-fade-end) - var(--rail-fade-bottom)),
+    rgba(0, 0, 0, 0.94) calc(var(--rail-fade-end) - var(--rail-fade-bottom) * 0.85),
+    rgba(0, 0, 0, 0.78) calc(var(--rail-fade-end) - var(--rail-fade-bottom) * 0.7),
+    rgba(0, 0, 0, 0.5) calc(var(--rail-fade-end) - var(--rail-fade-bottom) * 0.5),
+    rgba(0, 0, 0, 0.22) calc(var(--rail-fade-end) - var(--rail-fade-bottom) * 0.3),
+    rgba(0, 0, 0, 0.06) calc(var(--rail-fade-end) - var(--rail-fade-bottom) * 0.15),
+    rgba(0, 0, 0, 0) var(--rail-fade-end),
+    rgb(0, 0, 0) var(--rail-fade-end),
+    rgb(0, 0, 0) 100%
+  );
+  /* Two masks, kept as an intersection: a pixel survives only where both the
+     horizontal and the vertical fade leave it. Added — the default — a pixel
+     either fade keeps would survive, so an edge would only fade where the two
+     overlap, in the corners. */
+  -webkit-mask-image: var(--rail-fade-mask), var(--rail-fade-mask-y);
+  mask-image: var(--rail-fade-mask), var(--rail-fade-mask-y);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }

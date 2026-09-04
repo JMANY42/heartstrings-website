@@ -80,7 +80,15 @@ export function Gallery() {
             negative margins let the rail bleed to the screen edge on small
             screens so a half-visible tile hints that it scrolls, and the mask
             behind `scroll-rail-fade` softens whichever end still has rail
-            beyond it so that tile fades out rather than being cut off. */}
+            beyond it so that tile fades out rather than being cut off.
+
+            The rail is exactly the column wide, so a tile is never drawn past
+            it and the scrollbar spans no further than the tiles do. That also
+            makes the rail's own box the only room the tiles' shadow has, since
+            a scroll container clips whatever leaves its padding box and a
+            shadow is no exception. Sideways that room is nothing at all, so the
+            outermost tiles carry a shadow that stops at their own edge — see
+            the shadow classes below. */}
         <motion.ul
           ref={railRef}
           variants={container}
@@ -92,10 +100,18 @@ export function Gallery() {
           className="scroll-rail scroll-rail-fade -mx-6 -mt-3 flex list-none flex-row gap-5 overflow-x-auto px-6 pb-6 pt-3 sm:-mx-8 sm:px-8 md:mx-0 md:px-0"
         >
           {galleryItems.map((item) => (
+            // The wide shadow reaches about 60px past a tile, which is what
+            // keeps the band under the rail unbroken across the gaps. Only the
+            // first tile's left side and the last tile's right side ever sit
+            // against the rail's edge — every other edge a tile passes is
+            // covered by the mask's fade — and there the spill has nowhere to
+            // go and would be sliced into a hard line, so those two tiles get a
+            // shadow drawn back inside their own box instead. Their inner side
+            // loses its spill too, but the neighbouring tile's reaches over it.
             <motion.li
               key={item.src}
               variants={card}
-              className="group relative aspect-square w-[80vw] shrink-0 overflow-hidden rounded-[2rem] border border-brand-rose/35 bg-white shadow-[0_24px_70px_rgba(201,116,143,0.11)] sm:w-[25rem] md:w-[27.5rem] lg:w-[30rem]"
+              className="group relative aspect-square w-[80vw] shrink-0 overflow-hidden rounded-[2rem] border border-brand-rose/35 bg-white shadow-[0_24px_70px_rgba(201,116,143,0.11)] first:shadow-[0_24px_16px_-24px_rgba(201,116,143,0.26)] last:shadow-[0_24px_16px_-24px_rgba(201,116,143,0.26)] sm:w-[25rem] md:w-[27.5rem] lg:w-[30rem]"
             >
               <img
                 src={item.src}
