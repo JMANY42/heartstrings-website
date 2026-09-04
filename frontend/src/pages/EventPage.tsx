@@ -146,7 +146,7 @@ export function EventPage({ event }: { event: SpecialEvent }) {
             Objective
           </motion.p>
           <motion.h2 variants={fadeUp} className={headingClass}>
-            What this is for
+            Our reason why
           </motion.h2>
 
           {event.objective.map((paragraph, index) => (

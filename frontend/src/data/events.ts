@@ -142,24 +142,23 @@ function defineEvent(content: EventContent): SpecialEvent {
 export const specialEvents: SpecialEvent[] = [
   defineEvent({
     slug: 'breaking-taboo',
-    title: 'Heartstrings × Breaking Taboo',
+    title: 'Inside the Mind',
     eyebrow: 'Special event',
     tagline:
       'An evening of chamber music in support of open conversation about mental health.',
     summary:
-      'A joint fundraiser for mental health awareness — an evening of chamber music in support of open conversation about mental health.',
+      'A joint fundraiser for mental health awareness and an evening of chamber music in support of open conversation about mental health.',
     featured: true,
     collaborator: {
       name: 'Breaking Taboo',
-      // NOTE: point this at Breaking Taboo's own site before the page is shared.
-      href: undefined,
+      href: "https://breaking-taboo.org/",
       body: [
         'Breaking Taboo is a nonprofit working to end the silence around mental health. They run open conversations, education, and outreach for people who are rarely given room to talk about what they are carrying.',
         'We share an audience and a belief: that the hardest things get easier to say out loud once a room has been made gentle enough to say them in. Heartstrings brings the music, Breaking Taboo brings the conversation.',
       ],
     },
     objective: [
-      'The evening raises money for Breaking Taboo’s mental health programming, and gives their speakers a room already softened by live music.',
+      'The evening raises money for Breaking Taboo’s mental health programming by pairing musical pieces selected to reflect a specific emotions with guest speakers who share their experiences and insights on that emotion. The goal is to create a space where people can feel safe to talk about mental health, and to raise awareness of the resources available for those who need them.',
       'Every dollar from tickets goes to that work. Our musicians play, as always, as volunteers.',
     ],
     // NOTE: placeholders. Replace the venue, date, and time with the confirmed
@@ -167,13 +166,13 @@ export const specialEvents: SpecialEvent[] = [
     details: [
       {
         label: 'Location',
-        value: 'Venue to be confirmed',
-        note: 'Dallas area — the address lands here once it is booked.',
+        value: 'JO Perfomance Hall',
+        note: 'UTD Campus JO 2.604',
         icon: 'location',
       },
       {
         label: 'Date',
-        value: 'Date to be announced',
+        value: '4/25/2026',
         icon: 'date',
       },
       {
@@ -184,7 +183,7 @@ export const specialEvents: SpecialEvent[] = [
       {
         label: 'Program',
         value:
-          'Chamber works for strings, played by a small Heartstrings ensemble, between the evening’s conversations.',
+          'Chamber works for strings tied to specific emotions, played by a small Heartstrings ensemble, between the evening’s conversations.',
         icon: 'program',
       },
       {
@@ -197,10 +196,9 @@ export const specialEvents: SpecialEvent[] = [
       // NOTE: drop the ticketing link in here and the note below turns into a
       // live button — set `label` to the button's wording at the same time.
       href: undefined,
-      label: 'Tickets are not on sale yet',
-      note: 'The link lands here, and on Instagram, as soon as they are.',
+      label: 'Ticket sale has ended',
     },
-    // NOTE: placeholders. Replace with the confirmed line-up.
+    // NOTE: STILL UPDATE SPEAKERS
     speakers: [
       {
         name: 'Speaker to be announced',
