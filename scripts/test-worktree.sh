@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 #
 # Set up a Claude worktree with everything gitignored-but-required from the main
-# checkout, then run its backend and frontend together. Ctrl-C stops both.
+# checkout, then run its frontend on port 9000 and its backend on port 9001 —
+# clear of the 5173/5003 a normal `npm run dev` uses, so a worktree under test
+# never collides with the main checkout. Ctrl-C stops both.
 #
 #   ./scripts/test-worktree.sh                 # test the worktree you're in
 #   ./scripts/test-worktree.sh gallery-bleed   # test .claude/worktrees/gallery-bleed
@@ -186,12 +188,18 @@ echo "ready: $copied copied, $skipped already present, $missing missing"
 if [ "$RUN" -eq 0 ]; then
   echo
   echo "run it with:"
-  echo "  cd $DEST/backend  && npm run dev"
-  echo "  cd $DEST/frontend && npm run dev"
+  echo "  cd $DEST/backend  && PORT=9001 npm run dev"
+  echo "  cd $DEST/frontend && VITE_DEV_API_URL=http://localhost:9001/api npm run dev -- --port 9000 --strictPort"
   exit 0
 fi
 
 # --- run both dev servers -----------------------------------------------------
+# Fixed ports, deliberately clear of the 5173/5003 pair a normal `npm run dev`
+# uses, so a worktree under test never collides with the main checkout and you
+# always know which one you're looking at.
+FRONTEND_PORT=9000
+BACKEND_PORT=9001
+
 BACKEND_PID=""
 FRONTEND_PID=""
 SHUTTING_DOWN=0
@@ -212,11 +220,11 @@ port_busy() {
 # substitution would hand the server its pipe as stdout and then block forever
 # waiting for an EOF that a long-running server never sends.
 start_service() {
-  local label="$1" color="$2" dir="$3" pidvar="$4"
+  local label="$1" color="$2" dir="$3" pidvar="$4" cmd="$5"
   local prefix="${color}[${label}]${RESET} "
   local runner=""
   command -v setsid >/dev/null 2>&1 && runner="setsid"
-  $runner bash -c "cd '$dir' && npm run dev 2>&1 | sed -u 's/^/$prefix/'" &
+  $runner bash -c "cd '$dir' && $cmd 2>&1 | sed -u 's/^/$prefix/'" &
   printf -v "$pidvar" '%s' "$!"
 }
 
@@ -276,21 +284,35 @@ cleanup() {
 trap cleanup EXIT
 trap 'cleanup; exit 130' INT TERM HUP
 
-BACKEND_PORT="$(sed -n 's/^[[:space:]]*PORT[[:space:]]*=[[:space:]]*\([0-9]\{1,\}\).*/\1/p' "$DEST/backend/.env" 2>/dev/null | tail -1)"
-BACKEND_PORT="${BACKEND_PORT:-5003}"
+# Both ports are fixed, so a busy one means something else is squatting: say what
+# and stop, rather than drifting onto a port nothing is configured to talk to.
+port_conflict=0
+for p in "$FRONTEND_PORT" "$BACKEND_PORT"; do
+  if port_busy "$p"; then
+    echo
+    echo "${YELLOW}error:${RESET} port $p is already in use." >&2
+    if command -v ss >/dev/null 2>&1; then
+      ss -ltnp "sport = :$p" 2>/dev/null | tail -n +2 | sed 's/^/       /' >&2
+    fi
+    port_conflict=1
+  fi
+done
+if [ "$port_conflict" -eq 1 ]; then
+  echo "       stop whatever is holding it, then re-run." >&2
+  exit 1
+fi
 
 echo
-if port_busy "$BACKEND_PORT"; then
-  # The frontend hardcodes localhost:5003 in dev (frontend/src/services/api.ts),
-  # so a second backend on another port would not be reachable anyway.
-  echo "${YELLOW}note:${RESET} port $BACKEND_PORT is already in use, so the backend is not being started."
-  echo "      the worktree frontend will talk to whatever is serving that port."
-  echo "      testing backend changes? stop the other one first, then re-run this."
-else
-  start_service backend "$CYAN" "$DEST/backend" BACKEND_PID
-fi
-start_service frontend "$MAGENTA" "$DEST/frontend" FRONTEND_PID
+# The backend reads PORT (backend/src/server.ts); the frontend needs --strictPort
+# so vite fails loudly instead of quietly hopping to 9001 and colliding with it.
+# VITE_DEV_API_URL points the frontend's API calls at the backend we just moved.
+start_service backend "$CYAN" "$DEST/backend" BACKEND_PID \
+  "PORT=$BACKEND_PORT npm run dev"
+start_service frontend "$MAGENTA" "$DEST/frontend" FRONTEND_PID \
+  "VITE_DEV_API_URL=http://localhost:$BACKEND_PORT/api npm run dev -- --port $FRONTEND_PORT --strictPort"
 
+echo "  frontend  ${BOLD}http://localhost:$FRONTEND_PORT${RESET}"
+echo "  backend   ${BOLD}http://localhost:$BACKEND_PORT${RESET}"
 echo "${DIM}Ctrl-C stops both.${RESET}"
 echo
 
