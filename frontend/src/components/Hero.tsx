@@ -67,13 +67,13 @@ export function Hero() {
             <motion.div variants={item} className="mt-10 grid gap-3 sm:flex sm:flex-wrap sm:gap-4">
               <a
                 href="#join"
-                className="inline-flex items-center justify-center rounded-full bg-brand-deep px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-cream shadow-[0_20px_60px_rgba(201,116,143,0.28)] transition-transform hover:-translate-y-0.5 hover:bg-[#b75f7e]"
+                className="inline-flex items-center justify-center rounded-full bg-brand-deep px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-cream shadow-[0_20px_60px_rgba(201,116,143,0.28)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-hover"
               >
                 Join the ensemble
               </a>
               <a
                 href="#about"
-                className="inline-flex items-center justify-center rounded-full border border-brand-rose/70 bg-white/55 px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-deep transition-colors hover:bg-brand-pink/65"
+                className="inline-flex items-center justify-center rounded-full border border-brand-rose/70 bg-white/55 px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-deep transition duration-300 ease-out hover:-translate-y-1 hover:border-brand-hover/50 hover:bg-brand-hover/15"
               >
                 Discover our mission
               </a>

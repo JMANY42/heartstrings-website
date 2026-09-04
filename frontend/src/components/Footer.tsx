@@ -16,7 +16,7 @@ export function Footer() {
             href="https://www.instagram.com/heartstringsatutd/"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-3 rounded-full border border-brand-rose/55 bg-white/75 px-5 py-3 shadow-[0_18px_50px_rgba(201,116,143,0.1)] transition-transform hover:-translate-y-0.5"
+            className="inline-flex items-center gap-3 rounded-full border border-brand-rose/55 bg-white/75 px-5 py-3 shadow-[0_18px_50px_rgba(201,116,143,0.1)] transition duration-300 ease-out hover:-translate-y-1 hover:border-brand-hover/50 hover:bg-brand-hover/15"
             aria-label="Instagram"
           >
             <InstagramIcon />

@@ -1,5 +1,18 @@
 @import 'tailwindcss';
 
+/* The one hover accent every button shares: a muted mauve, less saturated and a
+   shade more purple than the brand rose the buttons sit at, so the hover reads
+   as a settling rather than a jolt.
+
+   It lives here rather than in tailwind.config.ts because Tailwind v4 no longer
+   picks that file up on its own — nothing in this stylesheet points at it with
+   `@config`, so the `brand-*` names it declares compile to nothing. A `@theme`
+   token is the one place a colour name in this project actually reaches the
+   generated CSS. */
+@theme {
+  --color-brand-hover: #a2718f;
+}
+
 :root {
   font-family: 'DM Sans', sans-serif;
   color: #6d4c5e;

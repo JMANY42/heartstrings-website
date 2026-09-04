@@ -67,7 +67,7 @@ export function Navbar() {
 
         <button
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-brand-rose/70 bg-white/65 text-brand-deep shadow-soft transition-transform hover:scale-105 md:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-brand-rose/70 bg-white/65 text-brand-deep shadow-soft transition duration-300 ease-out hover:-translate-y-1 hover:scale-105 hover:border-brand-hover/50 hover:bg-brand-hover/15 md:hidden"
           aria-label={isOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={isOpen}
           aria-controls="mobile-navigation"
@@ -92,7 +92,7 @@ export function Navbar() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="rounded-2xl px-4 py-3 text-base font-medium tracking-[0.12em] text-brand-deep transition-colors hover:bg-white/55"
+                  className="rounded-2xl px-4 py-3 text-base font-medium tracking-[0.12em] text-brand-deep transition duration-300 ease-out hover:-translate-y-0.5 hover:bg-brand-hover/15"
                   onClick={() => setIsOpen(false)}
                 >
                   {link.label}
