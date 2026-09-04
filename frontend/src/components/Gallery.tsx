@@ -80,7 +80,14 @@ export function Gallery() {
             negative margins let the rail bleed to the screen edge on small
             screens so a half-visible tile hints that it scrolls, and the mask
             behind `scroll-rail-fade` softens whichever end still has rail
-            beyond it so that tile fades out rather than being cut off. */}
+            beyond it so that tile fades out rather than being cut off.
+
+            A rail clips whatever leaves its padding box, so the padding is also
+            the only room the tiles' shadow has to fade out in. Below the screen
+            widths that bleed, that room has to be asked for: the shadow reaches
+            about 60px to either side, so the rail is padded past it and pulled
+            back out by the same amount, which leaves the tiles aligned with the
+            heading while the shadow at each end reaches the page unclipped. */}
         <motion.ul
           ref={railRef}
           variants={container}
@@ -89,7 +96,7 @@ export function Gallery() {
           viewport={{ once: true, amount: 0.15 }}
           tabIndex={0}
           aria-label="Gallery, scroll horizontally to see more"
-          className="scroll-rail scroll-rail-fade -mx-6 -mt-3 flex list-none flex-row gap-5 overflow-x-auto px-6 pb-6 pt-3 sm:-mx-8 sm:px-8 md:mx-0 md:px-0"
+          className="scroll-rail scroll-rail-fade -mx-6 -mt-3 flex list-none flex-row gap-5 overflow-x-auto px-6 pb-6 pt-3 sm:-mx-8 sm:px-8 md:-mx-16 md:px-16"
         >
           {galleryItems.map((item) => (
             <motion.li
