@@ -183,7 +183,7 @@ export function Collaborate() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex items-center justify-center rounded-full bg-brand-deep px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-cream shadow-[0_20px_60px_rgba(201,116,143,0.28)] transition duration-300 ease-out enabled:hover:-translate-y-1 enabled:hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-70"
+                className="inline-flex items-center justify-center rounded-full border border-brand-rose/70 bg-white/55 px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-deep transition duration-300 ease-out enabled:hover:-translate-y-1 enabled:hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-70"
               >
                 Send inquiry
               </button>
