@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion'
 
+import { useHorizontalWheelScroll } from '../hooks/useHorizontalWheelScroll'
+
 const imageModules = import.meta.glob<string>(
   '../assets/gallery/image_*.{jpg,jpeg,png,webp,avif,gif}',
   { eager: true, import: 'default', query: '?url' },
@@ -22,35 +24,9 @@ const captions = [
   'Performing at a pop-up concert for the Plano Community Home',
 ] as const
 
-// Every tile is a square: the column span always matches the row span, so the
-// grid stays square-on-square no matter how wide the viewport gets.
-// Two columns on small screens, six from `md` up.
-//
-// Two-up leaves a hole whenever the count is odd, so in that case the first
-// tile runs full width and every following pair fills a row exactly.
-const smallSpan = (index: number, total: number) =>
-  total % 2 === 1 && index === 0
-    ? 'col-span-2 row-span-2'
-    : 'col-span-1 row-span-1'
-
-// A repeating cycle of sizes (3, 3, 2, 4, 2, 2, 2, 2) so neighbouring images
-// rarely share a footprint. Combined with dense auto-placement it packs the
-// six-column grid without holes at five, eight and ten images.
-const largeSpans = [
-  'md:col-span-3 md:row-span-3',
-  'md:col-span-3 md:row-span-3',
-  'md:col-span-2 md:row-span-2',
-  'md:col-span-4 md:row-span-4',
-  'md:col-span-2 md:row-span-2',
-  'md:col-span-2 md:row-span-2',
-  'md:col-span-2 md:row-span-2',
-  'md:col-span-2 md:row-span-2',
-] as const
-
 const galleryItems = images.map((image, index) => ({
   ...image,
   caption: captions[index % captions.length],
-  className: `${smallSpan(index, images.length)} ${largeSpans[index % largeSpans.length]}`,
 }))
 
 const container = {
@@ -73,6 +49,8 @@ const card = {
 }
 
 export function Gallery() {
+  const railRef = useHorizontalWheelScroll<HTMLUListElement>()
+
   if (galleryItems.length === 0) {
     return null
   }
@@ -95,18 +73,24 @@ export function Gallery() {
           </h2>
         </motion.div>
 
-        <motion.div
+        {/* Every tile is the same square, laid out on one horizontal rail. The
+            negative margins let the rail bleed to the screen edge on small
+            screens so a half-visible tile hints that it scrolls. */}
+        <motion.ul
+          ref={railRef}
           variants={container}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
-          className="grid grid-cols-2 grid-flow-row-dense gap-5 md:grid-cols-6"
+          tabIndex={0}
+          aria-label="Gallery, scroll horizontally to see more"
+          className="scroll-rail -mx-6 -mt-3 flex list-none flex-row gap-5 overflow-x-auto px-6 pb-6 pt-3 sm:-mx-8 sm:px-8 md:mx-0 md:px-0"
         >
           {galleryItems.map((item) => (
-            <motion.article
+            <motion.li
               key={item.src}
               variants={card}
-              className={`group relative aspect-square overflow-hidden rounded-[2rem] border border-brand-rose/35 bg-white shadow-[0_24px_70px_rgba(201,116,143,0.11)] ${item.className}`}
+              className="group relative aspect-square w-[80vw] shrink-0 overflow-hidden rounded-[2rem] border border-brand-rose/35 bg-white shadow-[0_24px_70px_rgba(201,116,143,0.11)] sm:w-[20rem] md:w-[22rem] lg:w-[24rem]"
             >
               <img
                 src={item.src}
@@ -124,9 +108,9 @@ export function Gallery() {
                   </p>
                 </div>
               </div>
-            </motion.article>
+            </motion.li>
           ))}
-        </motion.div>
+        </motion.ul>
       </div>
     </section>
   )
