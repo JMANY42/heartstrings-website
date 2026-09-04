@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 
 import { useHorizontalWheelScroll } from '../hooks/useHorizontalWheelScroll'
+import { useRailEdgeFade } from '../hooks/useRailEdgeFade'
 
 const imageModules = import.meta.glob<string>(
   '../assets/gallery/image_*.{jpg,jpeg,png,webp,avif,gif}',
@@ -51,6 +52,8 @@ const card = {
 export function Gallery() {
   const railRef = useHorizontalWheelScroll<HTMLUListElement>()
 
+  useRailEdgeFade(railRef)
+
   if (galleryItems.length === 0) {
     return null
   }
@@ -75,7 +78,9 @@ export function Gallery() {
 
         {/* Every tile is the same square, laid out on one horizontal rail. The
             negative margins let the rail bleed to the screen edge on small
-            screens so a half-visible tile hints that it scrolls. */}
+            screens so a half-visible tile hints that it scrolls, and the mask
+            behind `scroll-rail-fade` softens whichever end still has rail
+            beyond it so that tile fades out rather than being cut off. */}
         <motion.ul
           ref={railRef}
           variants={container}
@@ -84,13 +89,13 @@ export function Gallery() {
           viewport={{ once: true, amount: 0.15 }}
           tabIndex={0}
           aria-label="Gallery, scroll horizontally to see more"
-          className="scroll-rail -mx-6 -mt-3 flex list-none flex-row gap-5 overflow-x-auto px-6 pb-6 pt-3 sm:-mx-8 sm:px-8 md:mx-0 md:px-0"
+          className="scroll-rail scroll-rail-fade -mx-6 -mt-3 flex list-none flex-row gap-5 overflow-x-auto px-6 pb-6 pt-3 sm:-mx-8 sm:px-8 md:mx-0 md:px-0"
         >
           {galleryItems.map((item) => (
             <motion.li
               key={item.src}
               variants={card}
-              className="group relative aspect-square w-[80vw] shrink-0 overflow-hidden rounded-[2rem] border border-brand-rose/35 bg-white shadow-[0_24px_70px_rgba(201,116,143,0.11)] sm:w-[20rem] md:w-[22rem] lg:w-[24rem]"
+              className="group relative aspect-square w-[80vw] shrink-0 overflow-hidden rounded-[2rem] border border-brand-rose/35 bg-white shadow-[0_24px_70px_rgba(201,116,143,0.11)] sm:w-[25rem] md:w-[27.5rem] lg:w-[30rem]"
             >
               <img
                 src={item.src}

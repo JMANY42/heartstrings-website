@@ -59,6 +59,34 @@ body {
   background: rgba(201, 116, 143, 0.45);
 }
 
+/* Soften the ends of a horizontal rail instead of cutting the tiles off square.
+   `useRailEdgeFade` writes the two widths from the live scroll position: the
+   right edge is faded while there is still rail to reach, the left only once
+   the reader has scrolled off the start, and each one grows in over its own
+   width so an edge appears gradually rather than snapping on. At 0 the two
+   stops of that side collapse onto each other and the mask is fully opaque
+   there, which is what leaves the first and last tile crisp at either end. */
+.scroll-rail-fade {
+  --rail-fade-left: 0px;
+  --rail-fade-right: 0px;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--rail-fade-left),
+    #000 calc(100% - var(--rail-fade-right)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--rail-fade-left),
+    #000 calc(100% - var(--rail-fade-right)),
+    transparent 100%
+  );
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
 /* Testimonial word cloud. The section is exactly one screen tall; circleCloud.ts
    packs the circles for the shape of that screen, leaving them tight against one
    another, and the cloud is then sized in JS to the largest box of the shape the
