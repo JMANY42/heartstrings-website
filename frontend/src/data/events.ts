@@ -166,7 +166,7 @@ export const specialEvents: SpecialEvent[] = [
     details: [
       {
         label: 'Location',
-        value: 'JO Perfomance Hall',
+        value: 'Jonsson Perfomance Hall',
         note: 'UTD Campus JO 2.604',
         icon: 'location',
       },
@@ -183,7 +183,7 @@ export const specialEvents: SpecialEvent[] = [
       {
         label: 'Program',
         value:
-          'Chamber works for strings tied to specific emotions, played by a small Heartstrings ensemble, between the evening’s conversations.',
+          'Chamber works for strings tied to specific emotions, played by a small Heartstrings ensemble between the evening’s conversations.',
         icon: 'program',
       },
       {
