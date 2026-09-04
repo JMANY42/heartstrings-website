@@ -1,5 +1,13 @@
 @import 'tailwindcss';
 
+/* The page shell width, used by `max-w-shell` on every section container.
+   Wide enough that the layout uses a large monitor instead of sitting in a
+   1280px strip down the middle; the copy inside keeps its own narrower caps
+   so line length stays readable. */
+@theme {
+  --container-shell: 100rem;
+}
+
 :root {
   font-family: 'DM Sans', sans-serif;
   color: #6d4c5e;

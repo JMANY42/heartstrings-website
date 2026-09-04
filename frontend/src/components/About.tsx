@@ -11,8 +11,8 @@ const fadeUp = {
 
 export function About() {
   return (
-    <section id="about" className="px-6 py-20 sm:px-8 lg:px-10 lg:py-28">
-      <div className="mx-auto max-w-7xl">
+    <section id="about" className="px-6 py-20 sm:px-8 lg:px-10 lg:py-28 xl:px-14">
+      <div className="mx-auto max-w-shell">
         <motion.div
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.14 } } }}
           initial="hidden"

@@ -124,8 +124,8 @@ export function Testimonials() {
   }, [])
 
   return (
-    <section id="testimonials" className="px-6 py-20 sm:px-8 lg:px-10 lg:py-28">
-      <div className="mx-auto max-w-7xl">
+    <section id="testimonials" className="px-6 py-20 sm:px-8 lg:px-10 lg:py-28 xl:px-14">
+      <div className="mx-auto max-w-shell">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}

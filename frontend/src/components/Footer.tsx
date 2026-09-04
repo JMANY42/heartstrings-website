@@ -1,7 +1,7 @@
 export function Footer() {
   return (
-    <footer className="border-t border-brand-rose/40 bg-brand-cream/85 px-6 py-10 sm:px-8 lg:px-10">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-end md:justify-between">
+    <footer className="border-t border-brand-rose/40 bg-brand-cream/85 px-6 py-10 sm:px-8 lg:px-10 xl:px-14">
+      <div className="mx-auto flex max-w-shell flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="font-display text-3xl leading-none tracking-[0.06em] text-brand-deep sm:text-4xl">
             Heartstrings

@@ -93,8 +93,8 @@ export function Collaborate() {
   }
 
   return (
-    <section id="collaborate" className="px-6 py-20 sm:px-8 lg:px-10 lg:py-28">
-      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
+    <section id="collaborate" className="px-6 py-20 sm:px-8 lg:px-10 lg:py-28 xl:px-14">
+      <div className="mx-auto grid max-w-shell gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
         <motion.div
           variants={reveal}
           initial="hidden"
