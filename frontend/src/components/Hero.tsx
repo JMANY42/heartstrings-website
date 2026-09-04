@@ -33,9 +33,9 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-[100svh] overflow-hidden px-6 pb-20 pt-32 sm:px-8 lg:px-10"
+      className="relative min-h-[100svh] overflow-hidden px-6 pb-20 pt-32 sm:px-8 lg:px-10 xl:px-14"
     >
-      <div className="mx-auto flex min-h-[calc(100svh-8rem)] max-w-7xl items-center">
+      <div className="mx-auto flex min-h-[calc(100svh-8rem)] max-w-shell items-center">
         <motion.div
           variants={container}
           initial="hidden"
@@ -82,7 +82,7 @@ export function Hero() {
 
           <motion.div
             variants={item}
-            className="relative mx-auto w-full max-w-[30rem]"
+            className="relative mx-auto w-full max-w-[30rem] xl:max-w-[34rem]"
             aria-hidden="true"
           >
             <div className="absolute inset-0 rounded-[2.75rem] bg-brand-pink/28 blur-2xl" />

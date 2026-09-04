@@ -44,7 +44,7 @@ export function Navbar() {
           : 'border-transparent bg-transparent'
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 sm:px-8 lg:px-10">
+      <div className="mx-auto flex max-w-shell items-center justify-between px-6 py-4 sm:px-8 lg:px-10 xl:px-14">
         <a
           href="#home"
           className="font-display text-2xl font-semibold tracking-[0.12em] text-brand-deep transition-opacity hover:opacity-80 sm:text-3xl"
@@ -87,7 +87,7 @@ export function Navbar() {
             transition={{ duration: 0.25 }}
             className="border-t border-brand-rose/35 bg-brand-pink/88 px-6 py-5 backdrop-blur-xl md:hidden sm:px-8"
           >
-            <nav className="mx-auto flex max-w-7xl flex-col gap-4" aria-label="Mobile">
+            <nav className="mx-auto flex max-w-shell flex-col gap-4" aria-label="Mobile">
               {links.map((link) => (
                 <a
                   key={link.href}

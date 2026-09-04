@@ -26,6 +26,8 @@
   --color-brand-cta: #e08fa9;
   --color-brand-cta-hover: #d87997;
   --color-brand-ink: #47202f;
+  --container-shell: 100rem;
+
 }
 
 :root {
