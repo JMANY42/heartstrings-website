@@ -1,6 +1,8 @@
+// VITE_DEV_API_URL lets scripts/test-worktree.sh point a worktree's frontend at
+// the backend it started on another port. Unset in a normal `npm run dev`.
 const API_BASE_URL = import.meta.env.MODE === 'production'
         ? '/api'
-        : 'http://localhost:5003/api';
+        : (import.meta.env.VITE_DEV_API_URL ?? 'http://localhost:5003/api');
 
 export type JoinFormData = {
   name: string
