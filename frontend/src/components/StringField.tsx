@@ -35,18 +35,25 @@ import type { StringAudio } from '@/lib/stringAudio'
  *  does double duty — it is what the string sounds, and, divided down, the rate
  *  at which it is drawn moving. `ring` is how long a pluck stays visible and
  *  `sustain` how long it stays audible; the two differ because the eye gives up
- *  on a swing long after the ear has stopped hearing the note. `weight` and
- *  `reach` are the gauge: lower strings are drawn thicker and swing further,
- *  because thicker strings are and do. `reach` is sized so that even a string
- *  plucked as fast as the cursor allows, which tops out at about twice a single
- *  pluck, stays inside the section. */
+ *  on a swing long after the ear has stopped hearing the note, and because the
+ *  two were tuned for different senses: the lower strings settle quickly on
+ *  screen, where six of them all swinging at once is a lot to look at, and ring
+ *  on as long as ever in the ear. `weight` and `reach` are the gauge: lower
+ *  strings are drawn thicker and swing further, because thicker strings are and
+ *  do. `reach` is sized so that even a string plucked as fast as the cursor
+ *  allows stays inside the section.
+ *
+ *  `haste` is the one number here that is not physics. A pulse's speed follows
+ *  its pitch, which leaves the bottom string the slowest thing on the screen by
+ *  a long way — slow enough to read as stuck rather than as heavy. It is given
+ *  a push; the rest are left where the pitch puts them. */
 const STRINGS = [
-  { note: 'E4', pitch: 329.63, rest: 0.14, ring: 4.6, sustain: 1.6, weight: 0.9, reach: 0.033 },
-  { note: 'B3', pitch: 246.94, rest: 0.284, ring: 5.2, sustain: 1.8, weight: 1.1, reach: 0.039 },
-  { note: 'G3', pitch: 196.0, rest: 0.428, ring: 5.8, sustain: 2.0, weight: 1.35, reach: 0.046 },
-  { note: 'D3', pitch: 146.83, rest: 0.572, ring: 6.5, sustain: 2.2, weight: 1.7, reach: 0.052 },
-  { note: 'A2', pitch: 110.0, rest: 0.716, ring: 7.2, sustain: 2.45, weight: 2.1, reach: 0.059 },
-  { note: 'E2', pitch: 82.41, rest: 0.86, ring: 8.0, sustain: 2.7, weight: 2.6, reach: 0.065 },
+  { note: 'E4', pitch: 329.63, rest: 0.14, ring: 4.6, sustain: 1.6, weight: 0.9, reach: 0.037, haste: 1 },
+  { note: 'B3', pitch: 246.94, rest: 0.284, ring: 4.2, sustain: 1.8, weight: 1.1, reach: 0.044, haste: 1 },
+  { note: 'G3', pitch: 196.0, rest: 0.428, ring: 3.6, sustain: 2.0, weight: 1.35, reach: 0.052, haste: 1 },
+  { note: 'D3', pitch: 146.83, rest: 0.572, ring: 3.0, sustain: 2.2, weight: 1.7, reach: 0.058, haste: 1 },
+  { note: 'A2', pitch: 110.0, rest: 0.716, ring: 2.5, sustain: 2.45, weight: 2.1, reach: 0.066, haste: 1 },
+  { note: 'E2', pitch: 82.41, rest: 0.86, ring: 2.1, sustain: 2.7, weight: 2.6, reach: 0.073, haste: 1.4 },
 ]
 
 /** What the pitches are divided by to get the rate the strings are drawn at.
@@ -147,8 +154,10 @@ export function StringField({ focusRef, sound }: Props) {
 
   if (fieldRef.current == null) {
     fieldRef.current = createStringField(
-      STRINGS.map(({ pitch, ring }) => ({
-        frequency: pitch / VISIBLE_SLOWDOWN,
+      STRINGS.map(({ pitch, ring, haste }) => ({
+        // Two lengths to a round trip, and a round trip a period — so the speed
+        // is twice the pitch, slowed to where it can be watched.
+        speed: (2 * pitch * haste) / VISIBLE_SLOWDOWN,
         ring,
       })),
     )
