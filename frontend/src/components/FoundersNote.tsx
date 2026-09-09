@@ -33,19 +33,43 @@ export function FoundersNote() {
       viewport={{ once: true, amount: 0.15 }}
       className="mt-24 lg:mt-32"
     >
-      <motion.div variants={fadeUp}>
-        <h3 className="font-display text-3xl font-bold text-brand-deep sm:text-4xl">
-          Founders
-        </h3>
+      <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:gap-8">
+        <motion.div variants={fadeUp}>
+          <h3 className="font-display text-3xl font-bold text-brand-deep sm:text-4xl">
+            Founders
+          </h3>
 
-        {/* Who they are, under the title — the same names off the roster that
-            the note below signs itself with. */}
-        {founders.length ? (
-          <p className="mt-3 text-sm font-medium uppercase tracking-[0.24em] text-brand-deep/60">
-            {founders.map((founder) => founder.name).join(' & ')}
+          {/* Who they are, under the title — the same names off the roster that
+              the note below signs itself with. */}
+          {founders.length ? (
+            <p className="mt-3 text-sm font-medium uppercase tracking-[0.24em] text-brand-deep/60">
+              {founders.map((founder) => founder.name).join(' & ')}
+            </p>
+          ) : null}
+        </motion.div>
+
+        {/* The rest of the ensemble gets a page of its own — the invitation
+            sits beside the heading, small enough not to outweigh it. */}
+        <motion.div
+          variants={fadeUp}
+          className="w-full max-w-sm shrink-0 rounded-[1.5rem] border border-brand-rose/40 bg-brand-pink/45 p-5 sm:w-auto"
+        >
+          <p className="change text-sm leading-6 text-brand-deep/78">
+            Heartstrings is far more than the two of us. Every performance is
+            played by volunteers who give their evenings and weekends to it.
           </p>
-        ) : null}
-      </motion.div>
+          <a
+            href={musiciansPath}
+            className="group mt-4 inline-flex items-center justify-center gap-2 rounded-full border border-brand-rose/70 bg-white/70 px-5 py-2.5 text-xs font-medium tracking-[0.18em] text-brand-deep shadow-[0_18px_50px_rgba(201,116,143,0.1)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-hover"
+          >
+            Meet our musicians
+            <ArrowUpRight
+              className="h-3.5 w-3.5 transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
+          </a>
+        </motion.div>
+      </div>
 
       <div className="mt-12 grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
         {/* Left — the photo of the two of them. */}
@@ -86,27 +110,6 @@ export function FoundersNote() {
           </blockquote>
         </motion.div>
       </div>
-
-      {/* The rest of the ensemble gets a page of its own. */}
-      <motion.div
-        variants={fadeUp}
-        className="mx-auto mt-12 max-w-3xl rounded-[1.75rem] border border-brand-rose/40 bg-brand-pink/45 p-6 text-center sm:p-7"
-      >
-        <p className="change text-base leading-7 text-brand-deep/78">
-          Heartstrings is far more than the two of us. Every performance is
-          played by volunteers who give their evenings and weekends to it.
-        </p>
-        <a
-          href={musiciansPath}
-          className="group mt-6 inline-flex items-center justify-center gap-2 rounded-full border border-brand-rose/70 bg-white/70 px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-deep shadow-[0_18px_50px_rgba(201,116,143,0.1)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-hover"
-        >
-          Meet our musicians
-          <ArrowUpRight
-            className="h-4 w-4 transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-            aria-hidden="true"
-          />
-        </a>
-      </motion.div>
     </motion.div>
   )
 }
