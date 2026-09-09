@@ -1,132 +1,137 @@
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { MotionConfig, motion } from 'framer-motion'
 
-const container = {
+import { StringField } from '@/components/StringField'
+
+// The hero says almost nothing. The name, a line under it, and one way in — the
+// rest of the screen is the string field behind them, which carries the idea
+// the old copy was spelling out: strings, a pulse, a room that is not quite
+// still. Everything the page used to explain here is explained properly a
+// screen further down, in About.
+
+const NAME = 'Heartstrings'
+
+/** The ink the name is set in, written out rather than reached for as
+ *  `text-brand-deep`. That name lives in tailwind.config.ts, which Tailwind v4
+ *  does not read unless a stylesheet points at it, so it compiles to nothing —
+ *  see the note in index.css. Everything wearing it today is really inheriting
+ *  this colour from :root, and the line below the name wants an opacity of it,
+ *  which needs a rule that actually exists. */
+const INK = '#6d4c5e'
+
+const reveal = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.14,
-      delayChildren: 0.2,
-    },
+    transition: { staggerChildren: 0.055, delayChildren: 0.15 },
   },
 }
 
-const item = {
-  hidden: { opacity: 0, y: 22 },
+/** Each letter of the name rises into place on its own. The name is the only
+ *  thing on the screen with any weight, so it arrives as a phrase rather than
+ *  as a block. */
+const letter = {
+  hidden: { opacity: 0, y: '0.34em' },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, ease: 'easeOut' },
+    transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] },
   },
 }
 
-const notes = [
-  { className: 'left-[8%] top-[14%] note-float', symbol: '♪', size: 'text-4xl' },
-  { className: 'left-[26%] top-[8%] note-float-slow', symbol: '♫', size: 'text-2xl' },
-  { className: 'right-[16%] top-[18%] note-float-reverse', symbol: '♪', size: 'text-5xl' },
-  { className: 'right-[6%] top-[34%] note-float-delay-1', symbol: '♩', size: 'text-3xl' },
-  { className: 'left-[14%] bottom-[20%] note-float-delay-2', symbol: '♬', size: 'text-4xl' },
-  { className: 'right-[24%] bottom-[12%] note-float-delay-3', symbol: '♪', size: 'text-2xl' },
-]
+const settle = {
+  hidden: { opacity: 0, y: 14 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.9, ease: 'easeOut' },
+  },
+}
 
 export function Hero() {
+  // The block the strings gather behind and fade out under. It holds the name
+  // and the line, and not the button — the button is solid enough to sit over
+  // a string, and taking it in would clear a hole most of the screen tall.
+  const markRef = useRef<HTMLDivElement>(null)
+
   return (
-    <section
-      id="home"
-      className="relative min-h-[100svh] overflow-hidden px-6 pb-20 pt-32 sm:px-8 lg:px-10 xl:px-14"
-    >
-      <div className="mx-auto flex min-h-[calc(100svh-8rem)] max-w-shell items-center">
+    // Everything here moves, and a reader who has asked their system for less
+    // of that should get the hero at rest rather than the hero caught
+    // mid-entrance. `user` leaves the fades alone and drops the travel, which
+    // is the part that causes trouble; the string field reads the same
+    // preference itself and draws a single still frame instead of running.
+    <MotionConfig reducedMotion="user">
+      <section
+        id="home"
+        className="relative isolate flex min-h-[100svh] items-center overflow-hidden px-6 py-28 sm:px-8 lg:px-10 xl:px-14"
+      >
+        <StringField focusRef={markRef} />
+
         <motion.div
-          variants={container}
+          variants={reveal}
           initial="hidden"
           animate="visible"
-          className="grid w-full items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14"
+          className="relative mx-auto flex w-full max-w-shell flex-col items-center text-center"
         >
-          <div className="max-w-3xl">
-            <motion.p
-              variants={item}
-              className="mb-9 inline-flex rounded-full border border-brand-rose/60 bg-white/55 px-4 py-2 text-xs font-medium uppercase tracking-[0.34em] text-brand-deep shadow-[0_14px_40px_rgba(201,116,143,0.08)] sm:mb-6"
+          <div ref={markRef} className="px-2">
+            <h1
+              className="font-display leading-[0.86] tracking-[-0.045em]"
+              style={{ color: INK }}
             >
-              University chamber ensemble
-            </motion.p>
-
-            <motion.h1
-              variants={item}
-              className="mb-4 font-display text-[clamp(2.75rem,15.5vw,3.75rem)] leading-[0.88] tracking-[-0.04em] text-brand-deep sm:mb-5 sm:text-7xl lg:mb-6 lg:text-[7.75rem]"
-            >
-              Heartstrings
-            </motion.h1>
-
-            <motion.p
-              variants={item}
-              className="mt-6 max-w-2xl text-lg leading-8 text-brand-deep/78 sm:text-xl"
-            >
-              Bringing the healing power of music to those who need it most.
-            </motion.p>
-
-            <motion.div variants={item} className="mt-10 grid gap-3 sm:flex sm:flex-wrap sm:gap-4">
-              <a
-                href="#join"
-                className="inline-flex items-center justify-center rounded-full bg-brand-cta px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-ink shadow-[0_18px_45px_rgba(224,143,169,0.32)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-cta-hover hover:shadow-[0_22px_55px_rgba(216,121,151,0.42)]"
+              <span className="sr-only">{NAME}</span>
+              <span
+                aria-hidden="true"
+                className="flex justify-center text-[clamp(3rem,15.5vw,10.5rem)]"
               >
-                Join the ensemble
-              </a>
-              <a
-                href="#about"
-                className="inline-flex items-center justify-center rounded-full border border-brand-rose/70 bg-white/55 px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-deep transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-hover"
-              >
-                Discover our mission
-              </a>
-            </motion.div>
+                {NAME.split('').map((character, index) => (
+                  <motion.span
+                    key={`${character}-${index}`}
+                    variants={letter}
+                    className="inline-block"
+                  >
+                    {character}
+                  </motion.span>
+                ))}
+              </span>
+            </h1>
+
+            <motion.p
+              variants={settle}
+              className="mt-9 text-[0.55rem] font-medium uppercase tracking-[0.24em] text-[#6d4c5e]/70 sm:mt-12 sm:text-xs sm:tracking-[0.46em]"
+            >
+              Music where it is needed most
+            </motion.p>
           </div>
 
-          <motion.div
-            variants={item}
-            className="relative mx-auto w-full max-w-[30rem] xl:max-w-[34rem]"
-            aria-hidden="true"
+          <motion.a
+            variants={settle}
+            href="#join"
+            className="mt-12 inline-flex items-center justify-center rounded-full bg-brand-cta px-8 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-ink shadow-[0_18px_45px_rgba(224,143,169,0.32)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-cta-hover hover:shadow-[0_22px_55px_rgba(216,121,151,0.42)] sm:mt-16"
           >
-            <div className="absolute inset-0 rounded-[2.75rem] bg-brand-pink/28 blur-2xl" />
-            <div className="relative overflow-hidden rounded-[2.75rem] border border-white/65 bg-[linear-gradient(180deg,rgba(255,255,255,0.8)_0%,rgba(255,248,244,0.88)_100%)] p-4 shadow-[0_30px_90px_rgba(201,116,143,0.18)] backdrop-blur-sm sm:p-6 lg:p-8">
-              <div className="absolute inset-x-8 top-8 h-px bg-brand-rose/55" />
-              <div className="absolute inset-x-8 top-[4.75rem] h-px bg-brand-rose/35" />
-              <div className="absolute inset-x-8 top-[8rem] h-px bg-brand-rose/25" />
-
-              <div className="relative rounded-[2rem] border border-brand-rose/40 bg-[radial-gradient(circle_at_top,rgba(255,222,233,0.72),transparent_45%),linear-gradient(180deg,rgba(255,252,249,0.92)_0%,rgba(255,247,243,0.98)_100%)] p-2 py-12 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] sm:p-4 sm:py-14 lg:aspect-[4/5] lg:p-6">
-                {notes.map((note) => (
-                  <span
-                    key={note.symbol + note.className}
-                    className={`absolute select-none text-brand-deep/25 ${note.className} ${note.size}`}
-                  >
-                    {note.symbol}
-                  </span>
-                ))}
-
-                <div className="relative mx-auto w-[86%] rounded-[2rem] border border-brand-rose/45 bg-white/58 p-5 shadow-[0_16px_46px_rgba(201,116,143,0.1)] backdrop-blur-sm sm:p-6 lg:absolute lg:left-1/2 lg:top-1/2 lg:w-[78%] lg:-translate-x-1/2 lg:-translate-y-1/2">
-                  <p className="font-display text-2xl italic text-brand-deep sm:text-4xl">
-                    Music that feels close enough to hold.
-                  </p>
-                  <p className="mt-5 max-w-sm text-sm leading-7 text-brand-deep/70 sm:text-base">
-                    Small ensembles. Gentle presence. Concert experiences shaped
-                    around the human pace of healing.
-                  </p>
-
-                  <div className="mt-6 flex items-end justify-between gap-4">
-                    <div>
-                      <p className="text-[0.65rem] uppercase tracking-[0.3em] text-brand-deep/55">
-                        Chamber music
-                      </p>
-                      <p className="mt-2 font-display text-2xl text-brand-deep">
-                        In the room, with you.
-                      </p>
-                    </div>
-                    <div className="h-12 w-12 shrink-0 rounded-full border border-brand-rose/55 bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.85),rgba(255,222,233,0.65)_40%,rgba(249,198,215,0.4)_100%)] sm:h-16 sm:w-16" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+            Join the ensemble
+          </motion.a>
         </motion.div>
-      </div>
-    </section>
+
+        {/* The way on, without a word for it: a thread down to the next
+            section with something travelling along it. */}
+        <motion.a
+          href="#about"
+          aria-label="Continue to about"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.6, duration: 1 }}
+          className="absolute bottom-9 left-1/2 -translate-x-1/2"
+        >
+          <span className="relative block h-16 w-3">
+            <span className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-[linear-gradient(180deg,rgba(201,116,143,0)_0%,rgba(201,116,143,0.4)_45%,rgba(201,116,143,0)_100%)]" />
+            <motion.span
+              className="absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-brand-cta"
+              animate={{ y: [0, 58], opacity: [0, 1, 1, 0] }}
+              transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          </span>
+        </motion.a>
+      </section>
+    </MotionConfig>
   )
 }
