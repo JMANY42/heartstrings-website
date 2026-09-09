@@ -37,23 +37,30 @@ import type { StringAudio } from '@/lib/stringAudio'
  *  `sustain` how long it stays audible; the two differ because the eye gives up
  *  on a swing long after the ear has stopped hearing the note. `weight` and
  *  `reach` are the gauge: lower strings are drawn thicker and swing further,
- *  because thicker strings are and do. */
+ *  because thicker strings are and do. `reach` is sized so that even a string
+ *  plucked as fast as the cursor allows, which tops out at about twice a single
+ *  pluck, stays inside the section. */
 const STRINGS = [
-  { note: 'E4', pitch: 329.63, rest: 0.14, ring: 4.6, sustain: 1.6, weight: 0.9, reach: 0.047 },
-  { note: 'B3', pitch: 246.94, rest: 0.284, ring: 5.2, sustain: 1.8, weight: 1.1, reach: 0.056 },
-  { note: 'G3', pitch: 196.0, rest: 0.428, ring: 5.8, sustain: 2.0, weight: 1.35, reach: 0.065 },
-  { note: 'D3', pitch: 146.83, rest: 0.572, ring: 6.5, sustain: 2.2, weight: 1.7, reach: 0.074 },
-  { note: 'A2', pitch: 110.0, rest: 0.716, ring: 7.2, sustain: 2.45, weight: 2.1, reach: 0.083 },
-  { note: 'E2', pitch: 82.41, rest: 0.86, ring: 8.0, sustain: 2.7, weight: 2.6, reach: 0.093 },
+  { note: 'E4', pitch: 329.63, rest: 0.14, ring: 4.6, sustain: 1.6, weight: 0.9, reach: 0.033 },
+  { note: 'B3', pitch: 246.94, rest: 0.284, ring: 5.2, sustain: 1.8, weight: 1.1, reach: 0.039 },
+  { note: 'G3', pitch: 196.0, rest: 0.428, ring: 5.8, sustain: 2.0, weight: 1.35, reach: 0.046 },
+  { note: 'D3', pitch: 146.83, rest: 0.572, ring: 6.5, sustain: 2.2, weight: 1.7, reach: 0.052 },
+  { note: 'A2', pitch: 110.0, rest: 0.716, ring: 7.2, sustain: 2.45, weight: 2.1, reach: 0.059 },
+  { note: 'E2', pitch: 82.41, rest: 0.86, ring: 8.0, sustain: 2.7, weight: 2.6, reach: 0.065 },
 ]
 
-/** What the pitches are divided by to get the rate the strings are drawn
- *  swinging at. A guitar's lowest string moves eighty-two times a second, which
- *  at any size on a screen is a blur; slowed by this it swings a little under
- *  once a second, and the high E four times as often, exactly as they really
- *  stand to one another. The field is in tune with itself, just far below
- *  hearing. */
-const VISIBLE_SLOWDOWN = 196
+/** What the pitches are divided by to get the rate the strings are drawn at.
+ *
+ *  A wave on a string runs down and back once per period of its fundamental, so
+ *  a real low E carries its pulse across and back eighty-two times a second —
+ *  at any size on a screen, a blur. Slowed by this the low E's pulse takes three
+ *  and a half seconds to cross and the high E's under a second, four times as
+ *  quick, exactly as those two notes really stand to one another. The field runs
+ *  in the tuning it sounds in, just far below hearing.
+ *
+ *  The figure is set by the top string rather than the bottom: any faster and
+ *  its pulse moves further between frames than it can without strobing. */
+const VISIBLE_SLOWDOWN = 600
 
 /** Ends of the ramp the strings take their colour from, top to bottom: the
  *  palette's pink opening into a plum deep enough to hold against the cream.

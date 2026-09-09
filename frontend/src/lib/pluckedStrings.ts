@@ -22,12 +22,17 @@
 //
 // What is drawn, though, is not that sum of shapes. Adding the modes together
 // gives the string's exact instantaneous outline, kinks and all, and drawn at
-// this scale that reads as a wobble rather than as a string. So the modes are
-// kept for the timing — how far the string is carried at any instant, and how
-// that dies away — and the shape they are drawn through is a Gaussian pulse:
-// `PULSE`, a compact disturbance a fifth of the way along the string, the
-// picture of a wave on a string rather than of a string standing still and
-// breathing. It is a chosen shape, not one derived from the modes below it.
+// this scale that reads as a wobble rather than as a string. What is drawn
+// instead is a Gaussian pulse — `PULSE` — running the length of the string,
+// turning over at each pin and coming back, which is what a disturbance on a
+// real string does and what the modes are a decomposition of.
+//
+// So the two halves of this file answer different questions. The pulse decides
+// where the string is bent and which way: it travels, so every part of the
+// string takes its turn, and it inverts on reflection, so a point on the string
+// is carried up, then down, then up. The modes decide only how much is left —
+// a decay, read as an amplitude rather than a position, since the rise and fall
+// is the pulse's job now and a string cannot swing twice over.
 
 /** A string's voice: what it sounds like, expressed visually. */
 export type StringVoice = {
@@ -48,41 +53,95 @@ const STEP = 1 / 120
  *  divide by nearly nothing, so a pluck there would be enormous. */
 const PLUCK_MARGIN = 0.06
 
+/** How much of a string's existing swing survives being plucked again.
+ *
+ *  Plucks add to whatever is already there, and nothing stops a reader dragging
+ *  the cursor back and forth across one string. Left to add freely a string
+ *  hammered at the shortest gap the cursor allows settles at nineteen times a
+ *  single pluck — comfortably off the screen. It is not what a hand does either:
+ *  to pluck a ringing string you first put a finger on it, which stops most of
+ *  what was there before it starts anything new. Holding most of it back is both
+ *  the true behaviour and what bounds the swing. */
+const GRIP = 0.3
+
 /** Length of the pulse, in string lengths — the `a` of the shape below. At a
  *  tenth of the string the disturbance is compact: it is worth a third of its
  *  height half a pulse either side of its peak, and nothing at all by the
  *  middle of the string. */
 const PULSE = 0.1
 
-/** Where the pulse sits: two pulse lengths from the near pin. */
+/** Where the pulse starts: two pulse lengths from the near pin. */
 const PULSE_AT = 2 * PULSE
 
-/** The shape the string is drawn through:
+/** The pulse itself, before it is put on a string:
  *
- *      exp( -(x - 2a)² / a² )
+ *      exp( -z² / a² )
  *
- *  A Gaussian pulse of length `a`, peaking at `2a` and falling away either
- *  side. Note that it is not symmetric about the middle of the string and does
- *  not reach zero at the near pin — it is worth about a fiftieth there, which
- *  at the sizes this is drawn at is under two pixels, and lands where the
- *  stroke has already faded out. Exported so the shape can be checked from
- *  outside. */
-export function pulseAt(position: number) {
-  const offset = position - PULSE_AT
-
-  return Math.exp(-(offset * offset) / (PULSE * PULSE))
+ *  a Gaussian of length `a`, worth one at its centre. */
+function bump(distance: number) {
+  return Math.exp(-(distance * distance) / (PULSE * PULSE))
 }
 
-/** How far along the string the swing is measured: at the pulse's peak, where
- *  the shape is worth one, so the two multiply cleanly.
+/** The pulse after `travel` string-lengths of running, at `position` along the
+ *  string. This is the shape asked for — a Gaussian of length `a`, starting at
+ *  `2a` — set moving and made to obey the pins.
  *
- *  Every mode reaches it. Measured at the middle of the string the even modes
- *  would count for nothing — a string in its second mode has a still centre —
- *  but a fifth of the way along nothing has a node, so all four modes move the
- *  pulse and the fast ones are visible in it. */
-const PROBE = Array.from({ length: MODES }, (_, order) =>
-  Math.sin((order + 1) * Math.PI * PULSE_AT),
-)
+ *  It obeys them by the method of images. A pulse on a string held at both ends
+ *  behaves exactly like a pulse on an endless string that also carries a mirror
+ *  copy of itself: upside down, and reflected about the pin. The two cancel at
+ *  the pin, which is what holding it there means, and as the real pulse runs off
+ *  the end its mirror runs on — so the reflection is not a special case to be
+ *  handled but something that simply happens, inverted, the way it does on a
+ *  real string. Mirroring the mirrors gives a copy every two string lengths, and
+ *  since the pulse is spent within half a length only the nearest few can
+ *  contribute anything.
+ *
+ *  So the pulse crosses to the far pin, turns over, comes back, turns over
+ *  again, and is exactly nothing at both ends the whole time — where the fixed
+ *  version of this shape was a fiftieth adrift at the near pin. `travel` runs
+ *  forward without bound; two lengths is one round trip. */
+export function pulseAt(position: number, travel: number) {
+  const wrapped = travel % 2
+  let total = 0
+
+  for (let image = -1; image <= 1; image += 1) {
+    const shift = wrapped + 2 * image
+
+    total += bump(position - shift) - bump(-position - shift)
+  }
+
+  return total
+}
+
+/** How much swing is left in a string, without regard to where in the swing it
+ *  happens to be.
+ *
+ *  A mode's `position` passes through zero twice a cycle, so reading it would
+ *  have the string at rest every time it went by. This reads the oscillator's
+ *  amplitude instead — position and velocity taken together — which only ever
+ *  falls, at the mode's own damping rate. Which matters more than it once did:
+ *  the pulse now takes its rise and fall from travelling and turning over at
+ *  the pins, so what it is scaled by has to be a decay and nothing else, or the
+ *  string would swing twice over.
+ *
+ *  Summed across the modes, so a pluck that put a lot into the fast ones starts
+ *  brighter and settles quickly — the shiver on a sharp pluck. */
+function swingOf(modes: Mode[]) {
+  return modes.reduce(
+    (total, mode) =>
+      total +
+      Math.hypot(
+        mode.position,
+        // Not velocity alone. A damped oscillator's position is
+        // A·e^(-λt)·cos(ω_d·t + φ), and it is this combination — the same one
+        // the exact step above turns on — that recovers A·e^(-λt) exactly.
+        // Velocity on its own leaves a wobble the size of λ/ω_d, which is
+        // small but is a swing that grows of its own accord.
+        (mode.velocity + mode.damping * mode.position) / mode.damped,
+      ),
+    0,
+  )
+}
 
 /** A pluck's decay per mode. Higher modes bend the string more sharply, lose
  *  energy faster, and so fade first — which is what turns the bright kink of a
@@ -130,33 +189,41 @@ export type StringField = {
    *  `strength` is the height of the pull, in the units the swing comes back
    *  in.
    *
-   *  Where it is caught no longer decides what the string looks like — that is
-   *  always the same pulse — but it still decides how the string behaves. A
-   *  pluck near a pin puts more into the modes above the fundamental, which are
-   *  fast and die first, so the pulse starts with a shiver on it and settles
-   *  quickly into a slower rise and fall; caught in the middle it simply swells
-   *  and subsides. How far the pulse moves at all depends on how much the pluck
-   *  displaced the string where the pulse sits, so a pluck landing near it
-   *  moves it most — at the instant it is let go. Not for long after: the modes
-   *  ring at multiples of one another and beat, so which pluck has the pulse
-   *  furthest out keeps changing hands. */
+   *  Where it is caught decides neither the shape nor where it is — the pulse
+   *  owns both, and where it is depends only on how long it has been running.
+   *  What the position decides is the decay. A pluck near a pin is a sharper
+   *  corner, so more of it goes into the modes above the fundamental, which are
+   *  fast and die first: the string starts with more in it and loses most of
+   *  that quickly. Caught in the middle it puts nearly everything into the
+   *  fundamental and fades evenly instead. */
   pluck(index: number, position: number, strength: number): void
   /** Run the strings forward by `seconds`. Time that does not divide evenly
    *  into a step is carried over to the next call, so the strings advance at
    *  the same rate however often this is called. */
   advance(seconds: number): void
   /** Where the string sits at `position` (0–1), relative to its rest line: how
-   *  far the string has been carried under the pulse, shaped by the pulse. */
+   *  much swing the string has left, placed and shaped by the running pulse. */
   displacement(index: number, position: number): number
-  /** How much a string is still ringing: 0 at rest, ~1 just after a full
-   *  pluck. Used to brighten a string while it is moving. */
+  /** How much a string is still ringing: 0 at rest, of the order of one just
+   *  after a full pluck, and only ever falling in between. Used to brighten a
+   *  string while it is moving, and to scale the pulse. */
   energy(index: number): number
 }
 
 export function createStringField(voices: StringVoice[]): StringField {
-  const strings = voices.map((voice) =>
-    Array.from({ length: MODES }, (_, index) => createMode(voice, index + 1)),
-  )
+  const strings = voices.map((voice) => ({
+    modes: Array.from({ length: MODES }, (_, index) => createMode(voice, index + 1)),
+    /** How far this string's pulse has run, in string lengths. It starts where
+     *  the shape says it does and never resets — a pluck feeds the pulse that
+     *  is already running rather than moving it, so nothing ever jumps. */
+    travel: PULSE_AT,
+    /** Lengths per second. A wave on a string makes the round trip — down and
+     *  back, two lengths — once per period of its fundamental, so the speed is
+     *  twice the pitch. The bottom string's pulse crosses in the time the top
+     *  string's crosses four times, which is exactly how far apart those two
+     *  notes are. */
+    speed: 2 * voice.frequency,
+  }))
 
   let carried = 0
 
@@ -175,9 +242,12 @@ export function createStringField(voices: StringVoice[]): StringField {
       const at = Math.min(Math.max(position, PLUCK_MARGIN), 1 - PLUCK_MARGIN)
       const scale = (2 * strength) / (Math.PI * Math.PI * at * (1 - at))
 
-      string.forEach((mode, order) => {
+      string.modes.forEach((mode, order) => {
         const harmonic = order + 1
 
+        // The finger lands before it lets go.
+        mode.position *= GRIP
+        mode.velocity *= GRIP
         mode.position +=
           (scale * Math.sin(harmonic * Math.PI * at)) / (harmonic * harmonic)
       })
@@ -193,7 +263,9 @@ export function createStringField(voices: StringVoice[]): StringField {
         carried -= STEP
 
         for (const string of strings) {
-          for (const mode of string) {
+          string.travel += string.speed * STEP
+
+          for (const mode of string.modes) {
             const { position, velocity, damping, damped, cos, sin, fade } = mode
 
             mode.position =
@@ -214,25 +286,13 @@ export function createStringField(voices: StringVoice[]): StringField {
         return 0
       }
 
-      // How far the string has been moved where the pulse sits, shaped over the
-      // string by the pulse.
-      let swing = 0
-
-      string.forEach((mode, order) => {
-        swing += mode.position * PROBE[order]
-      })
-
-      return swing * pulseAt(position)
+      return swingOf(string.modes) * pulseAt(position, string.travel)
     },
 
     energy(index) {
       const string = strings[index]
 
-      if (!string) {
-        return 0
-      }
-
-      return string.reduce((total, mode) => total + Math.abs(mode.position), 0)
+      return string ? swingOf(string.modes) : 0
     },
   }
 }
