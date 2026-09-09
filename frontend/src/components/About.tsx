@@ -47,24 +47,27 @@ export function About() {
           <div className="mt-12 grid items-start gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
             {/* Left — the copy, and the quote it closes on. */}
             <motion.div variants={fadeUp}>
-              <p className="text-lg leading-8 text-brand-deep/78 sm:text-xl">
+              <p className="change text-lg leading-8 text-brand-deep/78 sm:text-xl">
                 Heartstrings is a student-run ensemble that believes music
                 belongs everywhere — especially in places of hardship. We visit
                 hospitals, clinics, and care facilities to perform intimate
                 chamber music for patients, families, and staff.
               </p>
 
-              <p className="mt-6 text-lg leading-8 text-brand-deep/78 sm:text-xl">
+              <p className="change mt-6 text-lg leading-8 text-brand-deep/78 sm:text-xl">
                 Our repertoire spans Baroque to contemporary, performed by small
                 ensembles of 4–6 musicians. Every performance is free,
                 volunteer-driven, and tailored to the setting.
               </p>
+              <motion.blockquote
+                variants={fadeUp}
+                className="mt-10 max-w-xl border-l-2 border-brand-deep/20 pl-6"
+              >
+              <p className="font-display text-3xl italic leading-tight text-brand-deep sm:text-4xl">
+                “Music expresses that which cannot be put into words and that which cannot remain silent.”
+              </p>
+            </motion.blockquote>
 
-              <blockquote className="mt-10 max-w-xl">
-                <p className="font-display text-3xl italic leading-tight text-brand-deep sm:text-4xl">
-                  “Music gives voice to that which cannot be put into words.”
-                </p>
-              </blockquote>
             </motion.div>
 
             {/* Right — the photo. */}

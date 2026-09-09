@@ -7,7 +7,7 @@ export function Footer() {
             Heartstrings
           </p>
           <p className="mt-3 max-w-sm text-sm leading-7 text-brand-deep/70">
-            Healing, one note at a time.
+            Music Where it is Needed Most
           </p>
         </div>
 

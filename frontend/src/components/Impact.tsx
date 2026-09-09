@@ -188,7 +188,7 @@ export function Impact() {
             variants={fadeUp}
             className="mt-4 font-display text-4xl leading-[0.95] tracking-[-0.03em] text-brand-deep sm:text-5xl lg:text-6xl"
           >
-            What the music has done
+            What our music has done
           </motion.h2>
 
           <div className="mt-12 grid items-start gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
@@ -197,13 +197,13 @@ export function Impact() {
               <h3 className="font-display text-3xl text-brand-deep sm:text-4xl">
                 Where we&apos;ve played
               </h3>
-              <p className="mt-4 max-w-md text-base leading-7 text-brand-deep/72">
+              <p className="change mt-4 max-w-md text-base leading-7 text-brand-deep/72">
                 Hospitals, care homes, and community spaces across the Dallas
                 area that have opened their doors to us.
               </p>
 
               {/* One connected panel — rows are divided, not detached. */}
-              <ul className="mt-8 overflow-hidden rounded-[1.75rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,248,244,0.95)_100%)] shadow-[0_16px_50px_rgba(201,116,143,0.08)]">
+              <ul className="change mt-8 overflow-hidden rounded-[1.75rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,248,244,0.95)_100%)] shadow-[0_16px_50px_rgba(201,116,143,0.08)]">
                 {locations.map((location) => (
                   <li
                     key={location.name}
@@ -242,19 +242,19 @@ export function Impact() {
                 <div className="pointer-events-none absolute left-1/2 top-0 h-52 w-52 -translate-x-1/2 -translate-y-1/3 rounded-full bg-brand-pink/50 blur-3xl" />
 
                 <div className="relative">
-                  <p className="text-sm uppercase tracking-[0.3em] text-brand-deep/62 sm:text-base">
+                  <p className="change text-sm uppercase tracking-[0.3em] text-brand-deep/62 sm:text-base">
                     Patients uplifted
                   </p>
-                  <p className="mt-4 font-display text-7xl leading-none tracking-[-0.04em] text-brand-deep sm:text-8xl lg:text-[7rem]">
+                  <p className="change mt-4 font-display text-7xl leading-none tracking-[-0.04em] text-brand-deep sm:text-8xl lg:text-[7rem]">
                     {patients.toLocaleString()}
                     <span aria-hidden="true">+</span>
                   </p>
-                  <p className="mx-auto mt-5 max-w-sm text-base leading-7 text-brand-deep/72">
+                  <p className="change mx-auto mt-5 max-w-sm text-base leading-7 text-brand-deep/72">
                     Patients, families, and caregivers who have heard live music
                     from a Heartstrings ensemble.
                   </p>
 
-                  <div className="mt-8 rounded-[1.75rem] border border-brand-rose/40 bg-brand-pink/45 px-6 py-5">
+                  <div className="change mt-8 rounded-[1.75rem] border border-brand-rose/40 bg-brand-pink/45 px-6 py-5">
                     <p className="text-xs uppercase tracking-[0.24em] text-brand-deep/55">
                       Raised for care and outreach
                     </p>

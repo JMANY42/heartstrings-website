@@ -68,7 +68,7 @@ export function Gallery({
               </p>
             ) : null}
             {heading ? (
-              <h2 className="mt-4 font-display text-4xl leading-[0.95] tracking-[-0.03em] text-brand-deep sm:text-5xl lg:text-6xl">
+              <h2 className="change mt-4 font-display text-4xl leading-[0.95] tracking-[-0.03em] text-brand-deep sm:text-5xl lg:text-6xl">
                 {heading}
               </h2>
             ) : null}

@@ -54,14 +54,14 @@ export function MusiciansPage() {
             variants={fadeUp}
             className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-brand-deep/72 sm:text-xl"
           >
-            Every Heartstrings performance is played by volunteers — students
+            Every Heartstrings performance is played by our volunteers — students
             who give their evenings and weekends to bring music to those who need it most.
           </motion.p>
         </motion.div>
       </section>
 
       {/* The roster */}
-      <section className="px-6 py-14 sm:px-8 lg:px-10 lg:py-20 xl:px-14">
+      <section className="change px-6 py-14 sm:px-8 lg:px-10 lg:py-20 xl:px-14">
         <motion.ul
           variants={stagger}
           initial="hidden"

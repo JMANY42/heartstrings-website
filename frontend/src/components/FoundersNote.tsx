@@ -73,7 +73,7 @@ export function FoundersNote() {
             {missionStatement.map((paragraph, index) => (
               <p
                 key={index}
-                className="mt-6 text-lg leading-8 text-brand-deep/78 first:mt-0 sm:text-xl"
+                className="change mt-6 text-lg leading-8 text-brand-deep/78 first:mt-0 sm:text-xl"
               >
                 {paragraph}
               </p>
@@ -92,7 +92,7 @@ export function FoundersNote() {
         variants={fadeUp}
         className="mx-auto mt-12 max-w-3xl rounded-[1.75rem] border border-brand-rose/40 bg-brand-pink/45 p-6 text-center sm:p-7"
       >
-        <p className="text-base leading-7 text-brand-deep/78">
+        <p className="change text-base leading-7 text-brand-deep/78">
           Heartstrings is far more than the two of us. Every performance is
           played by volunteers who give their evenings and weekends to it.
         </p>

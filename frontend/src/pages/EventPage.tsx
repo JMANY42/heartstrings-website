@@ -30,7 +30,7 @@ const eyebrowClass =
   'text-xs font-medium uppercase tracking-[0.34em] text-brand-deep/55'
 const headingClass =
   'mt-4 font-display text-4xl leading-[0.95] tracking-[-0.03em] text-brand-deep sm:text-5xl'
-const bodyClass = 'text-lg leading-8 text-brand-deep/78'
+const bodyClass = 'change text-lg leading-8 text-brand-deep/78'
 
 const isExternal = (href: string) => /^https?:\/\//.test(href)
 
@@ -223,7 +223,7 @@ export function EventPage({ event }: { event: SpecialEvent }) {
                 Guest speakers
               </h3>
 
-              <ul className="mt-6 space-y-4">
+              <ul className="change mt-6 space-y-4">
                 {event.speakers.map((speaker, index) => (
                   <li key={`${speaker.name}-${index}`}>
                     <SpeakerCard speaker={speaker} />

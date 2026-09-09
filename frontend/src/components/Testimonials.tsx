@@ -255,7 +255,7 @@ export function Testimonials() {
             >
               <div
                 data-circle-text
-                className="mx-auto w-fit max-w-[72cqw]"
+                className="change mx-auto w-fit max-w-[72cqw]"
                 style={{ fontSize: `${testimonial.quoteSize}cqw` }}
               >
                 <blockquote className="leading-[1.3] hyphens-auto">
