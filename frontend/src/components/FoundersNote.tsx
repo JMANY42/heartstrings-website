@@ -35,7 +35,7 @@ export function FoundersNote() {
     >
       <motion.h3
         variants={fadeUp}
-        className="text-center font-display text-2xl text-brand-deep sm:text-3xl"
+        className="font-display text-2xl text-brand-deep sm:text-3xl"
       >
         Founders
       </motion.h3>
