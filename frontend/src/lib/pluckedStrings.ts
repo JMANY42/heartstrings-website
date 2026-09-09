@@ -19,6 +19,18 @@
 // the true answer at any step — and because the step is fixed the sine and
 // cosine it needs are worked out once, when the field is built, instead of
 // every frame.
+//
+// What is drawn, though, is not that sum of shapes. Adding the modes together
+// gives the string's exact instantaneous outline, kinks and all — which is true
+// but is not what a vibrating string looks like. Watch a real one and you see
+// one smooth symmetric bulge, widest in the middle and tapering into both pins,
+// because the fundamental dominates the shape while the modes above it are too
+// fine and too short-lived for an eye to separate. So the modes are kept for
+// the timing — how far the string is displaced at any instant, and how that
+// dies away — and the shape they are drawn through is `SPREAD` below: a
+// symmetric Gaussian, which at the width used here is the fundamental to within
+// a thousandth. The eye gets the envelope it would really see, and the physics
+// still decides everything about how it moves.
 
 /** A string's voice: what it sounds like, expressed visually. */
 export type StringVoice = {
@@ -38,6 +50,41 @@ const STEP = 1 / 120
 /** Where a pluck is allowed to land. Right at the pin the mode amplitudes
  *  divide by nearly nothing, so a pluck there would be enormous. */
 const PLUCK_MARGIN = 0.06
+
+/** Width of the bell the swing is drawn through, in string lengths.
+ *
+ *  Not a number picked for looks. A string pinned at both ends and vibrating in
+ *  its fundamental holds the shape sin(πx), and a Gaussian this wide — once it
+ *  is pulled down to meet the pins, which is what `EDGE` does — follows that
+ *  curve to within seven ten-thousandths across the whole span. So the bell is
+ *  the real shape rather than a stand-in for it, and the symmetry is the
+ *  string's own: both halves of a vibrating string are mirror images, whichever
+ *  end it was plucked from. */
+const SPREAD = 0.5275
+
+/** What the bell is worth at the pins, and so how much has to come off it for
+ *  the string to be pinned at all. A Gaussian never quite reaches zero. */
+const EDGE = Math.exp(-0.5 * (0.5 / SPREAD) ** 2)
+
+/** How far along the string the swing is measured: the middle, where the bell
+ *  is worth one, so the two multiply cleanly.
+ *
+ *  Only the odd modes reach it. The even ones have a node exactly in the
+ *  middle — a string in its second mode has a still centre, one half going up
+ *  as the other comes down — so they add nothing to how far it swings, which is
+ *  right. They still count towards `energy`, which is why they are carried. */
+const MIDDLE = Array.from({ length: MODES }, (_, order) =>
+  Math.sin((order + 1) * Math.PI * 0.5),
+)
+
+/** The swing's shape: a symmetric bell over the middle of the string, worth one
+ *  there and nothing at either pin. Exported so it can be held against sin(πx)
+ *  from outside. */
+export function bellAt(position: number) {
+  const offset = (position - 0.5) / SPREAD
+
+  return (Math.exp(-0.5 * offset * offset) - EDGE) / (1 - EDGE)
+}
 
 /** A pluck's decay per mode. Higher modes bend the string more sharply, lose
  *  energy faster, and so fade first — which is what turns the bright kink of a
@@ -82,14 +129,24 @@ function createMode(voice: StringVoice, harmonic: number): Mode {
 
 export type StringField = {
   /** Pull a string aside at `position` (0–1 across its length) and let go.
-   *  `strength` is the height of the pull, in the same units the shape comes
-   *  back in — so 1 plucks a string one unit clear of its rest line. */
+   *  `strength` is the height of the pull, in the units the swing comes back
+   *  in.
+   *
+   *  Where it is caught no longer decides what the string looks like — that is
+   *  always the same symmetric bell — but it still decides how the string
+   *  behaves. A pluck near a pin puts more into the modes above the
+   *  fundamental, which are fast and die first, so the string starts with a
+   *  shiver on top of its swing and settles quickly into a slower one; caught
+   *  in the middle it simply swells and subsides. Near a pin also moves the
+   *  middle of the string less, so it swings less far, which is what a real one
+   *  does. */
   pluck(index: number, position: number, strength: number): void
   /** Run the strings forward by `seconds`. Time that does not divide evenly
    *  into a step is carried over to the next call, so the strings advance at
    *  the same rate however often this is called. */
   advance(seconds: number): void
-  /** Where the string sits at `position` (0–1), relative to its rest line. */
+  /** Where the string sits at `position` (0–1), relative to its rest line: how
+   *  far its middle has swung, spread over its length by the bell. */
   displacement(index: number, position: number): number
   /** How much a string is still ringing: 0 at rest, ~1 just after a full
    *  pluck. Used to brighten a string while it is moving. */
@@ -157,13 +214,15 @@ export function createStringField(voices: StringVoice[]): StringField {
         return 0
       }
 
-      let total = 0
+      // How far the middle of the string has been carried, from the modes that
+      // reach it, spread over the string by the bell.
+      let middle = 0
 
       string.forEach((mode, order) => {
-        total += mode.position * Math.sin((order + 1) * Math.PI * position)
+        middle += mode.position * MIDDLE[order]
       })
 
-      return total
+      return middle * bellAt(position)
     },
 
     energy(index) {

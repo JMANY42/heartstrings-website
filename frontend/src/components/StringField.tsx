@@ -39,12 +39,12 @@ import type { StringAudio } from '@/lib/stringAudio'
  *  `reach` are the gauge: lower strings are drawn thicker and swing further,
  *  because thicker strings are and do. */
 const STRINGS = [
-  { note: 'E4', pitch: 329.63, rest: 0.14, ring: 4.6, sustain: 1.6, weight: 0.9, reach: 0.026 },
-  { note: 'B3', pitch: 246.94, rest: 0.284, ring: 5.2, sustain: 1.8, weight: 1.1, reach: 0.031 },
-  { note: 'G3', pitch: 196.0, rest: 0.428, ring: 5.8, sustain: 2.0, weight: 1.35, reach: 0.036 },
-  { note: 'D3', pitch: 146.83, rest: 0.572, ring: 6.5, sustain: 2.2, weight: 1.7, reach: 0.041 },
-  { note: 'A2', pitch: 110.0, rest: 0.716, ring: 7.2, sustain: 2.45, weight: 2.1, reach: 0.046 },
-  { note: 'E2', pitch: 82.41, rest: 0.86, ring: 8.0, sustain: 2.7, weight: 2.6, reach: 0.052 },
+  { note: 'E4', pitch: 329.63, rest: 0.14, ring: 4.6, sustain: 1.6, weight: 0.9, reach: 0.031 },
+  { note: 'B3', pitch: 246.94, rest: 0.284, ring: 5.2, sustain: 1.8, weight: 1.1, reach: 0.037 },
+  { note: 'G3', pitch: 196.0, rest: 0.428, ring: 5.8, sustain: 2.0, weight: 1.35, reach: 0.043 },
+  { note: 'D3', pitch: 146.83, rest: 0.572, ring: 6.5, sustain: 2.2, weight: 1.7, reach: 0.049 },
+  { note: 'A2', pitch: 110.0, rest: 0.716, ring: 7.2, sustain: 2.45, weight: 2.1, reach: 0.055 },
+  { note: 'E2', pitch: 82.41, rest: 0.86, ring: 8.0, sustain: 2.7, weight: 2.6, reach: 0.062 },
 ]
 
 /** What the pitches are divided by to get the rate the strings are drawn
@@ -70,8 +70,11 @@ const BOTTOM_COLOUR = [138, 62, 92]
 const GATHER = 0.46
 const GATHER_WIDTH = 0.34
 
-/** Points along a string. Enough that the fourth mode — two full waves across
- *  the screen — is a curve rather than a set of corners. */
+/** Points along a string. Both curves a string is drawn through — the bell it
+ *  swings in and the gather that pulls it towards the wordmark — are smooth and
+ *  broad, so this is far more than the shape needs; it is set for the width of
+ *  the screen instead, so that even on a very wide one the segments stay short
+ *  enough not to read as a polyline. */
 const SAMPLES = 160
 
 /** The resting pulse the field plays itself on: a beat, its answer, and a
