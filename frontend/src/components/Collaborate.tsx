@@ -109,20 +109,8 @@ export function Collaborate() {
             Bring Heartstrings to your space
           </h2>
           <p className="mt-6 text-lg leading-8 text-brand-deep/78 sm:text-xl">
-            Hospitals, clinics, and event organizers can invite our ensembles to
-            share intimate performances designed around the setting and the
-            people in it.
+            Do you work at a hospital, clinic, care home, or anywhere where live music would make a difference? We'd love to perform for you! Fill out the form and we'll get back to you to discuss how we can bring music to your space.
           </p>
-
-          <div className="mt-10 space-y-4 rounded-[2rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.8)_0%,rgba(255,248,244,0.94)_100%)] p-6 shadow-[0_24px_70px_rgba(201,116,143,0.1)] sm:p-8">
-            <p className="font-display text-3xl italic text-brand-deep sm:text-4xl">
-              For patients, families, caregivers, and staff.
-            </p>
-            <p className="text-sm leading-7 text-brand-deep/72 sm:text-base">
-              We coordinate repertoire and ensemble size carefully so every
-              visit feels respectful, present, and music-first.
-            </p>
-          </div>
         </motion.div>
 
         <motion.div

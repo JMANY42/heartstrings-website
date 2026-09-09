@@ -55,8 +55,7 @@ export function MusiciansPage() {
             className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-brand-deep/72 sm:text-xl"
           >
             Every Heartstrings performance is played by volunteers — students
-            who give their evenings and weekends to a room that needed the
-            music more than a concert hall would have.
+            who give their evenings and weekends to bring music to those who need it most.
           </motion.p>
         </motion.div>
       </section>

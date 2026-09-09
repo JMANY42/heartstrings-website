@@ -114,16 +114,8 @@ export function Join() {
             Make music that matters
           </h2>
           <p className="mt-6 text-lg leading-8 text-brand-deep/78 sm:text-xl">
-            Students who want to share chamber music in hospitals and clinics
-            are welcome to request membership. We look for care, consistency,
-            and musical sensitivity above all else.
+            Love playing music? Want to make a difference you can see? Want an awesome group of friends? Sounds like you're perfect for Heartstrings! We welcome musicians of all skill levels, instruments, and backgrounds.
           </p>
-
-          <div className="mt-10 rounded-[2rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,248,244,0.94)_100%)] p-6 shadow-[0_24px_70px_rgba(201,116,143,0.1)] sm:p-8">
-            <p className="font-display text-3xl italic text-brand-deep sm:text-4xl">
-              Rehearse thoughtfully. Perform gently. Show up for people.
-            </p>
-          </div>
         </motion.div>
 
         <motion.div
@@ -188,8 +180,7 @@ export function Join() {
               </button>
 
               <p className="text-sm leading-6 text-brand-deep/62 sm:max-w-sm sm:text-right">
-                Expectation is simple: be prepared, be kind, and care about the
-                people in the room.
+                Expectation is simple: be prepared, be kind, and make a difference.
               </p>
             </div>
 

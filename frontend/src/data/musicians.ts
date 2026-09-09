@@ -73,7 +73,7 @@ export const musicians: Musician[] = [
     role: 'Co-founder & President',
     instruments: ['Violin'],
     major: 'Biology',
-    joined: 'Founding member, Fall 2025',
+    joined: 'Fall 2025',
     blurb:
       'Founded heartstrings as a way to reach out to the people who need music most. Plays first violin and finds/arranges pieces for the group.',
   },
@@ -83,7 +83,7 @@ export const musicians: Musician[] = [
     role: 'Co-founder & Vice President',
     instruments: ['Violin'],
     major: 'Neuroscience',
-    joined: 'Founding member, Fall 2025',
+    joined: 'Fall 2025',
     blurb:
       'Founded heartstrings as a way to reach out to the people who need music most. Plays first violin and finds/arranges pieces for the group.',
   },
@@ -99,7 +99,7 @@ export const musicians: Musician[] = [
   },
   {
     slug: 'officer-outreach',
-    name: 'Musician name',
+    name: 'Habeen Kim',
     role: 'Outreach Officer',
     instruments: ['Flute'],
     major: 'Public Health',
@@ -110,6 +110,7 @@ export const musicians: Musician[] = [
   {
     slug: 'musician-five',
     name: 'Ashhad Qazi',
+    role: 'Officer',
     instruments: ['Viola'],
     major: 'Business',
     joined: 'Spring 2025',
@@ -121,6 +122,7 @@ export const musicians: Musician[] = [
     name: 'Jason Nguyen',
     instruments: ['Piano', 'Guitar'],
     major: 'Computer Science',
+    role: 'Officer',
     joined: 'Fall 2025',
     blurb:
       'Accompanies whatever the room has a piano for, and arranges pieces down to whichever three or four of us made it that afternoon.',
@@ -130,6 +132,7 @@ export const musicians: Musician[] = [
     name: 'Olivia Lee',
     instruments: ['Cello'],
     major: 'Psychology',
+    role: 'Officer',
     joined: 'Fall 2025',
     blurb:
       'Accompanies whatever the room has a piano for, and arranges pieces down to whichever three or four of us made it that afternoon.',
@@ -139,6 +142,7 @@ export const musicians: Musician[] = [
     name: 'Saimanasaa Lastname',
     instruments: ['Viola'],
     major: 'Biochemistry',
+    role: 'Officer',
     joined: 'Fall 2025',
     blurb:
       'Accompanies whatever the room has a piano for, and arranges pieces down to whichever three or four of us made it that afternoon.',
@@ -148,6 +152,7 @@ export const musicians: Musician[] = [
     name: 'Stephen Pereira',
     instruments: ['Violin'],
     major: 'Music',
+    role: 'Officer',
     joined: 'Fall 2025',
     blurb:
       'Accompanies whatever the room has a piano for, and arranges pieces down to whichever three or four of us made it that afternoon.',

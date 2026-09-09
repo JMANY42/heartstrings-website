@@ -30,14 +30,14 @@ export function About() {
 
             <p className="max-w-2xl text-lg leading-8 text-brand-deep/78 sm:text-xl">
               Heartstrings is a student-run ensemble that believes music
-              belongs everywhere — especially in places of hardship. We visit
+              belongs everywhere, especially in places of hardship. We visit
               hospitals, clinics, and care facilities to perform intimate
               chamber music for patients, families, and staff.
             </p>
 
             <p className="max-w-2xl text-lg leading-8 text-brand-deep/78 sm:text-xl">
-              Our repertoire spans Baroque to contemporary, performed by small
-              ensembles of 4–6 musicians. Every performance is free,
+              Our repertoire spans classical to contemporary pop and movie soundtracks, performed by small
+              ensembles of mostly string musicians. Every performance is free,
               volunteer-driven, and tailored to the setting.
             </p>
 
@@ -46,7 +46,7 @@ export function About() {
               className="mt-10 max-w-xl border-l-2 border-brand-deep/20 pl-6"
             >
               <p className="font-display text-3xl italic leading-tight text-brand-deep sm:text-4xl">
-                “Music gives voice to that which cannot be put into words.”
+                “Music expresses that which cannot be put into words and that which cannot remain silent.”
               </p>
             </motion.blockquote>
           </motion.div>
