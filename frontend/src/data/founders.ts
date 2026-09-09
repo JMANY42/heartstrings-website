@@ -1,21 +1,42 @@
 /* ---------------------------------------------------------------------------
    The founders section on the home page.
 
-   Everything it shows lives here: the photo of the co-founders, who they are,
-   and the mission statement in their own words. The section reads from this
-   file, so the copy can change without the component being touched.
+   Who the founders are is NOT written here — it is read out of the roster in
+   `src/data/musicians.ts`, which is the one place a person's name, title,
+   instruments and photo are kept. Anyone whose `role` there says co-founder
+   shows up in this section, in the order the roster lists them, so a founder
+   never has to be renamed in two files.
 
-   NOTE: the names, roles, and the mission statement below are placeholders.
-   Replace them with the founders' own words before this goes live.
+   What does live here is the part of the section the roster has no opinion
+   about: the photo of the two of them together, and the mission statement in
+   their own words.
+
+   NOTE: the mission statement below is a placeholder. Replace it with the
+   founders' own words before this goes live.
 --------------------------------------------------------------------------- */
 
 import { galleryItems } from '@/data/gallery'
+import { initialsFor, musicians, photoFor, type Musician } from '@/data/musicians'
 
-export type Founder = {
-  name: string
-  /** Instrument, title, or both — shown under the name. */
-  role?: string
+/** A founder is just a musician the roster marks as one. */
+export type Founder = Musician & {
+  /** Their photo from `src/assets/musicians/`, while they have one. */
+  photo?: string
+  /** Shown in the soft circle until that photo arrives. */
+  initials: string
 }
+
+/** Matches "Co-founder", "Cofounder & President", "co founder", and so on, so
+    the roster can title someone however it likes without dropping them here. */
+const coFounderRole = /co[-\s]?founder/i
+
+export const founders: Founder[] = musicians
+  .filter((musician) => coFounderRole.test(musician.role ?? ''))
+  .map((musician) => ({
+    ...musician,
+    photo: photoFor(musician),
+    initials: initialsFor(musician.name),
+  }))
 
 /* The photo of the two of them together lives in `src/assets/founders/`, named
    `portrait.<ext>`. See the README in that folder. */
@@ -25,11 +46,6 @@ const founderImageModules = import.meta.glob<string>(
 )
 
 const portraitSrc = Object.values(founderImageModules)[0]
-
-export const founders: Founder[] = [
-  { name: 'Co-founder name', role: 'Co-founder · Violin' },
-  { name: 'Co-founder name', role: 'Co-founder · Cello' },
-]
 
 /** The photo the section is built around. Until the real one is dropped in it
     borrows the home page gallery, so the section never renders with a hole

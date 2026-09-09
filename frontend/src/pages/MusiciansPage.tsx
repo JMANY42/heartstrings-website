@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowUpRight, CalendarDays, Music } from 'lucide-react'
+import { ArrowUpRight, CalendarDays, GraduationCap, Music } from 'lucide-react'
 
 // One entry in `musicians.ts` is one card here. The page knows nothing about
 // who is on the roster; it only knows how a card is laid out.
@@ -96,7 +96,8 @@ export function MusiciansPage() {
 }
 
 /** Photo on top, name under it, officer role as the subtitle under the name,
-    then the instrument and the term they joined, then the blurb. */
+    then a chip per instrument, then their major and the term they joined, then
+    the blurb. */
 function MusicianCard({ musician }: { musician: Musician }) {
   const photo = photoFor(musician)
 
@@ -131,12 +132,34 @@ function MusicianCard({ musician }: { musician: Musician }) {
         </p>
       ) : null}
 
-      {/* Instrument and joining term — the two facts every musician has. */}
+      {/* What they play — a chip each, so a second instrument just adds one. */}
+      <ul className="mt-5 flex flex-wrap items-center justify-center gap-2">
+        {musician.instruments.map((instrument) => (
+          <li
+            key={instrument}
+            className="inline-flex items-center gap-1.5 rounded-full border border-brand-rose/50 bg-brand-pink/40 px-3 py-1.5 text-sm text-brand-deep/75"
+          >
+            <Music
+              className="h-3.5 w-3.5 shrink-0 text-brand-deep/45"
+              aria-hidden="true"
+            />
+            {instrument}
+          </li>
+        ))}
+      </ul>
+
+      {/* Their major, and the term they joined. */}
       <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-brand-rose/35 pt-5 text-sm text-brand-deep/70">
-        <span className="inline-flex items-center gap-2">
-          <Music className="h-4 w-4 shrink-0 text-brand-deep/45" aria-hidden="true" />
-          {musician.instrument}
-        </span>
+        {musician.major ? (
+          <span className="inline-flex items-center gap-2">
+            <GraduationCap
+              className="h-4 w-4 shrink-0 text-brand-deep/45"
+              aria-hidden="true"
+            />
+            <span className="sr-only">Major: </span>
+            {musician.major}
+          </span>
+        ) : null}
         <span className="inline-flex items-center gap-2">
           <CalendarDays
             className="h-4 w-4 shrink-0 text-brand-deep/45"

@@ -2,18 +2,23 @@
    The musicians — one entry here is one card on /musicians.
 
    Everything a card shows comes from this file: the photo, the name, the
-   optional officer role that sits under it, the instrument, when they joined,
-   and a short blurb. Cards render in the order they are written here, so the
-   file itself is the running order — officers first, then the rest, is the
-   convention this list follows.
+   optional officer role that sits under it, the instruments they play, their
+   major, when they joined, and a short blurb. Cards render in the order they
+   are written here, so the file itself is the running order — officers first,
+   then the rest, is the convention this list follows.
 
    A photo goes in `src/assets/musicians/` named after the musician's `slug`.
    See the README in that folder. A musician without one gets their initials in
    a soft circle rather than a broken image, so a card is never half-empty
    while a photo is still being chased.
 
-   NOTE: every entry below is a placeholder. Replace the names, instruments,
-   join dates, roles, and blurbs with the real roster before this goes live.
+   The founders section on the home page reads out of this file too: whoever's
+   `role` says co-founder is who that section shows, so a co-founder's name,
+   title, instruments and photo live here and nowhere else.
+
+   NOTE: most entries below are still placeholders. Replace the names,
+   instruments, majors, join dates, roles, and blurbs with the real roster
+   before this goes live.
 --------------------------------------------------------------------------- */
 
 export type Musician = {
@@ -22,7 +27,10 @@ export type Musician = {
   name: string
   /** Officer title, if they hold one. Shown as the subtitle under the name. */
   role?: string
-  instrument: string
+  /** Everything they play, most-played first. One is a list of one. */
+  instruments: string[]
+  /** Their major — or intended major — while they have one to give. */
+  major?: string
   /** When they joined — a semester reads better than a date. */
   joined: string
   /** Two or three sentences, in their own voice where possible. */
@@ -61,52 +69,85 @@ export function initialsFor(name: string): string {
 export const musicians: Musician[] = [
   {
     slug: 'co-founder-one',
-    name: 'Co-founder name',
+    name: 'Anishka Desai',
     role: 'Co-founder & President',
-    instrument: 'Violin',
-    joined: 'Founding member, Fall 2024',
+    instruments: ['Violin'],
+    major: 'Biology',
+    joined: 'Founding member, Fall 2025',
     blurb:
-      'Started Heartstrings after a semester of playing in hospital lobbies and realising the rooms wanted more. Plays first violin in most of our quartets and books nearly every visit.',
+      'Founded heartstrings as a way to reach out to the people who need music most. Plays first violin and finds/arranges pieces for the group.',
   },
   {
     slug: 'co-founder-two',
-    name: 'Co-founder name',
+    name: 'Shadai Haeri',
     role: 'Co-founder & Vice President',
-    instrument: 'Cello',
-    joined: 'Founding member, Fall 2024',
+    instruments: ['Violin'],
+    major: 'Neuroscience',
+    joined: 'Founding member, Fall 2025',
     blurb:
-      'Handles the programming — which pieces suit which room, and how long a set should run when the audience is tired. Has been playing cello since she was seven.',
+      'Founded heartstrings as a way to reach out to the people who need music most. Plays first violin and finds/arranges pieces for the group.',
   },
   {
     slug: 'officer-treasurer',
-    name: 'Musician name',
+    name: 'Jonathan Lewis',
     role: 'Treasurer',
-    instrument: 'Viola',
-    joined: 'Fall 2024',
+    instruments: ['Cello'],
+    major: 'Computer Science',
+    joined: 'Fall 2025',
     blurb:
-      'Keeps the books and the instrument fund. Joined for one performance in her first semester and has not missed a visit since.',
+      'Loves seeing the smile on patient\'s faces when we play. Maintaines the website as a small side project.',
   },
   {
     slug: 'officer-outreach',
     name: 'Musician name',
     role: 'Outreach Officer',
-    instrument: 'Flute',
+    instruments: ['Flute'],
+    major: 'Public Health',
     joined: 'Spring 2025',
     blurb:
       'The reason we get through the door anywhere. Writes to hospitals and care homes across the Dallas area and turns a maybe into a date on the calendar.',
   },
   {
     slug: 'musician-five',
-    name: 'Musician name',
-    instrument: 'Violin',
+    name: 'Ashhad Qazi',
+    instruments: ['Viola'],
+    major: 'Business',
     joined: 'Spring 2025',
     blurb:
       'Plays second violin and sight-reads anything put in front of her, which has saved more than one set list on the drive over.',
   },
   {
     slug: 'musician-six',
-    name: 'Musician name',
-    instrument: 'Piano',
+    name: 'Jason Nguyen',
+    instruments: ['Piano', 'Guitar'],
+    major: 'Computer Science',
+    joined: 'Fall 2025',
+    blurb:
+      'Accompanies whatever the room has a piano for, and arranges pieces down to whichever three or four of us made it that afternoon.',
+  },
+  {
+    slug: 'musician-seven',
+    name: 'Olivia Lee',
+    instruments: ['Cello'],
+    major: 'Psychology',
+    joined: 'Fall 2025',
+    blurb:
+      'Accompanies whatever the room has a piano for, and arranges pieces down to whichever three or four of us made it that afternoon.',
+  },
+  {
+    slug: 'musician-eight',
+    name: 'Saimanasaa Lastname',
+    instruments: ['Viola'],
+    major: 'Biochemistry',
+    joined: 'Fall 2025',
+    blurb:
+      'Accompanies whatever the room has a piano for, and arranges pieces down to whichever three or four of us made it that afternoon.',
+  },
+  {
+    slug: 'musician-nine',
+    name: 'Stephen Pereira',
+    instruments: ['Violin'],
+    major: 'Music',
     joined: 'Fall 2025',
     blurb:
       'Accompanies whatever the room has a piano for, and arranges pieces down to whichever three or four of us made it that afternoon.',

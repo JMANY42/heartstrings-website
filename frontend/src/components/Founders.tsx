@@ -1,13 +1,15 @@
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 
-// The photo, the names, and the mission statement all come from one file, so
-// the founders can rewrite their own words without this component changing.
+// The mission statement and the photo of the pair come from the founders file;
+// who the founders are comes with them, read off the roster in `musicians.ts`
+// so a name is only ever written in one place.
 import {
   founders,
   foundersPhoto,
   missionStatement,
   musiciansPath,
+  type Founder,
 } from '@/data/founders'
 
 const fadeUp = {
@@ -58,19 +60,12 @@ export function Founders() {
 
               {/* One connected panel, like the locations list above it. */}
               <ul className="mt-6 overflow-hidden rounded-[1.75rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,248,244,0.95)_100%)] shadow-[0_16px_50px_rgba(201,116,143,0.08)]">
-                {founders.map((founder, index) => (
+                {founders.map((founder) => (
                   <li
-                    key={`${founder.name}-${index}`}
+                    key={founder.slug}
                     className="border-b border-brand-rose/30 px-5 py-4 last:border-b-0"
                   >
-                    <p className="font-display text-2xl text-brand-deep sm:text-3xl">
-                      {founder.name}
-                    </p>
-                    {founder.role ? (
-                      <p className="mt-1.5 text-xs uppercase tracking-[0.24em] text-brand-deep/55">
-                        {founder.role}
-                      </p>
-                    ) : null}
+                    <FounderRow founder={founder} />
                   </li>
                 ))}
               </ul>
@@ -121,5 +116,41 @@ export function Founders() {
         </motion.div>
       </div>
     </section>
+  )
+}
+
+/** One founder: their roster photo (or initials while there isn't one), their
+    name, and the title and instruments the roster gives them. */
+function FounderRow({ founder }: { founder: Founder }) {
+  return (
+    <div className="flex items-center gap-4">
+      <div className="h-14 w-14 shrink-0 overflow-hidden rounded-full border border-brand-rose/55 bg-brand-pink/40 shadow-[0_10px_28px_rgba(201,116,143,0.12)]">
+        {founder.photo ? (
+          <img
+            src={founder.photo}
+            alt={founder.name}
+            loading="lazy"
+            className="h-full w-full object-cover object-center"
+          />
+        ) : (
+          <div
+            className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.85),rgba(255,222,233,0.65)_40%,rgba(249,198,215,0.4)_100%)] font-display text-lg text-brand-deep/70"
+            aria-hidden="true"
+          >
+            {founder.initials}
+          </div>
+        )}
+      </div>
+
+      <div className="min-w-0">
+        <p className="font-display text-2xl text-brand-deep sm:text-3xl">
+          {founder.name}
+        </p>
+        <p className="mt-1.5 text-xs uppercase tracking-[0.24em] text-brand-deep/55">
+          {/* The roster's title, then everything they play under it. */}
+          {[founder.role, ...founder.instruments].filter(Boolean).join(' · ')}
+        </p>
+      </div>
+    </div>
   )
 }

@@ -31,8 +31,8 @@ See the README in that folder.
 ## The musicians page
 
 `/musicians` is one card per entry in `frontend/src/data/musicians.ts` — photo,
-name, an optional officer role under the name, instrument, when they joined,
-and a short blurb. Cards render in the order the file lists them, so that file
+name, an optional officer role under the name, a chip per instrument they play
+(`instruments` is a list), their major, when they joined, and a short blurb. Cards render in the order the file lists them, so that file
 is the running order. Photos go in `frontend/src/assets/musicians/`, one per
 musician named after their `slug`; see the README in that folder. A musician
 without a photo gets their initials in a soft circle rather than a gap.
