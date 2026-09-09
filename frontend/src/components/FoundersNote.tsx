@@ -33,7 +33,7 @@ export function FoundersNote() {
       viewport={{ once: true, amount: 0.15 }}
       className="mt-24 lg:mt-32"
     >
-      <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:gap-8">
+      <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:gap-8">
         <motion.div variants={fadeUp}>
           <h3 className="font-display text-3xl font-bold text-brand-deep sm:text-4xl">
             Founders
@@ -49,18 +49,19 @@ export function FoundersNote() {
         </motion.div>
 
         {/* The rest of the ensemble gets a page of its own — the invitation
-            sits beside the heading, small enough not to outweigh it. */}
+            sits beside the heading, running wide rather than tall so it never
+            stands higher than the title it is set against. */}
         <motion.div
           variants={fadeUp}
-          className="w-full max-w-sm shrink-0 rounded-[1.5rem] border border-brand-rose/40 bg-brand-pink/45 p-5 sm:w-auto"
+          className="flex w-full flex-col gap-4 rounded-[1.5rem] border border-brand-rose/40 bg-brand-pink/45 px-5 py-3 sm:flex-row sm:items-center lg:flex-1"
         >
-          <p className="change text-sm leading-6 text-brand-deep/78">
+          <p className="change text-xs leading-5 text-brand-deep/78">
             Heartstrings is far more than the two of us. Every performance is
             played by volunteers who give their evenings and weekends to it.
           </p>
           <a
             href={musiciansPath}
-            className="group mt-4 inline-flex items-center justify-center gap-2 rounded-full border border-brand-rose/70 bg-white/70 px-5 py-2.5 text-xs font-medium tracking-[0.18em] text-brand-deep shadow-[0_18px_50px_rgba(201,116,143,0.1)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-hover"
+            className="group inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-brand-rose/70 bg-white/70 px-4 py-2 text-xs font-medium tracking-[0.18em] text-brand-deep shadow-[0_18px_50px_rgba(201,116,143,0.1)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-hover"
           >
             Meet our musicians
             <ArrowUpRight
