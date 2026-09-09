@@ -12,8 +12,8 @@
    a soft circle rather than a broken image, so a card is never half-empty
    while a photo is still being chased.
 
-   The founders section on the home page reads out of this file too: whoever's
-   `role` says co-founder is who that section shows, so a co-founder's name,
+   The founders note in the about section reads out of this file too: whoever's
+   `role` says co-founder is who that note is signed by, so a co-founder's name,
    title, instruments and photo live here and nowhere else.
 
    NOTE: most entries below are still placeholders. Replace the names,

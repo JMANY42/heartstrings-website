@@ -17,27 +17,17 @@
 --------------------------------------------------------------------------- */
 
 import { galleryItems } from '@/data/gallery'
-import { initialsFor, musicians, photoFor, type Musician } from '@/data/musicians'
-
-/** A founder is just a musician the roster marks as one. */
-export type Founder = Musician & {
-  /** Their photo from `src/assets/musicians/`, while they have one. */
-  photo?: string
-  /** Shown in the soft circle until that photo arrives. */
-  initials: string
-}
+import { musicians, type Musician } from '@/data/musicians'
 
 /** Matches "Co-founder", "Cofounder & President", "co founder", and so on, so
     the roster can title someone however it likes without dropping them here. */
 const coFounderRole = /co[-\s]?founder/i
 
-export const founders: Founder[] = musicians
-  .filter((musician) => coFounderRole.test(musician.role ?? ''))
-  .map((musician) => ({
-    ...musician,
-    photo: photoFor(musician),
-    initials: initialsFor(musician.name),
-  }))
+/** A founder is just a musician the roster marks as one. The note signs itself
+    with their names, in the order the roster lists them. */
+export const founders: Musician[] = musicians.filter((musician) =>
+  coFounderRole.test(musician.role ?? ''),
+)
 
 /* The photo of the two of them together lives in `src/assets/founders/`, named
    `portrait.<ext>`. See the README in that folder. */

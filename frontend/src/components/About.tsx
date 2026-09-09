@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-import { FoundersPanel } from '@/components/Founders'
+import { FoundersNote } from '@/components/FoundersNote'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -20,7 +20,7 @@ export function About() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.28 }}
-          className="grid items-start gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16"
+          className="grid items-start gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16"
         >
           <motion.div variants={fadeUp} className="space-y-6">
             <p className="text-xs font-medium uppercase tracking-[0.34em] text-brand-deep/55">
@@ -53,8 +53,11 @@ export function About() {
             </motion.blockquote>
           </motion.div>
 
-          {/* The founders, in the space the stat card used to take. */}
-          <FoundersPanel />
+          {/* Right — the note from the founders, signed by whoever the
+              roster marks as one. */}
+          <motion.div variants={fadeUp}>
+            <FoundersNote />
+          </motion.div>
         </motion.div>
       </div>
     </section>
