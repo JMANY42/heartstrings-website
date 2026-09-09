@@ -21,16 +21,13 @@
 // every frame.
 //
 // What is drawn, though, is not that sum of shapes. Adding the modes together
-// gives the string's exact instantaneous outline, kinks and all — which is true
-// but is not what a vibrating string looks like. Watch a real one and you see
-// one smooth symmetric bulge, widest in the middle and tapering into both pins,
-// because the fundamental dominates the shape while the modes above it are too
-// fine and too short-lived for an eye to separate. So the modes are kept for
-// the timing — how far the string is displaced at any instant, and how that
-// dies away — and the shape they are drawn through is `SPREAD` below: a
-// symmetric Gaussian, which at the width used here is the fundamental to within
-// a thousandth. The eye gets the envelope it would really see, and the physics
-// still decides everything about how it moves.
+// gives the string's exact instantaneous outline, kinks and all, and drawn at
+// this scale that reads as a wobble rather than as a string. So the modes are
+// kept for the timing — how far the string is carried at any instant, and how
+// that dies away — and the shape they are drawn through is a Gaussian pulse:
+// `PULSE`, a compact disturbance a fifth of the way along the string, the
+// picture of a wave on a string rather than of a string standing still and
+// breathing. It is a chosen shape, not one derived from the modes below it.
 
 /** A string's voice: what it sounds like, expressed visually. */
 export type StringVoice = {
@@ -51,40 +48,41 @@ const STEP = 1 / 120
  *  divide by nearly nothing, so a pluck there would be enormous. */
 const PLUCK_MARGIN = 0.06
 
-/** Width of the bell the swing is drawn through, in string lengths.
+/** Length of the pulse, in string lengths — the `a` of the shape below. At a
+ *  tenth of the string the disturbance is compact: it is worth a third of its
+ *  height half a pulse either side of its peak, and nothing at all by the
+ *  middle of the string. */
+const PULSE = 0.1
+
+/** Where the pulse sits: two pulse lengths from the near pin. */
+const PULSE_AT = 2 * PULSE
+
+/** The shape the string is drawn through:
  *
- *  Not a number picked for looks. A string pinned at both ends and vibrating in
- *  its fundamental holds the shape sin(πx), and a Gaussian this wide — once it
- *  is pulled down to meet the pins, which is what `EDGE` does — follows that
- *  curve to within seven ten-thousandths across the whole span. So the bell is
- *  the real shape rather than a stand-in for it, and the symmetry is the
- *  string's own: both halves of a vibrating string are mirror images, whichever
- *  end it was plucked from. */
-const SPREAD = 0.5275
-
-/** What the bell is worth at the pins, and so how much has to come off it for
- *  the string to be pinned at all. A Gaussian never quite reaches zero. */
-const EDGE = Math.exp(-0.5 * (0.5 / SPREAD) ** 2)
-
-/** How far along the string the swing is measured: the middle, where the bell
- *  is worth one, so the two multiply cleanly.
+ *      exp( -(x - 2a)² / a² )
  *
- *  Only the odd modes reach it. The even ones have a node exactly in the
- *  middle — a string in its second mode has a still centre, one half going up
- *  as the other comes down — so they add nothing to how far it swings, which is
- *  right. They still count towards `energy`, which is why they are carried. */
-const MIDDLE = Array.from({ length: MODES }, (_, order) =>
-  Math.sin((order + 1) * Math.PI * 0.5),
-)
+ *  A Gaussian pulse of length `a`, peaking at `2a` and falling away either
+ *  side. Note that it is not symmetric about the middle of the string and does
+ *  not reach zero at the near pin — it is worth about a fiftieth there, which
+ *  at the sizes this is drawn at is under two pixels, and lands where the
+ *  stroke has already faded out. Exported so the shape can be checked from
+ *  outside. */
+export function pulseAt(position: number) {
+  const offset = position - PULSE_AT
 
-/** The swing's shape: a symmetric bell over the middle of the string, worth one
- *  there and nothing at either pin. Exported so it can be held against sin(πx)
- *  from outside. */
-export function bellAt(position: number) {
-  const offset = (position - 0.5) / SPREAD
-
-  return (Math.exp(-0.5 * offset * offset) - EDGE) / (1 - EDGE)
+  return Math.exp(-(offset * offset) / (PULSE * PULSE))
 }
+
+/** How far along the string the swing is measured: at the pulse's peak, where
+ *  the shape is worth one, so the two multiply cleanly.
+ *
+ *  Every mode reaches it. Measured at the middle of the string the even modes
+ *  would count for nothing — a string in its second mode has a still centre —
+ *  but a fifth of the way along nothing has a node, so all four modes move the
+ *  pulse and the fast ones are visible in it. */
+const PROBE = Array.from({ length: MODES }, (_, order) =>
+  Math.sin((order + 1) * Math.PI * PULSE_AT),
+)
 
 /** A pluck's decay per mode. Higher modes bend the string more sharply, lose
  *  energy faster, and so fade first — which is what turns the bright kink of a
@@ -133,20 +131,22 @@ export type StringField = {
    *  in.
    *
    *  Where it is caught no longer decides what the string looks like — that is
-   *  always the same symmetric bell — but it still decides how the string
-   *  behaves. A pluck near a pin puts more into the modes above the
-   *  fundamental, which are fast and die first, so the string starts with a
-   *  shiver on top of its swing and settles quickly into a slower one; caught
-   *  in the middle it simply swells and subsides. Near a pin also moves the
-   *  middle of the string less, so it swings less far, which is what a real one
-   *  does. */
+   *  always the same pulse — but it still decides how the string behaves. A
+   *  pluck near a pin puts more into the modes above the fundamental, which are
+   *  fast and die first, so the pulse starts with a shiver on it and settles
+   *  quickly into a slower rise and fall; caught in the middle it simply swells
+   *  and subsides. How far the pulse moves at all depends on how much the pluck
+   *  displaced the string where the pulse sits, so a pluck landing near it
+   *  moves it most — at the instant it is let go. Not for long after: the modes
+   *  ring at multiples of one another and beat, so which pluck has the pulse
+   *  furthest out keeps changing hands. */
   pluck(index: number, position: number, strength: number): void
   /** Run the strings forward by `seconds`. Time that does not divide evenly
    *  into a step is carried over to the next call, so the strings advance at
    *  the same rate however often this is called. */
   advance(seconds: number): void
   /** Where the string sits at `position` (0–1), relative to its rest line: how
-   *  far its middle has swung, spread over its length by the bell. */
+   *  far the string has been carried under the pulse, shaped by the pulse. */
   displacement(index: number, position: number): number
   /** How much a string is still ringing: 0 at rest, ~1 just after a full
    *  pluck. Used to brighten a string while it is moving. */
@@ -214,15 +214,15 @@ export function createStringField(voices: StringVoice[]): StringField {
         return 0
       }
 
-      // How far the middle of the string has been carried, from the modes that
-      // reach it, spread over the string by the bell.
-      let middle = 0
+      // How far the string has been moved where the pulse sits, shaped over the
+      // string by the pulse.
+      let swing = 0
 
       string.forEach((mode, order) => {
-        middle += mode.position * MIDDLE[order]
+        swing += mode.position * PROBE[order]
       })
 
-      return middle * bellAt(position)
+      return swing * pulseAt(position)
     },
 
     energy(index) {
