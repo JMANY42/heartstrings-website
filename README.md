@@ -28,9 +28,22 @@ Photos for a page go in `frontend/src/assets/events/<slug>/`. The file named
 `highlight` becomes the wide photo at the top; the rest fill the photo rail.
 See the README in that folder.
 
+## The musicians page
+
+`/musicians` is one card per entry in `frontend/src/data/musicians.ts` — photo,
+name, an optional officer role under the name, instrument, when they joined,
+and a short blurb. Cards render in the order the file lists them, so that file
+is the running order. Photos go in `frontend/src/assets/musicians/`, one per
+musician named after their `slug`; see the README in that folder. A musician
+without a photo gets their initials in a soft circle rather than a gap.
+
+The founders section on the home page links here. Its own copy — the photo of
+the co-founders and their mission statement — lives in
+`frontend/src/data/founders.ts`.
+
 **Nginx must serve `index.html` for these paths.** The build has no file at
-`/events/<slug>`, so without a fallback a direct visit or a refresh 404s. The
-server block needs:
+`/events/<slug>` or `/musicians`, so without a fallback a direct visit or a
+refresh 404s. The server block needs:
 
 ```nginx
 location / {

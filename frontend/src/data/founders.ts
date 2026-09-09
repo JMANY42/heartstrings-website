@@ -46,5 +46,6 @@ export const missionStatement: string[] = [
 ]
 
 /** Where the musicians page lives. The section links to it; the page itself is
-    still to be built, and is wired up in `App.tsx` when it is. */
+    `MusiciansPage.tsx`, routed in `App.tsx`, and its roster is
+    `src/data/musicians.ts`. */
 export const musiciansPath = '/musicians'
