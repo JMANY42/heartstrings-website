@@ -3,6 +3,7 @@ import type { RefObject } from 'react'
 
 import { createStringField } from '@/lib/pluckedStrings'
 import type { StringField as Field } from '@/lib/pluckedStrings'
+import { dealPlucks } from '@/lib/pluckOrder'
 import { createStringAudio } from '@/lib/stringAudio'
 import type { StringAudio } from '@/lib/stringAudio'
 
@@ -73,19 +74,20 @@ const GATHER_WIDTH = 0.34
  *  the screen — is a curve rather than a set of corners. */
 const SAMPLES = 160
 
-/** The resting pulse the field is plucked on: a beat, its answer, and a pause.
- *
- *  The first lands on one of the three wound strings and the second answers
- *  above it, which is why the pair reads as a heartbeat rather than as two
- *  unrelated notes. Each beat works through its own strings in turn, so the
- *  same pair does not come round twice running. `level` is how loud it is when
- *  the strings have been given a voice — well under a plucked one, because this
- *  goes on for as long as the hero is on screen. */
+/** The resting pulse the field plays itself on: a beat, its answer, and a
+ *  pause. `level` is how loud it is once the strings have been given a voice —
+ *  well under a plucked one, because this goes on for as long as the hero is on
+ *  screen. */
 const BEAT = [
-  { at: 0, strength: 1, level: 0.34, strings: [5, 4, 3] },
-  { at: 0.31, strength: 0.62, level: 0.22, strings: [0, 2, 1] },
+  { at: 0, strength: 1, level: 0.34 },
+  { at: 0.31, strength: 0.62, level: 0.22 },
 ]
 const PULSE = 3.6
+
+/** How long after the reader's last pluck the strings start playing themselves
+ *  again. Long enough that a pause in the middle of strumming is not stepped
+ *  on, short enough that a hero left alone comes back to life. */
+const IDLE = 3.2
 
 /** The shortest gap between two plucks of the same string by the cursor. A
  *  string crosses back under a slow-moving cursor several times a second while
@@ -144,6 +146,12 @@ export function StringField({ focusRef, sound }: Props) {
 
   const audioRef = useRef<StringAudio | null>(null)
 
+  // Wall-clock time until which the field should keep out of the way, for the
+  // benefit of anything outside the drawing loop that is playing the strings
+  // itself. The loop keeps its own clock, which only advances while it is
+  // running, so this is in `performance.now()` terms and converted on arrival.
+  const hushRef = useRef(0)
+
   // Built and thrown away with the reader's answer rather than kept around
   // muted. An AudioContext is a real device: leaving one open holds the audio
   // hardware awake, and on a phone that shows up as a battery cost for a page
@@ -158,6 +166,12 @@ export function StringField({ focusRef, sound }: Props) {
     const audio = createStringAudio(STRINGS)
 
     audioRef.current = audio
+
+    // The strum is the instrument being played, so the pulse holds off through
+    // it and for the usual idle afterwards — otherwise a resting beat lands in
+    // the middle of the strum about one time in four.
+    hushRef.current =
+      performance.now() + (STRINGS.length * STRUM_GAP + IDLE) * 1000
 
     const field = fieldRef.current
     const strum = STRINGS.map((_, offset) =>
@@ -204,7 +218,21 @@ export function StringField({ focusRef, sound }: Props) {
     let clock = 0
     let cursor: { x: number; y: number } | null = null
     const plucked = STRINGS.map(() => -Infinity)
-    const turn = BEAT.map(() => 0)
+
+    /** The twelve being dealt out, and how far through it we are. */
+    let bag = dealPlucks(STRINGS.length, BEAT.length)
+    let dealt = 0
+
+    /** Beats are numbered straight through — beat n is the (n % 2)th of pulse
+     *  floor(n / 2) — so the pairs the bag is dealt in cannot drift out of step
+     *  with the pulse they are played on. `origin` is when beat zero fell, and
+     *  moving it moves everything still to come. */
+    let origin = 0.6
+    let next = 0
+
+    /** When the strings may start playing themselves again: pushed out ahead of
+     *  the clock every time the reader plucks one. */
+    let quiet = 0
     let frame = 0
     let last = 0
     let running = false
@@ -250,6 +278,13 @@ export function StringField({ focusRef, sound }: Props) {
 
     const heightAt = (index: number, x: number) =>
       restAt(index, x) + field.displacement(index, x) * STRINGS[index].reach
+
+    /** When a numbered beat falls: which pulse it belongs to, plus where it sits
+     *  inside that pulse. */
+    const beatAt = (index: number) =>
+      origin +
+      Math.floor(index / BEAT.length) * PULSE +
+      BEAT[index % BEAT.length].at
 
     const draw = () => {
       context.clearRect(0, 0, width, height)
@@ -341,32 +376,47 @@ export function StringField({ focusRef, sound }: Props) {
 
       last = now
 
-      const before = clock
-
       clock += elapsed
 
-      // The two beats of the pulse, and the pause after them. Each lands a
-      // little way along its string — never dead centre, where a pluck excites
-      // only the broadest mode and looks like a bounce.
-      BEAT.forEach(({ at, strength, level, strings }, index) => {
-        // A beat is due when this frame steps over it. The pulse repeats, so
-        // both this cycle's and the next one's are tested — a frame that lands
-        // near the end of a cycle steps over the seam into the one after it.
-        const cycle = Math.floor(before / PULSE)
-        const due = [cycle * PULSE + at, (cycle + 1) * PULSE + at]
+      // Anything outside the loop that is playing the strings — the opening
+      // strum — asks for quiet on the wall clock, which only means something
+      // here once it is put in the loop's own terms.
+      if (hushRef.current > now) {
+        quiet = Math.max(quiet, clock + (hushRef.current - now) / 1000)
+      }
 
-        if (!due.some((time) => time > before && time <= clock)) {
-          return
+      // Hold the strings off while the reader is playing them. Rather than
+      // dropping the beats that fall inside that window, the whole schedule is
+      // slid forward by however much it overlaps — so nothing is lost, the pair
+      // that was interrupted resumes as a pair, and the twelve still deals out
+      // every string exactly twice. The first beat back lands `IDLE` after the
+      // reader's last pluck, wherever in the bag it had got to.
+      if (beatAt(next) < quiet) {
+        origin += quiet - beatAt(next)
+      }
+
+      // Every beat this frame has stepped over, in order. More than one only
+      // ever comes up after a stall, and playing them in order is what keeps
+      // the pairs aligned with the bag.
+      while (clock >= beatAt(next)) {
+        const { strength, level } = BEAT[next % BEAT.length]
+
+        if (dealt >= bag.length) {
+          bag = dealPlucks(STRINGS.length, BEAT.length)
+          dealt = 0
         }
 
-        const string = strings[turn[index] % strings.length]
-        const along = 0.24 + 0.52 * ((Math.sin(clock * 1.7 + string) + 1) / 2)
+        const string = bag[dealt]
+        // Never dead centre, where a pluck excites only the broadest mode and
+        // looks like a bounce rather than a string.
+        const along = 0.24 + Math.random() * 0.52
 
-        turn[index] += 1
+        dealt += 1
+        next += 1
         field.pluck(string, along, strength)
         audioRef.current?.pluck(string, level)
         glow = Math.max(glow, strength)
-      })
+      }
 
       glow *= Math.exp(-elapsed * 1.9)
 
@@ -428,6 +478,8 @@ export function StringField({ focusRef, sound }: Props) {
         const strength = Math.min(0.3 + speed * 9, 1.15)
 
         plucked[index] = clock
+        // The instrument is being played, so it stops playing itself.
+        quiet = clock + IDLE
         field.pluck(index, at.x, strength)
         audioRef.current?.pluck(index, strength * CURSOR_LEVEL)
         glow = Math.max(glow, strength * 0.6)
