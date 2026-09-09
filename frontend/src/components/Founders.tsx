@@ -44,7 +44,7 @@ export function Founders() {
             The two who started it
           </motion.h2>
 
-          <div className="mt-12 grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+          <div className="mt-12 grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
             {/* Left — the photo of the two of them, and their names under it. */}
             <motion.div variants={fadeUp}>
               {foundersPhoto.src ? (
