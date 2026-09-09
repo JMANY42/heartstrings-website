@@ -33,12 +33,19 @@ export function FoundersNote() {
       viewport={{ once: true, amount: 0.15 }}
       className="mt-24 lg:mt-32"
     >
-      <motion.h3
-        variants={fadeUp}
-        className="font-display text-2xl text-brand-deep sm:text-3xl"
-      >
-        Founders
-      </motion.h3>
+      <motion.div variants={fadeUp}>
+        <h3 className="font-display text-3xl font-bold text-brand-deep sm:text-4xl">
+          Founders
+        </h3>
+
+        {/* Who they are, under the title — the same names off the roster that
+            the note below signs itself with. */}
+        {founders.length ? (
+          <p className="mt-3 text-sm font-medium uppercase tracking-[0.24em] text-brand-deep/60">
+            {founders.map((founder) => founder.name).join(' & ')}
+          </p>
+        ) : null}
+      </motion.div>
 
       <div className="mt-12 grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
         {/* Left — the photo of the two of them. */}
