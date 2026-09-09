@@ -33,7 +33,7 @@ export function FoundersNote() {
       viewport={{ once: true, amount: 0.15 }}
       className="mt-24 lg:mt-32"
     >
-      <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:gap-8">
+      <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
         <motion.div variants={fadeUp}>
           <h3 className="font-display text-3xl font-bold text-brand-deep sm:text-4xl">
             Founders
@@ -49,13 +49,15 @@ export function FoundersNote() {
         </motion.div>
 
         {/* The rest of the ensemble gets a page of its own — the invitation
-            sits beside the heading, running wide rather than tall so it never
-            stands higher than the title it is set against. */}
+            sits out at the right of the heading, running wide rather than
+            tall so it never stands higher than the title across from it. */}
         <motion.div
           variants={fadeUp}
-          className="flex w-full flex-col gap-4 rounded-[1.5rem] border border-brand-rose/40 bg-brand-pink/45 px-5 py-3 sm:flex-row sm:items-center lg:flex-1"
+          className="flex w-full flex-col gap-4 rounded-[1.5rem] border border-brand-rose/40 bg-brand-pink/45 px-5 py-3 sm:w-auto sm:flex-row sm:items-center"
         >
-          <p className="change text-xs leading-5 text-brand-deep/78">
+          {/* Held to a width that breaks the line in two — two short lines
+              keep the card the same height as the heading opposite. */}
+          <p className="change text-xs leading-5 text-brand-deep/78 sm:max-w-[24rem]">
             Heartstrings is far more than the two of us. Every performance is
             played by volunteers who give their evenings and weekends to it.
           </p>
