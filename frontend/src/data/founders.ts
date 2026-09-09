@@ -1,5 +1,6 @@
 /* ---------------------------------------------------------------------------
-   The founders section on the home page.
+   The founders panel, which fills the right-hand column of the About
+   section on the home page.
 
    Who the founders are is NOT written here — it is read out of the roster in
    `src/data/musicians.ts`, which is the one place a person's name, title,
