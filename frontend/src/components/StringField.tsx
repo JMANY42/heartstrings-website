@@ -2,10 +2,18 @@ import { useEffect, useRef } from 'react'
 import type { RefObject } from 'react'
 
 import { createStringField } from '@/lib/pluckedStrings'
+import type { StringField as Field } from '@/lib/pluckedStrings'
+import { createStringAudio } from '@/lib/stringAudio'
+import type { StringAudio } from '@/lib/stringAudio'
 
-// The hero's backdrop: seven strings drawn straight across the screen, pulled
+// The hero's backdrop: six strings drawn straight across the screen, pulled
 // together where the wordmark sits and splaying out to either edge, so the name
 // looks like the point every line is running out of.
+//
+// It is a guitar. The strings are tuned E A D G B E from the bottom up, they
+// thicken as they descend the way a real set does, and each one both moves and
+// sounds at its own pitch — the same six notes, in the same order, whether you
+// are looking at it or listening to it.
 //
 // Nothing here is a loop of decoration. The strings are the simulation in
 // `pluckedStrings` — pluck one and it really rings and really settles — and
@@ -18,26 +26,41 @@ import { createStringField } from '@/lib/pluckedStrings'
 // fresh shape on every frame, which is the case SVG is worst at — each one
 // would be a new attribute string, parsed, and re-laid out by the browser.
 
-/** The strings, top to bottom, as fractions of the section's height.
+/** The set, top to bottom: standard tuning read the way a player says it, from
+ *  the thin E down to the thick one.
  *
- *  They are not evenly spaced, and the pitches are not a chord. Even spacing
- *  and simple ratios both read as a printed pattern rather than as something
- *  moving; uneven gaps and pitches that never quite line up mean the field
- *  keeps drifting through arrangements it has not been in before. Lower
- *  strings are slower, heavier, and swing further, as a thicker string does. */
+ *  `rest` is where the string lies, as a fraction of the section's height, and
+ *  they are evenly spaced as a guitar's are. `pitch` is the note in Hz, and it
+ *  does double duty — it is what the string sounds, and, divided down, the rate
+ *  at which it is drawn moving. `ring` is how long a pluck stays visible and
+ *  `sustain` how long it stays audible; the two differ because the eye gives up
+ *  on a swing long after the ear has stopped hearing the note. `weight` and
+ *  `reach` are the gauge: lower strings are drawn thicker and swing further,
+ *  because thicker strings are and do. */
 const STRINGS = [
-  { rest: 0.14, frequency: 1.31, ring: 4.4, weight: 1.0, reach: 0.028 },
-  { rest: 0.245, frequency: 1.09, ring: 5.0, weight: 1.15, reach: 0.034 },
-  { rest: 0.365, frequency: 0.93, ring: 5.6, weight: 1.35, reach: 0.04 },
-  { rest: 0.5, frequency: 0.77, ring: 6.4, weight: 1.7, reach: 0.05 },
-  { rest: 0.635, frequency: 0.64, ring: 6.9, weight: 1.4, reach: 0.044 },
-  { rest: 0.755, frequency: 0.55, ring: 7.4, weight: 1.2, reach: 0.037 },
-  { rest: 0.86, frequency: 0.47, ring: 8.0, weight: 1.0, reach: 0.03 },
+  { note: 'E4', pitch: 329.63, rest: 0.14, ring: 4.6, sustain: 1.6, weight: 0.9, reach: 0.026 },
+  { note: 'B3', pitch: 246.94, rest: 0.284, ring: 5.2, sustain: 1.8, weight: 1.1, reach: 0.031 },
+  { note: 'G3', pitch: 196.0, rest: 0.428, ring: 5.8, sustain: 2.0, weight: 1.35, reach: 0.036 },
+  { note: 'D3', pitch: 146.83, rest: 0.572, ring: 6.5, sustain: 2.2, weight: 1.7, reach: 0.041 },
+  { note: 'A2', pitch: 110.0, rest: 0.716, ring: 7.2, sustain: 2.45, weight: 2.1, reach: 0.046 },
+  { note: 'E2', pitch: 82.41, rest: 0.86, ring: 8.0, sustain: 2.7, weight: 2.6, reach: 0.052 },
 ]
 
+/** What the pitches are divided by to get the rate the strings are drawn
+ *  swinging at. A guitar's lowest string moves eighty-two times a second, which
+ *  at any size on a screen is a blur; slowed by this it swings a little under
+ *  once a second, and the high E four times as often, exactly as they really
+ *  stand to one another. The field is in tune with itself, just far below
+ *  hearing. */
+const VISIBLE_SLOWDOWN = 196
+
 /** Ends of the ramp the strings take their colour from, top to bottom: the
- *  palette's pink opening into a plum deep enough to hold against the cream. */
-const TOP_COLOUR = [214, 130, 162]
+ *  palette's pink opening into a plum deep enough to hold against the cream.
+ *
+ *  The pink end is deeper than it looks like it should be. The top strings are
+ *  the thin ones, so they are already the faintest thing on the screen by their
+ *  gauge alone; giving them the palest colour as well left them invisible. */
+const TOP_COLOUR = [198, 112, 146]
 const BOTTOM_COLOUR = [138, 62, 92]
 
 /** How far towards the wordmark the strings are drawn in, and how much of the
@@ -51,10 +74,16 @@ const GATHER_WIDTH = 0.34
 const SAMPLES = 160
 
 /** The resting pulse the field is plucked on: a beat, its answer, and a pause.
- *  Seconds, and the strength of each. */
+ *
+ *  The first lands on one of the three wound strings and the second answers
+ *  above it, which is why the pair reads as a heartbeat rather than as two
+ *  unrelated notes. Each beat works through its own strings in turn, so the
+ *  same pair does not come round twice running. `level` is how loud it is when
+ *  the strings have been given a voice — well under a plucked one, because this
+ *  goes on for as long as the hero is on screen. */
 const BEAT = [
-  { at: 0, strength: 1 },
-  { at: 0.31, strength: 0.62 },
+  { at: 0, strength: 1, level: 0.34, strings: [5, 4, 3] },
+  { at: 0.31, strength: 0.62, level: 0.22, strings: [0, 2, 1] },
 ]
 const PULSE = 3.6
 
@@ -64,10 +93,20 @@ const PULSE = 3.6
  *  string was swinging off the screen. */
 const PLUCK_GAP = 0.1
 
+/** How loud a string the cursor has caught is. */
+const CURSOR_LEVEL = 0.85
+
+/** The strum played when the strings are given their voice: bottom string
+ *  first, upwards, this many seconds apart. It is both an answer to the click
+ *  and the plainest way to say what has just been switched on. */
+const STRUM_GAP = 0.075
+
 type Props = {
   /** The block the strings gather behind, and are faded out under so the text
    *  on top of them stays readable. */
   focusRef: RefObject<HTMLElement | null>
+  /** Whether the strings may be heard as well as seen. */
+  sound: boolean
 }
 
 function colourAt(position: number) {
@@ -86,18 +125,69 @@ function gatherAt(x: number) {
   return Math.exp(-offset * offset)
 }
 
-export function StringField({ focusRef }: Props) {
+export function StringField({ focusRef, sound }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  // The strings themselves outlive both effects below: the drawing loop reads
+  // them every frame, and the strum that greets a reader who turns the sound on
+  // plucks them from outside it.
+  const fieldRef = useRef<Field | null>(null)
+
+  if (fieldRef.current == null) {
+    fieldRef.current = createStringField(
+      STRINGS.map(({ pitch, ring }) => ({
+        frequency: pitch / VISIBLE_SLOWDOWN,
+        ring,
+      })),
+    )
+  }
+
+  const audioRef = useRef<StringAudio | null>(null)
+
+  // Built and thrown away with the reader's answer rather than kept around
+  // muted. An AudioContext is a real device: leaving one open holds the audio
+  // hardware awake, and on a phone that shows up as a battery cost for a page
+  // that is not making a sound.
+  useEffect(() => {
+    if (!sound) {
+      return
+    }
+
+    // Reached from a click, which is the only moment a browser will let an
+    // AudioContext start.
+    const audio = createStringAudio(STRINGS)
+
+    audioRef.current = audio
+
+    const field = fieldRef.current
+    const strum = STRINGS.map((_, offset) =>
+      window.setTimeout(
+        () => {
+          const index = STRINGS.length - 1 - offset
+
+          field?.pluck(index, 0.3, 0.62)
+          audio?.pluck(index, 0.72)
+        },
+        offset * STRUM_GAP * 1000,
+      ),
+    )
+
+    return () => {
+      strum.forEach(window.clearTimeout)
+      audio?.close()
+      audioRef.current = null
+    }
+  }, [sound])
 
   useEffect(() => {
     const canvas = canvasRef.current
     const context = canvas?.getContext('2d')
+    const field = fieldRef.current
 
-    if (!canvas || !context) {
+    if (!canvas || !context || !field) {
       return
     }
 
-    const field = createStringField(STRINGS)
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     // The section's size in CSS pixels, and where the wordmark sits inside it.
@@ -114,14 +204,10 @@ export function StringField({ focusRef }: Props) {
     let clock = 0
     let cursor: { x: number; y: number } | null = null
     const plucked = STRINGS.map(() => -Infinity)
+    const turn = BEAT.map(() => 0)
     let frame = 0
     let last = 0
     let running = false
-
-    /** Which string the next beat lands on. Walking through them in steps that
-     *  do not divide into seven means the pattern never reads as top-to-bottom
-     *  and takes a long time to come back to where it started. */
-    let voice = 3
 
     const measure = () => {
       const box = canvas.getBoundingClientRect()
@@ -259,10 +345,10 @@ export function StringField({ focusRef }: Props) {
 
       clock += elapsed
 
-      // The two beats of the pulse, and the pause after them. Each lands on a
-      // different string, and a little way along it — never dead centre, where
-      // a pluck excites only the broadest mode and looks like a bounce.
-      BEAT.forEach(({ at, strength }, index) => {
+      // The two beats of the pulse, and the pause after them. Each lands a
+      // little way along its string — never dead centre, where a pluck excites
+      // only the broadest mode and looks like a bounce.
+      BEAT.forEach(({ at, strength, level, strings }, index) => {
         // A beat is due when this frame steps over it. The pulse repeats, so
         // both this cycle's and the next one's are tested — a frame that lands
         // near the end of a cycle steps over the seam into the one after it.
@@ -273,11 +359,12 @@ export function StringField({ focusRef }: Props) {
           return
         }
 
-        voice = (voice + (index === 0 ? 3 : 2)) % STRINGS.length
+        const string = strings[turn[index] % strings.length]
+        const along = 0.24 + 0.52 * ((Math.sin(clock * 1.7 + string) + 1) / 2)
 
-        const along = 0.24 + 0.52 * ((Math.sin(clock * 1.7 + voice) + 1) / 2)
-
-        field.pluck(voice, along, strength)
+        turn[index] += 1
+        field.pluck(string, along, strength)
+        audioRef.current?.pluck(string, level)
         glow = Math.max(glow, strength)
       })
 
@@ -342,6 +429,7 @@ export function StringField({ focusRef }: Props) {
 
         plucked[index] = clock
         field.pluck(index, at.x, strength)
+        audioRef.current?.pluck(index, strength * CURSOR_LEVEL)
         glow = Math.max(glow, strength * 0.6)
       })
     }

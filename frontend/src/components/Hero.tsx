@@ -1,5 +1,6 @@
-import { useRef } from 'react'
+import { useState, useRef } from 'react'
 import { MotionConfig, motion } from 'framer-motion'
+import { AudioLines, VolumeX } from 'lucide-react'
 
 import { StringField } from '@/components/StringField'
 
@@ -54,6 +55,12 @@ export function Hero() {
   // a string, and taking it in would clear a hole most of the screen tall.
   const markRef = useRef<HTMLDivElement>(null)
 
+  // The strings are silent until they are asked for. A page that makes a noise
+  // at someone who only came to read it is a page they close, and browsers
+  // agree — an AudioContext will not start outside a click, which is exactly
+  // what the button below is.
+  const [sound, setSound] = useState(false)
+
   return (
     // Everything here moves, and a reader who has asked their system for less
     // of that should get the hero at rest rather than the hero caught
@@ -65,7 +72,7 @@ export function Hero() {
         id="home"
         className="relative isolate flex min-h-[100svh] items-center overflow-hidden px-6 py-28 sm:px-8 lg:px-10 xl:px-14"
       >
-        <StringField focusRef={markRef} />
+        <StringField focusRef={markRef} sound={sound} />
 
         <motion.div
           variants={reveal}
@@ -111,6 +118,29 @@ export function Hero() {
             Join the ensemble
           </motion.a>
         </motion.div>
+
+        {/* Gives the strings their voice. No label — the two glyphs say which
+            way it is set, and a hero that has just spent its whole screen
+            saying less is not the place to spend a sentence on it. Turning it
+            on is answered with a strum, which is both the confirmation and the
+            explanation. */}
+        <motion.button
+          type="button"
+          onClick={() => setSound((on) => !on)}
+          aria-pressed={sound}
+          aria-label={sound ? 'Silence the strings' : 'Let the strings sound'}
+          title={sound ? 'Silence the strings' : 'Let the strings sound'}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.6, duration: 1 }}
+          className="absolute bottom-9 left-6 rounded-full p-2 text-[#6d4c5e]/45 transition duration-300 ease-out hover:text-[#6d4c5e]/85 sm:left-8 lg:left-10 xl:left-14"
+        >
+          {sound ? (
+            <AudioLines className="h-5 w-5" strokeWidth={1.5} />
+          ) : (
+            <VolumeX className="h-5 w-5" strokeWidth={1.5} />
+          )}
+        </motion.button>
 
         {/* The way on, without a word for it: a thread down to the next
             section with something travelling along it. */}
