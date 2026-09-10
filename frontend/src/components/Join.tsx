@@ -1,9 +1,11 @@
 import { useState, type ReactNode } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowUpRight } from 'lucide-react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { api } from '@/services/api'
+import { musiciansPath } from '@/data/founders'
 
 const joinSchema = z.object({
   name: z.string().min(2, 'Please share a name.'),
@@ -105,7 +107,7 @@ export function Join() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.25 }}
-          className="max-w-2xl"
+          className="flex max-w-2xl flex-col"
         >
           <p className="text-xs font-medium uppercase tracking-[0.34em] text-brand-deep/55">
             Join
@@ -116,6 +118,32 @@ export function Join() {
           <p className="mt-6 text-lg leading-8 text-brand-deep/78 sm:text-xl">
             Love playing music? Want to make a difference you can see? Want an awesome group of friends? Sounds like you're perfect for Heartstrings! We welcome musicians of all skill levels, instruments, and backgrounds.
           </p>
+
+          {/* The rest of the ensemble gets a page of its own. The wrapper
+              takes the `mt-auto` that drops the card to the foot of the
+              column, level with the bottom of the form, so the card itself
+              keeps its own size untouched. */}
+          <div className="mt-auto flex pt-10">
+            <div className="flex w-full flex-col gap-4 rounded-[1.5rem] border border-brand-rose/40 bg-brand-pink/45 px-5 py-3 sm:w-auto sm:flex-row sm:items-center">
+              {/* Held to a width that breaks the line in two — two short
+                  lines keep the card as short as it was. */}
+              <p className="change text-xs leading-5 text-brand-deep/78 sm:max-w-[24rem]">
+                Heartstrings is far more than the two of us. Every performance
+                is played by volunteers who give their evenings and weekends to
+                it.
+              </p>
+              <a
+                href={musiciansPath}
+                className="group inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-brand-rose/70 bg-white/70 px-4 py-2 text-xs font-medium tracking-[0.18em] text-brand-deep shadow-[0_18px_50px_rgba(201,116,143,0.1)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-hover"
+              >
+                Meet our musicians
+                <ArrowUpRight
+                  className="h-3.5 w-3.5 transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  aria-hidden="true"
+                />
+              </a>
+            </div>
+          </div>
         </motion.div>
 
         <motion.div
