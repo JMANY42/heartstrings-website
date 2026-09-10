@@ -228,3 +228,26 @@ export const specialEvents: SpecialEvent[] = [
 export function findEvent(slug: string): SpecialEvent | undefined {
   return specialEvents.find((event) => event.slug === slug)
 }
+
+/** Splits the events into the three groups the home page and the /events
+    page show. An event without a date is treated as still to come. */
+export function groupEvents(events: SpecialEvent[]) {
+  const startOfToday = new Date()
+  startOfToday.setHours(0, 0, 0, 0)
+
+  const dateOf = (event: SpecialEvent) =>
+    event.date ? new Date(`${event.date}T00:00:00`).getTime() : Infinity
+
+  const featured = events.find((event) => event.featured)
+  const rest = events.filter((event) => event !== featured)
+
+  return {
+    featured,
+    upcoming: rest
+      .filter((event) => dateOf(event) >= startOfToday.getTime())
+      .sort((a, b) => dateOf(a) - dateOf(b)),
+    past: rest
+      .filter((event) => dateOf(event) < startOfToday.getTime())
+      .sort((a, b) => dateOf(b) - dateOf(a)),
+  }
+}

@@ -4,22 +4,24 @@ import { Footer } from '@/components/Footer'
 import { Navbar } from '@/components/Navbar'
 import { findEvent } from '@/data/events'
 import { EventNotFound, EventPage } from '@/pages/EventPage'
+import { EventsPage } from '@/pages/EventsPage'
 import { Home } from '@/pages/Home'
 import { MusiciansPage } from '@/pages/MusiciansPage'
 
 /* Routing.
 
-   The site is the home page, the musicians page, and a page per special event,
-   and every link between them is a plain anchor, so there is nothing here to
+   The site is the home page, the musicians page, the events page, and a page
+   per special event, and every link between them is a plain anchor, so there is nothing here to
    gain from a router library: the path is read once at load, and the matching
    page is rendered. `popstate` is listened for so the back and forward buttons
    still land on the right page if a restored history entry is served from the
    browser's cache rather than re-requested.
 
-   Deploy note: because neither /musicians nor /events/<slug> has a file of its
-   own in the build, the web server has to serve index.html for them. See the
-   README. */
+   Deploy note: because none of /musicians, /events, or /events/<slug> has a
+   file of its own in the build, the web server has to serve index.html for
+   them. See the README. */
 const eventPath = /^\/events\/([^/]+)\/?$/
+const eventsRoute = /^\/events\/?$/
 const musiciansRoute = /^\/musicians\/?$/
 
 function usePathname() {
@@ -41,6 +43,10 @@ function Page() {
 
   if (musiciansRoute.test(pathname)) {
     return <MusiciansPage />
+  }
+
+  if (eventsRoute.test(pathname)) {
+    return <EventsPage />
   }
 
   const match = eventPath.exec(pathname)

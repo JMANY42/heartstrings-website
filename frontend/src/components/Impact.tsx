@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 
-// The cards below are the same events the /events/<slug> pages are built from,
-// so a card and its page can never say different things.
-import { specialEvents, type SpecialEvent } from '@/data/events'
+// The cards are shared with the /events page, so the two can never disagree
+// about which event goes where.
+import { EventSection, FeaturedEvent } from '@/components/EventCards'
+import { groupEvents, specialEvents } from '@/data/events'
 
 // ---------------------------------------------------------------------------
 // Impact figures — update these as the numbers grow.
@@ -73,93 +74,6 @@ function useCountUp(value: number, isActive: boolean) {
   if (reduceMotion) return value
 
   return isActive ? animated : 0
-}
-
-/** Every event card looks the same — the sections around them say which is
-    which, so the card itself carries no badge. */
-function EventCard({ event }: { event: SpecialEvent }) {
-  return (
-    <a
-      href={`/events/${event.slug}`}
-      className="group relative flex h-full flex-col overflow-hidden rounded-[2rem] text-center border border-brand-deep/25 bg-[linear-gradient(180deg,rgba(255,222,233,0.72)_0%,rgba(255,248,244,0.96)_100%)] p-6 shadow-[0_24px_70px_rgba(201,116,143,0.16)] transition duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_32px_90px_rgba(201,116,143,0.22)] focus-visible:-translate-y-1 focus-visible:outline-none sm:p-8"
-    >
-      <p className="font-display text-3xl leading-tight text-brand-deep sm:text-4xl">
-        {event.title}
-      </p>
-      <p className="mt-2 text-xs font-medium uppercase tracking-[0.24em] text-brand-deep/60 sm:text-sm">
-        Heartstrings &times; {event.collaborator.name}
-      </p>
-      <p className="mx-auto mt-3 max-w-md text-base leading-7 text-brand-deep/75">
-        {event.summary}
-      </p>
-      <span className="mt-auto inline-flex items-center justify-center gap-2 pt-5 text-sm font-medium tracking-[0.14em] text-brand-deep/70 transition group-hover:text-brand-deep">
-        Read more
-        <ArrowUpRight
-          className="h-4 w-4 transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-          aria-hidden="true"
-        />
-      </span>
-    </a>
-  )
-}
-
-/** Two columns of cards. An odd one out sits centered on its own row rather
-    than hanging off the left edge. */
-function EventSection({
-  heading,
-  events,
-}: {
-  heading: string
-  events: SpecialEvent[]
-}) {
-  if (!events.length) return null
-
-  const hasOddCard = events.length % 2 === 1
-
-  return (
-    <div className="mt-14">
-      <h4 className="text-center text-xs font-medium uppercase tracking-[0.34em] text-brand-deep/55">
-        {heading}
-      </h4>
-      <ul className="mt-6 grid gap-6 sm:grid-cols-2">
-        {events.map((event, index) => (
-          <li
-            key={event.slug}
-            className={
-              hasOddCard && index === events.length - 1
-                ? 'sm:col-span-2 sm:w-[calc(50%-0.75rem)] sm:justify-self-center'
-                : ''
-            }
-          >
-            <EventCard event={event} />
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
-/** Splits the events into the three groups the home page shows. An event
-    without a date is treated as still to come. */
-function groupEvents(events: SpecialEvent[]) {
-  const startOfToday = new Date()
-  startOfToday.setHours(0, 0, 0, 0)
-
-  const dateOf = (event: SpecialEvent) =>
-    event.date ? new Date(`${event.date}T00:00:00`).getTime() : Infinity
-
-  const featured = events.find((event) => event.featured)
-  const rest = events.filter((event) => event !== featured)
-
-  return {
-    featured,
-    upcoming: rest
-      .filter((event) => dateOf(event) >= startOfToday.getTime())
-      .sort((a, b) => dateOf(a) - dateOf(b)),
-    past: rest
-      .filter((event) => dateOf(event) < startOfToday.getTime())
-      .sort((a, b) => dateOf(b) - dateOf(a)),
-  }
 }
 
 export function Impact() {
@@ -278,19 +192,24 @@ export function Impact() {
               Special events &amp; collaborations
             </h3>
 
-            {featured ? (
-              <div className="mt-10">
-                <h4 className="text-center text-xs font-medium uppercase tracking-[0.34em] text-brand-deep/55">
-                  Featured
-                </h4>
-                <div className="mx-auto mt-6 max-w-xl">
-                  <EventCard event={featured} />
-                </div>
-              </div>
-            ) : null}
+            {featured ? <FeaturedEvent event={featured} /> : null}
 
             <EventSection heading="Upcoming" events={upcoming} />
             <EventSection heading="Past" events={past} />
+
+            {/* The full list has a page of its own. */}
+            <div className="mt-12 flex justify-center">
+              <a
+                href="/events"
+                className="group inline-flex items-center justify-center gap-2 rounded-full border border-brand-rose/70 bg-white/70 px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-deep shadow-[0_18px_50px_rgba(201,116,143,0.1)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-hover"
+              >
+                View all events
+                <ArrowUpRight
+                  className="h-4 w-4 transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  aria-hidden="true"
+                />
+              </a>
+            </div>
 
             <p className="mt-8 text-center text-sm leading-7 text-brand-deep/60">
               More collaborations are in the works — check back soon.
