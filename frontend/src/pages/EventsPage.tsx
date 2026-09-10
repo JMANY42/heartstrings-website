@@ -59,17 +59,17 @@ export function EventsPage() {
         </motion.div>
       </section>
 
-      {/* The events */}
-      <section className="px-6 py-14 sm:px-8 lg:px-10 lg:py-20 xl:px-14">
+      {/* The events. The title section above already pads its foot, so this
+          one only adds a little on top. */}
+      <section className="px-6 pb-14 pt-4 sm:px-8 lg:px-10 lg:pb-20 lg:pt-6 xl:px-14">
         <motion.div
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.05 }}
-          className="mx-auto max-w-5xl"
+          className="mx-auto flex max-w-5xl flex-col gap-14"
         >
           {featured ? <FeaturedEvent event={featured} /> : null}
-
           <EventSection heading="Upcoming" events={upcoming} />
           <EventSection heading="Past" events={past} />
 

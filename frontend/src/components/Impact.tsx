@@ -192,10 +192,11 @@ export function Impact() {
               Special events &amp; collaborations
             </h3>
 
-            {featured ? <FeaturedEvent event={featured} /> : null}
-
-            <EventSection heading="Upcoming" events={upcoming} />
-            <EventSection heading="Past" events={past} />
+            <div className="mt-10 flex flex-col gap-14">
+              {featured ? <FeaturedEvent event={featured} /> : null}
+              <EventSection heading="Upcoming" events={upcoming} />
+              <EventSection heading="Past" events={past} />
+            </div>
 
             {/* The full list has a page of its own. */}
             <div className="mt-12 flex justify-center">

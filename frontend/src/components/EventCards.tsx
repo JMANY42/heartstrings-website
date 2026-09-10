@@ -35,7 +35,8 @@ export function EventCard({ event }: { event: SpecialEvent }) {
 }
 
 /** Two columns of cards. An odd one out sits centered on its own row rather
-    than hanging off the left edge. */
+    than hanging off the left edge. Carries no outer margin — the parent
+    spaces the groups. */
 export function EventSection({
   heading,
   events,
@@ -48,7 +49,7 @@ export function EventSection({
   const hasOddCard = events.length % 2 === 1
 
   return (
-    <div className="mt-14">
+    <div>
       <h4 className="text-center text-xs font-medium uppercase tracking-[0.34em] text-brand-deep/55">
         {heading}
       </h4>
@@ -73,7 +74,7 @@ export function EventSection({
 /** The featured event on its own, centered above the rest. */
 export function FeaturedEvent({ event }: { event: SpecialEvent }) {
   return (
-    <div className="mt-10">
+    <div>
       <h4 className="text-center text-xs font-medium uppercase tracking-[0.34em] text-brand-deep/55">
         Featured
       </h4>
