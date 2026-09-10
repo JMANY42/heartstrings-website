@@ -61,7 +61,7 @@ export function MusiciansPage() {
       </section>
 
       {/* The roster */}
-      <section className="change px-6 py-14 sm:px-8 lg:px-10 lg:py-20 xl:px-14">
+      <section className="px-6 py-14 sm:px-8 lg:px-10 lg:py-20 xl:px-14">
         <motion.ul
           variants={stagger}
           initial="hidden"

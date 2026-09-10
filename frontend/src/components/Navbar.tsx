@@ -16,7 +16,7 @@ const links = [
    horizontal rule on mobile. */
 const pages = [
   { label: 'Musicians', href: '/musicians' },
-  { label: 'All events', href: '/events' },
+  { label: 'Special Events', href: '/events' },
 ]
 
 export function Navbar() {

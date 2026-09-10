@@ -27,9 +27,9 @@ export type Testimonial = {
 export const testimonials: Testimonial[] = [
   {
     quote:
-      'They played in the hallway outside my mother’s room for twenty minutes. It was the first time all week she asked to sit up and listen.',
-    name: 'Dana Whitfield',
-    role: 'Family member, oncology ward',
+      'I love visiting patients and playing with heartstrings. It is an absolute joy to see the smiles we bring to their faces.',
+    name: 'Jonathan Lewis',
+    role: 'Cellist',
   },
   {
     quote:

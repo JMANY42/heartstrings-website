@@ -53,8 +53,7 @@ export function EventsPage() {
             className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-brand-deep/72 sm:text-xl"
           >
             Beyond our regular visits, we partner with organizations that share
-            our belief in what music can do — every event we have played
-            together, and every one still to come, is here.
+            our belief in what music can do to host special fundraisers and events.  
           </motion.p>
         </motion.div>
       </section>
