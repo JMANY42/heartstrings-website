@@ -123,15 +123,14 @@ export function Join() {
               invitation to the foot of the column, level with the bottom of
               the form; the button is sized to match the form's own. */}
           <div className="mt-auto flex flex-col gap-5 pt-10">
-            <p className="change text-base leading-7 text-brand-deep/78 sm:max-w-md">
-              Heartstrings is far more than the two of us. Every performance is
-              played by volunteers who give their evenings and weekends to it.
+            <p className="text-base leading-7 text-brand-deep/78 sm:max-w-md">
+              Want to see who's already playing? Check out our current roster of musicians!
             </p>
             <a
               href={musiciansPath}
               className="group inline-flex w-fit items-center justify-center gap-2.5 whitespace-nowrap rounded-full border border-brand-rose/70 bg-white/55 px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-deep shadow-[0_18px_50px_rgba(201,116,143,0.1)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-hover"
             >
-              See our current musicians
+              Meet our musicians
               <ArrowUpRight
                 className="h-4 w-4 transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                 aria-hidden="true"

@@ -40,11 +40,10 @@ export function FoundersNote() {
 
         {/* Who they are, under the title — the same names off the roster that
             the note below signs itself with. */}
-        {founders.length ? (
-          <p className="mt-3 text-sm font-medium uppercase tracking-[0.24em] text-brand-deep/60">
-            {founders.map((founder) => founder.name).join(' & ')}
-          </p>
-        ) : null}
+
+        <p className="mt-3 text-sm font-medium uppercase tracking-[0.24em] text-brand-deep/60">
+          Anishka Desai & Shadai Haeri
+        </p>
       </motion.div>
 
       <div className="mt-12 grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch lg:gap-16">
@@ -83,7 +82,7 @@ export function FoundersNote() {
 
             <footer className="mt-7 text-xs uppercase tracking-[0.24em] text-brand-deep/55">
               {/* Signed by whoever the roster marks as a founder. */}
-              {founders.map((founder) => founder.name).join(' & ')}
+                Anishka Desai & Shadai Haeri
             </footer>
           </blockquote>
 
