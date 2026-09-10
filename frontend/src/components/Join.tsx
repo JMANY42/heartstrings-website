@@ -119,30 +119,24 @@ export function Join() {
             Love playing music? Want to make a difference you can see? Want an awesome group of friends? Sounds like you're perfect for Heartstrings! We welcome musicians of all skill levels, instruments, and backgrounds.
           </p>
 
-          {/* The rest of the ensemble gets a page of its own. The wrapper
-              takes the `mt-auto` that drops the card to the foot of the
-              column, level with the bottom of the form, so the card itself
-              keeps its own size untouched. */}
-          <div className="mt-auto flex pt-10">
-            <div className="flex w-full flex-col gap-4 rounded-[1.5rem] border border-brand-rose/40 bg-brand-pink/45 px-5 py-3 sm:w-auto sm:flex-row sm:items-center">
-              {/* Held to a width that breaks the line in two — two short
-                  lines keep the card as short as it was. */}
-              <p className="change text-xs leading-5 text-brand-deep/78 sm:max-w-[24rem]">
-                Heartstrings is far more than the two of us. Every performance
-                is played by volunteers who give their evenings and weekends to
-                it.
-              </p>
-              <a
-                href={musiciansPath}
-                className="group inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-brand-rose/70 bg-white/70 px-4 py-2 text-xs font-medium tracking-[0.18em] text-brand-deep shadow-[0_18px_50px_rgba(201,116,143,0.1)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-hover"
-              >
-                Meet our musicians
-                <ArrowUpRight
-                  className="h-3.5 w-3.5 transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                  aria-hidden="true"
-                />
-              </a>
-            </div>
+          {/* The current roster has a page of its own. `mt-auto` drops the
+              invitation to the foot of the column, level with the bottom of
+              the form; the button is sized to match the form's own. */}
+          <div className="mt-auto flex flex-col gap-5 pt-10">
+            <p className="change text-base leading-7 text-brand-deep/78 sm:max-w-md">
+              Heartstrings is far more than the two of us. Every performance is
+              played by volunteers who give their evenings and weekends to it.
+            </p>
+            <a
+              href={musiciansPath}
+              className="group inline-flex w-fit items-center justify-center gap-2.5 whitespace-nowrap rounded-full border border-brand-rose/70 bg-white/55 px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-deep shadow-[0_18px_50px_rgba(201,116,143,0.1)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-hover"
+            >
+              See our current musicians
+              <ArrowUpRight
+                className="h-4 w-4 transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
+            </a>
           </div>
         </motion.div>
 
