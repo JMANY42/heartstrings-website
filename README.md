@@ -28,6 +28,15 @@ Photos for a page go in `frontend/src/assets/events/<slug>/`. The file named
 `highlight` becomes the wide photo at the top; the rest fill the photo rail.
 See the README in that folder.
 
+## The events page
+
+`/events` lists every special event in the same three groups the Impact
+section on the home page uses — featured, upcoming, past — with a short
+introduction above them. The "View all events" button under that section on
+the home page leads here. The cards, and the grouping, are shared between the
+two in `frontend/src/components/EventCards.tsx`, so adding an entry to
+`frontend/src/data/events.ts` puts it in both places.
+
 ## The musicians page
 
 `/musicians` is one card per entry in `frontend/src/data/musicians.ts` — photo,
@@ -42,8 +51,8 @@ the co-founders and their mission statement — lives in
 `frontend/src/data/founders.ts`.
 
 **Nginx must serve `index.html` for these paths.** The build has no file at
-`/events/<slug>` or `/musicians`, so without a fallback a direct visit or a
-refresh 404s. The server block needs:
+`/events`, `/events/<slug>`, or `/musicians`, so without a fallback a direct
+visit or a refresh 404s. The server block needs:
 
 ```nginx
 location / {
