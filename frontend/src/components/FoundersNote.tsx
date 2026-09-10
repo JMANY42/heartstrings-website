@@ -5,7 +5,6 @@ import { ArrowUpRight } from 'lucide-react'
 // founders are comes with them, read off the roster in `musicians.ts` so a
 // name is only ever written in one place.
 import {
-  founders,
   foundersPhoto,
   missionStatement,
   musiciansPath,
