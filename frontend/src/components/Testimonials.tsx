@@ -2,82 +2,10 @@ import { useMemo, useRef } from 'react'
 import type { CSSProperties } from 'react'
 import { motion } from 'framer-motion'
 
+import { testimonials } from '@/data/testimonials'
 import { useBoxSize } from '../hooks/useBoxSize'
 import { useCircleTextFit } from '../hooks/useCircleTextFit'
 import { fitTextToCircle, layoutCircleCloud } from '../lib/circleCloud'
-
-const testimonials = [
-  {
-    quote:
-      'They played in the hallway outside my mother’s room for twenty minutes. It was the first time all week she asked to sit up and listen.',
-    name: 'Dana Whitfield',
-    role: 'Family member, oncology ward',
-  },
-  {
-    quote:
-      'Our patients talked about that afternoon for days. The students read the room beautifully — soft where it needed to be, never intrusive.',
-    name: 'Marcus Ibe',
-    role: 'Charge nurse, St. Alden Medical',
-  },
-  {
-    quote:
-      'I have worked in palliative care for eleven years. I have rarely seen a room settle the way it did when the quartet began.',
-    name: 'Dr. Priya Raghavan',
-    role: 'Palliative care physician',
-  },
-  {
-    quote:
-      'Playing for someone six feet away, on the hardest day of their life, changed how I hear my own instrument.',
-    name: 'Elena Marchetti',
-    role: 'Violinist, Heartstrings',
-  },
-  {
-    quote:
-      'They arrived early, set up without a fuss, and left the lounge warmer than they found it. We ask them back every season.',
-    name: 'Tom Bergstrom',
-    role: 'Activities director, Rosewood Care',
-  },
-  {
-    quote:
-      'My father had not spoken much in months. He hummed along to the Bach. I will not forget that sound.',
-    name: 'Ayesha Karim',
-    role: 'Family member, Rosewood Care',
-  },
-  {
-    quote:
-      'My father had not spoken much in months. He hummed along to the Bach. I will not forget that sound.',
-    name: 'Ayesha Karim',
-    role: 'Family member, Rosewood Care',
-  },
-  {
-    quote:
-      'My father had not spoken much in months. He hummed along to the Bach. I will not forget that sound.',
-    name: 'Ayesha Karim',
-    role: 'Family member, Rosewood Care',
-  },
-  {
-    quote:
-      'My father had not spoken much in months. He hummed along to the Bach. I will not forget that sound.',
-    name: 'Ayesha Karim',
-    role: 'Family member, Rosewood Care',
-  }, {
-    quote:
-      'My father had not spoken much in months. He hummed along to the Bach. I will asdf asdfasdf not forget that sound.',
-    name: 'Ayesha Karim',
-    role: 'Family member, Rosewood Care',
-  }, {
-    quote:
-      'My father had not spoken much in months. He hummed along to the Bach. I will asdf asdfasdf not forget that sound.',
-    name: 'Ayesha Karim',
-    role: 'Family member, Rosewood Care',
-  },{
-    quote:
-      'My father had not spoken much in months. He hummed along to the Bach. I will not forget that sound.',
-    name: 'Ayesha Karim',
-    role: 'Family member, Rosewood Care',
-  }
-
-] as const
 
 // The shape of the screen assumed before one has been measured. Landscape,
 // because most of them are.
