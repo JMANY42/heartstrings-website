@@ -67,7 +67,7 @@ export function MusiciansPage() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.05 }}
-          className="mx-auto grid max-w-shell gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          className="mx-auto grid max-w-shell gap-6 sm:grid-cols-2 lg:grid-cols-4"
         >
           {musicians.map((musician) => (
             <motion.li key={musician.slug} variants={fadeUp} className="h-full">
@@ -95,15 +95,16 @@ export function MusiciansPage() {
 }
 
 /** Photo on top, name under it, officer role as the subtitle under the name,
-    then what they play, their major and the term they joined on one line, then
-    the blurb. */
+    then — pinned to the foot of the card — what they play, their major and the
+    term they joined on one line. */
 function MusicianCard({ musician }: { musician: Musician }) {
   const photo = photoFor(musician)
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-[2rem] border border-brand-rose/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.84)_0%,rgba(255,248,244,0.96)_100%)] p-6 text-center shadow-[0_20px_60px_rgba(201,116,143,0.1)] transition duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_28px_80px_rgba(201,116,143,0.16)] sm:p-7">
-      {/* A square photo, or the musician's initials while there isn't one. */}
-      <div className="mx-auto h-32 w-32 shrink-0 overflow-hidden rounded-full border border-brand-rose/55 bg-brand-pink/40 shadow-[0_14px_40px_rgba(201,116,143,0.14)] sm:h-36 sm:w-36">
+    <div className="flex h-full flex-col overflow-hidden rounded-[2rem] border border-brand-rose/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.84)_0%,rgba(255,248,244,0.96)_100%)] p-5 text-center shadow-[0_20px_60px_rgba(201,116,143,0.1)] transition duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_28px_80px_rgba(201,116,143,0.16)]">
+      {/* A square photo the full width of the card, or the musician's initials
+          while there isn't one. */}
+      <div className="aspect-square w-full shrink-0 overflow-hidden rounded-[1.5rem] border border-brand-rose/55 bg-brand-pink/40 shadow-[0_14px_40px_rgba(201,116,143,0.14)]">
         {photo ? (
           <img
             src={photo}
@@ -113,7 +114,7 @@ function MusicianCard({ musician }: { musician: Musician }) {
           />
         ) : (
           <div
-            className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.85),rgba(255,222,233,0.65)_40%,rgba(249,198,215,0.4)_100%)] font-display text-4xl text-brand-deep/70"
+            className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.85),rgba(255,222,233,0.65)_40%,rgba(249,198,215,0.4)_100%)] font-display text-7xl text-brand-deep/70"
             aria-hidden="true"
           >
             {initialsFor(musician.name)}
@@ -121,19 +122,23 @@ function MusicianCard({ musician }: { musician: Musician }) {
         )}
       </div>
 
-      <p className="mt-5 font-display text-3xl leading-tight text-brand-deep">
-        {musician.name}
-      </p>
-
-      {musician.role ? (
-        <p className="mt-2 text-xs font-medium uppercase tracking-[0.24em] text-brand-deep/60">
-          {musician.role}
+      <div className="mt-5 pb-5">
+        <p className="font-display text-2xl leading-tight text-brand-deep sm:text-3xl">
+          {musician.name}
         </p>
-      ) : null}
+
+        {musician.role ? (
+          <p className="mt-2 text-xs font-medium uppercase tracking-[0.24em] text-brand-deep/60">
+            {musician.role}
+          </p>
+        ) : null}
+      </div>
 
       {/* What they play, their major, and the joining term — all on one line,
-          with a second instrument reading as "Piano · Guitar". */}
-      <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-brand-rose/35 pt-5 text-sm text-brand-deep/70">
+          with a second instrument reading as "Piano · Guitar". `mt-auto` keeps
+          this at the foot of the card, level across a row, whether or not the
+          name above it wrapped. */}
+      <div className="mt-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-brand-rose/35 pt-5 text-sm text-brand-deep/70">
         <span className="inline-flex items-center gap-2">
           <Music className="h-4 w-4 shrink-0 text-brand-deep/45" aria-hidden="true" />
           {musician.instruments.join(' · ')}
@@ -157,10 +162,6 @@ function MusicianCard({ musician }: { musician: Musician }) {
           {musician.joined}
         </span>
       </div>
-
-      <p className="mt-5 text-base leading-7 text-brand-deep/75">
-        {musician.blurb}
-      </p>
     </div>
   )
 }

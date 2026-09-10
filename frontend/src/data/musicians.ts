@@ -3,7 +3,7 @@
 
    Everything a card shows comes from this file: the photo, the name, the
    optional officer role that sits under it, the instruments they play, their
-   major, when they joined, and a short blurb. Cards render in the order they
+   major, and when they joined. Cards render in the order they
    are written here, so the file itself is the running order — officers first,
    then the rest, is the convention this list follows.
 
@@ -33,7 +33,8 @@ export type Musician = {
   major?: string
   /** When they joined — a semester reads better than a date. */
   joined: string
-  /** Two or three sentences, in their own voice where possible. */
+  /** Two or three sentences, in their own voice where possible. Not shown on
+      the card at the moment — kept so the words aren't lost. */
   blurb: string
 }
 
