@@ -11,6 +11,14 @@ const links = [
   { label: 'Join', href: '/#join' },
 ]
 
+/* Full pages of their own, kept apart from the section links above: to the
+   right of them behind a vertical rule on desktop, beneath them under a
+   horizontal rule on mobile. */
+const pages = [
+  { label: 'Musicians', href: '/musicians' },
+  { label: 'All events', href: '/events' },
+]
+
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -64,6 +72,18 @@ export function Navbar() {
               {link.label}
             </a>
           ))}
+
+          <div className="flex items-center gap-8 border-l border-brand-deep/30 pl-8">
+            {pages.map((page) => (
+              <a
+                key={page.href}
+                href={page.href}
+                className="text-sm font-medium tracking-[0.18em] text-brand-deep/80 transition-colors hover:text-brand-deep"
+              >
+                {page.label}
+              </a>
+            ))}
+          </div>
         </nav>
 
         <button
@@ -99,6 +119,19 @@ export function Navbar() {
                   {link.label}
                 </a>
               ))}
+
+              <div className="flex flex-col gap-4 border-t border-brand-deep/30 pt-4">
+                {pages.map((page) => (
+                  <a
+                    key={page.href}
+                    href={page.href}
+                    className="rounded-2xl px-4 py-3 text-base font-medium tracking-[0.12em] text-brand-deep transition duration-300 ease-out hover:-translate-y-0.5 hover:bg-brand-hover"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {page.label}
+                  </a>
+                ))}
+              </div>
             </nav>
           </motion.div>
         ) : null}
