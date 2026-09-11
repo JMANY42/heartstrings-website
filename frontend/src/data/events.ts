@@ -192,7 +192,7 @@ export const specialEvents: SpecialEvent[] = [
       },
       {
         label: 'Admission',
-        value: 'Ticketed — proceeds go to Breaking Taboo',
+        value: '$5 — proceeds go to Breaking Taboo',
         icon: 'info',
       },
     ],
@@ -205,22 +205,47 @@ export const specialEvents: SpecialEvent[] = [
     // NOTE: STILL UPDATE SPEAKERS
     speakers: [
       {
-        name: 'Speaker to be announced',
-        role: 'Breaking Taboo',
-        bio: 'A speaker from Breaking Taboo on the work they do, and on why the silence around mental health is worth breaking.',
+        name: 'Dr. Meg Flanigan',
+        role: 'Assistant Dean of Assessment and Curriculum @ UTD School of Behavorial and Brain Sciences',
+        bio: 'Dr. Flanigan works in psychology, education, and curriculum development focusing on how people learn and how psychological concepts are understood and applied. Her perspective highlights how awareness of the mind begins with learning how to understand it.',
       },
       {
-        name: 'Speaker to be announced',
-        role: 'Heartstrings',
-        bio: 'A Heartstrings musician on what playing in hospitals and care homes has taught us about being in a hard room.',
+        name: 'Dr. Kendra Seaman',
+        role: 'Associate Professor of Psychology @ UTD',
+        bio: 'Dr. Seaman studies how people make decisions and how motivation and cognition shift over time. Her research helps explain how emotion influences judgment, especially in moments of uncertainty or change.',
+      },
+      {
+        name: 'Dr. Shayla Holub',
+        role: 'Department Head of Psychology @ UTD',
+        bio: 'Dr. Holub studies how children develop socially, emotionally, and physically, emphasizing how relationships and early environments shape lifelong well-being. Her work highlights the importance of connection and emotional support in human development.'
+      },
+      {
+        name: 'Dr. Noa Ofen',
+        role: 'Professor of Psychology @ UTD',
+        bio: 'Dr. Ofen studies how memory and brain function develop across the lifespan. Her work explores how we learn from experience, adapt over time, and build resilience through memory and change.'
+      },
+      {
+        name: 'Dr. Bart Rypma',
+        role: 'Professor of Behavioral and Brain Sciences @ UTD',
+        bio: 'Dr. Rypma studies cognitive aging, brain function, and how the brain supports memory and decision-making over time. His work explores how we continue to adapt and grow throughout life.',
+      },
+      {
+        name: 'Dr. Anila D’Mello',
+        role: 'Assistant Professor of Psychology @ UTD',
+        bio: 'Dr. D’Mello’s research focuses on brain development and function, particularly in relation to neurodevelopmental conditions. Her work advances our understanding of how brain connectivity and structure influence cognition, behavior, and emotional processing. ',
+      },
+      {
+        name: 'Molding Doctors',
+        role: 'Student-led organization @ UTD',
+        bio: 'Molding Doctors brings a healthcare and advocacy perspective, reflecting on how sadness is experienced and addressed in both clinical and human contexts. Their message emphasizes the importance of acknowledging emotional struggle and creating space for support.',
       },
 
     ],
     photoCaptions: [
       'Mr. Ming and the Heartstrings ensemble',
-      'SPEAKER NAME',
-      'SPEAKER NAME',
-      'All of our wonderful speakers'
+      'Dr. Noa Ofen',
+      'Dr. Bart Rypma',
+      'Our wonderful speakers'
     ],
   }),
 ]
