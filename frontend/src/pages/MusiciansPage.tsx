@@ -95,8 +95,8 @@ export function MusiciansPage() {
 }
 
 /** Photo on top, name under it, officer role as the subtitle under the name,
-    then — pinned to the foot of the card — what they play, their major and the
-    term they joined, one to a row.
+    then — pinned to the foot of the card — what they play, their major (and
+    minor) and the term they joined, one to a row.
 
     Every text region is a fixed number of lines: the name always takes two,
     the role one, the foot three. A short name reserves the space anyway and a
@@ -105,6 +105,10 @@ export function MusiciansPage() {
 function MusicianCard({ musician }: { musician: Musician }) {
   const photo = photoFor(musician)
   const instruments = musician.instruments.join(' · ')
+  // "Computer Science · Music minor" — or just whichever half they have.
+  const studies = [musician.major, musician.minor && `${musician.minor} minor`]
+    .filter(Boolean)
+    .join(' · ')
 
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-[2rem] border border-brand-rose/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.84)_0%,rgba(255,248,244,0.96)_100%)] p-5 text-center shadow-[0_20px_60px_rgba(201,116,143,0.1)] transition duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_28px_80px_rgba(201,116,143,0.16)]">
@@ -147,7 +151,7 @@ function MusicianCard({ musician }: { musician: Musician }) {
         </p>
       </div>
 
-      {/* What they play, their major, and the joining term — one to a row, so
+      {/* What they play, their major and minor, and the joining term — one to a row, so
           the foot is exactly three lines on every card. A second instrument
           reads as "Piano · Guitar". `mt-auto` keeps this at the foot of the
           card, level across a row. `min-w-0` on each row is what lets
@@ -160,15 +164,15 @@ function MusicianCard({ musician }: { musician: Musician }) {
           </span>
         </span>
         <span className="flex min-h-[1lh] min-w-0 items-center justify-center gap-2">
-          {musician.major ? (
+          {studies ? (
             <>
               <GraduationCap
                 className="h-4 w-4 shrink-0 text-brand-deep/45"
                 aria-hidden="true"
               />
-              <span className="sr-only">Major: </span>
-              <span className="truncate" title={musician.major}>
-                {musician.major}
+              <span className="sr-only">Studies: </span>
+              <span className="truncate" title={studies}>
+                {studies}
               </span>
             </>
           ) : null}

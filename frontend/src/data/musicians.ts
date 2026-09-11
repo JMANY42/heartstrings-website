@@ -3,7 +3,7 @@
 
    Everything a card shows comes from this file: the photo, the name, the
    optional officer role that sits under it, the instruments they play, their
-   major, and when they joined. Cards render in the order they
+   major and minor, and when they joined. Cards render in the order they
    are written here, so the file itself is the running order — officers first,
    then the rest, is the convention this list follows.
 
@@ -33,6 +33,10 @@ export type Musician = {
       gives it one line: keep it under about 25 characters, abbreviating
       ("SLHS", "CS") rather than letting it end in an ellipsis. */
   major?: string
+  /** Their minor, if they have one. Shares the major's line on the card as
+      "Computer Science · Music minor", so the same length advice applies to
+      the two together. */
+  minor?: string
   /** When they joined — a semester reads better than a date. */
   joined: string
   /** Two or three sentences, in their own voice where possible. Not shown on
