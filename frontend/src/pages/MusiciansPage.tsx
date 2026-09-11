@@ -11,6 +11,14 @@ import {
   type Musician,
 } from '@/data/musicians'
 
+// Cards with a photo come first, then the rest — each group keeps the order
+// the roster file gives it. A stable partition rather than a sort, so the
+// running order in `musicians.ts` still decides everything else.
+const roster = [
+  ...musicians.filter((musician) => photoFor(musician)),
+  ...musicians.filter((musician) => !photoFor(musician)),
+]
+
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: {
@@ -69,7 +77,7 @@ export function MusiciansPage() {
           viewport={{ once: true, amount: 0.05 }}
           className="mx-auto grid max-w-shell gap-6 sm:grid-cols-2 lg:grid-cols-4"
         >
-          {musicians.map((musician) => (
+          {roster.map((musician) => (
             <motion.li key={musician.slug} variants={fadeUp} className="h-full">
               <MusicianCard musician={musician} />
             </motion.li>

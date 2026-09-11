@@ -5,7 +5,9 @@
    optional officer role that sits under it, the instruments they play, their
    major and minor, and when they joined. Cards render in the order they
    are written here, so the file itself is the running order — officers first,
-   then the rest, is the convention this list follows.
+   then the rest, is the convention this list follows. The one thing the page
+   adds on top: musicians who have a photo are shown before those who don't,
+   each group still in this file's order.
 
    A photo goes in `src/assets/musicians/` named after the musician's `slug`.
    See the README in that folder. A musician without one gets their initials in

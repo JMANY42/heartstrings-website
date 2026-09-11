@@ -47,16 +47,16 @@ export function About() {
           <div className="mt-12 grid items-start gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
             {/* Left — the copy, and the quote it closes on. */}
             <motion.div variants={fadeUp}>
-              <p className="change text-lg leading-8 text-brand-deep/78 sm:text-xl">
-                Heartstrings is a student-run ensemble that believes music
-                belongs everywhere — especially in places of hardship. We visit
+              <p className="text-lg leading-8 text-brand-deep/78 sm:text-xl">
+                Heartstrings is a service organization at UT Dallas that combines music with clinical service & fundraising initiatives through public performances.
+                We believes that music belongs everywhere, especially in places of hardship. We visit
                 hospitals, clinics, and care facilities to perform intimate
                 chamber music for patients, families, and staff.
               </p>
 
-              <p className="change mt-6 text-lg leading-8 text-brand-deep/78 sm:text-xl">
+              <p className="mt-6 text-lg leading-8 text-brand-deep/78 sm:text-xl">
                 Our repertoire spans Baroque to contemporary, performed by small
-                ensembles of 4–6 musicians. Every performance is free,
+                ensembles of musicians. Every performance is free,
                 volunteer-driven, and tailored to the setting.
               </p>
               <motion.blockquote

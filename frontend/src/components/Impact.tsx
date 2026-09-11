@@ -29,10 +29,6 @@ const locations = [
     href: 'https://www.planocommunityhome.org/',
   },
   {
-    name: 'UT Dallas campus',
-    href: 'https://www.utdallas.edu/',
-  },
-  {
     name: 'Dallas Scottsish Rite for Children',
     href: 'https://scottishriteforchildren.org/'
   },
@@ -57,8 +53,8 @@ const locations = [
     href: 'https://murphyplanoallergy.com/'
   },
   {
-    name: 'Plano Community Home',
-    href: 'https://www.planocommunityhome.org/'
+    name: 'Lewisville Estates',
+    href: 'https://www.lewisvilleseniorliving.com/'
   }
 ]
 
@@ -110,6 +106,9 @@ export function Impact() {
   const patients = useCountUp(patientsUplifted, statInView)
   const raised = useCountUp(amountRaised, statInView)
   const { featured, upcoming, past } = groupEvents(specialEvents)
+  // Index of the first cell on the two-column grid's bottom row — a full row
+  // of two when the count is even, a lone left cell when it's odd.
+  const lastRowStart = locations.length - (locations.length % 2 === 0 ? 2 : 1)
 
   return (
     <section id="impact" className="px-6 py-20 sm:px-8 lg:px-10 lg:py-28 xl:px-14">
@@ -144,18 +143,24 @@ export function Impact() {
                 area that have opened their doors to us.
               </p>
 
-              {/* One connected panel — rows are divided, not detached. */}
-              <ul className="change mt-8 overflow-hidden rounded-[1.75rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,248,244,0.95)_100%)] shadow-[0_16px_50px_rgba(201,116,143,0.08)]">
-                {locations.map((location) => (
+              {/* One connected panel — cells are divided, not detached. Two
+                  columns from `sm` up. The left column draws the vertical
+                  rule and every cell draws its bottom rule, so with an odd
+                  count the empty bottom-right slot is still framed on both
+                  sides; only the cells on the panel's bottom edge drop it. */}
+              <ul className="change mt-8 grid overflow-hidden rounded-[1.75rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,248,244,0.95)_100%)] shadow-[0_16px_50px_rgba(201,116,143,0.08)] sm:grid-cols-2">
+                {locations.map((location, index) => (
                   <li
                     key={location.name}
-                    className="border-b border-brand-rose/30 last:border-b-0"
+                    className={`border-b border-brand-rose/30 last:border-b-0 sm:odd:border-r ${
+                      index >= lastRowStart ? 'sm:border-b-0' : ''
+                    }`}
                   >
                     <a
                       href={location.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="group flex items-start gap-4 px-5 py-4 transition duration-300 ease-out hover:bg-brand-pink/30 focus-visible:bg-brand-pink/30 focus-visible:outline-none"
+                      className="group flex h-full items-start gap-4 px-5 py-4 transition duration-300 ease-out hover:bg-brand-pink/30 focus-visible:bg-brand-pink/30 focus-visible:outline-none"
                     >
                       <span
                         className="mt-2 h-2 w-2 shrink-0 rounded-full bg-brand-deep/45 transition group-hover:bg-brand-deep"
@@ -174,12 +179,13 @@ export function Impact() {
               </ul>
             </motion.div>
 
-            {/* Right — the headline stat */}
-            <div>
+            {/* Right — the headline stat. The card runs the full height of
+                the location column, with its contents centred inside. */}
+            <div className="lg:self-stretch">
               <motion.div
                 ref={statRef}
                 variants={fadeUp}
-                className="relative overflow-hidden rounded-[2.5rem] border border-brand-rose/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.84)_0%,rgba(255,248,244,0.96)_100%)] p-8 text-center shadow-[0_28px_90px_rgba(201,116,143,0.12)] sm:p-10"
+                className="relative flex h-full flex-col justify-center overflow-hidden rounded-[2.5rem] border border-brand-rose/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.84)_0%,rgba(255,248,244,0.96)_100%)] p-8 text-center shadow-[0_28px_90px_rgba(201,116,143,0.12)] sm:p-10"
               >
                 <div className="pointer-events-none absolute left-1/2 top-0 h-52 w-52 -translate-x-1/2 -translate-y-1/3 rounded-full bg-brand-pink/50 blur-3xl" />
 
@@ -196,7 +202,7 @@ export function Impact() {
                     from a Heartstrings ensemble.
                   </p>
 
-                  <div className="change mt-8 rounded-[1.75rem] border border-brand-rose/40 bg-brand-pink/45 px-6 py-5">
+                  <div className="mt-8 rounded-[1.75rem] border border-brand-rose/40 bg-brand-pink/45 px-6 py-5">
                     <p className="text-xs uppercase tracking-[0.24em] text-brand-deep/55">
                       Raised for care and outreach
                     </p>
