@@ -48,8 +48,8 @@ export const foundersPhoto = {
 
 /** In their own words — one paragraph per entry. */
 export const missionStatement: string[] = [
-  'We started Heartstrings because we kept noticing the same thing in two very different rooms: a hospital ward goes quiet in a way a rehearsal hall never does, and the music we had spent years learning had somewhere better to be than a stage.',
-  'So we took it there. Our mission is simple — bring live music to the people least likely to be able to come and hear it, and play for them with the same care we would give an audience anywhere else. No tickets, no stage, no distance. Just a few musicians in a room, for as long as the room wants us.',
+  'Hi! We are Shadai and Anishka, and we started Heartstrings to give music a purpose beyond performance. After meeting as stand partners in the UTD University Orchestra, we realized that despite such a strong community of musicians on campus, there wasn’t yet an organization using music to serve others beyond it. What began as an idea between the two of us in November 2025 has grown into a space that allows us to share what we love with patients and others throughout the DFW area and bring the UTD music community together.',
+  'In less than a year, we’ve had the opportunity to consistently perform for patients at care centers like Scottish Rite for Children and Baylor Scott & White, collaborate with other student organizations, raise funds for causes we care about, and create new ways for musicians to serve their community. We’re so grateful for everyone who has helped bring Heartstrings to life, including our amazing officer team and our supportive community, and we can’t wait to see where it goes! Music truly can heal, and we want to embrace that to its fullest, shining some light where it is needed most 🎻🤍'
 ]
 
 /** Where the musicians page lives. The section links to it; the page itself is

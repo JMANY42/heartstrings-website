@@ -202,7 +202,6 @@ export const specialEvents: SpecialEvent[] = [
       href: undefined,
       label: 'Ticket sale has ended',
     },
-    // NOTE: STILL UPDATE SPEAKERS
     speakers: [
       {
         name: 'Dr. Meg Flanigan',
@@ -248,6 +247,66 @@ export const specialEvents: SpecialEvent[] = [
       'Our wonderful speakers'
     ],
   }),
+  //  defineEvent({
+  //   slug: 'plano-community-home',
+  //   title: 'Pop-Up Concert',
+  //   eyebrow: 'Special event',
+  //   tagline:
+  //     'A pop-up concert in association with other performance groups at UTD.',
+  //   summary:
+  //     'A pop-up concert featuring Heartstrings, Novis, and other performance groups at UTD, for the residents of Plano Community Home.',
+  //   featured: false,
+  //   date: '2026-05-04',
+  //   collaborator: {
+  //     name: 'Novis',
+  //     href: "https://breaking-taboo.org/",
+  //     body: [
+  //       'Breaking Taboo is a nonprofit working to end the silence around mental health. They run open conversations, education, and outreach for people who are rarely given room to talk about what they are carrying.',
+  //       'We share an audience and a belief: that the stigma around mental health is something we can overcome through creating safe spaces for sharing. Heartstrings brings the music, Breaking Taboo brings the conversation.',
+  //     ],
+  //   },
+  //   objective: [
+  //     'The evening raises money for Breaking Taboo’s mental health programming by pairing musical pieces selected to reflect specific emotions with guest speakers who share their experiences and insights on that emotion. The goal is to create a space where people can feel safe to talk about mental health, and to raise awareness of the resources available for those who need them.',
+  //     'Every dollar from tickets goes to their work. Our musicians play, as always, as volunteers.',
+  //   ],
+  //   // NOTE: placeholders. Replace the venue, date, and time with the confirmed
+  //   // details before this page is shared.
+  //   details: [
+  //     {
+  //       label: 'Location',
+  //       value: 'Jonsson Perfomance Hall',
+  //       note: 'UTD Campus JO 2.604',
+  //       icon: 'location',
+  //     },
+  //     {
+  //       label: 'Date',
+  //       value: '4/25/2026',
+  //       icon: 'date',
+  //     },
+  //     {
+  //       label: 'Time',
+  //       value: ['Doors 6:30 PM', 'Performance 7:00 PM'],
+  //       icon: 'time',
+  //     },
+  //     {
+  //       label: 'Program',
+  //       value:
+  //         'Chamber works for strings tied to specific emotions, played by a small Heartstrings ensemble between the evening’s conversations.',
+  //       icon: 'program',
+  //     },
+  //     {
+  //       label: 'Admission',
+  //       value: '$5 — proceeds go to Breaking Taboo',
+  //       icon: 'info',
+  //     },
+  //   ],
+  //   tickets: {
+  //     // NOTE: drop the ticketing link in here and the note below turns into a
+  //     // live button — set `label` to the button's wording at the same time.
+  //     href: undefined,
+  //     label: 'Ticket sale has ended',
+  //   },
+  // }),
 ]
 
 export function findEvent(slug: string): SpecialEvent | undefined {

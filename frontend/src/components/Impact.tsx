@@ -45,8 +45,8 @@ const locations = [
     href: 'https://www.cancer.org/support-programs-and-services/patient-lodging/hope-lodge/dallas.html'
   },
   {
-    name: 'Windhaven Surgery Center????',
-    href: 'https://www.windhavensurgery.com/'
+    name: 'Wyndham Court of Plano',
+    href: 'https://silvercareliving.com/wyndham-court-plano/'
   },
   {
     name: 'Prestonwood Court',
@@ -148,7 +148,7 @@ export function Impact() {
                   rule and every cell draws its bottom rule, so with an odd
                   count the empty bottom-right slot is still framed on both
                   sides; only the cells on the panel's bottom edge drop it. */}
-              <ul className="change mt-8 grid overflow-hidden rounded-[1.75rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,248,244,0.95)_100%)] shadow-[0_16px_50px_rgba(201,116,143,0.08)] sm:grid-cols-2">
+              <ul className="mt-8 grid overflow-hidden rounded-[1.75rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,248,244,0.95)_100%)] shadow-[0_16px_50px_rgba(201,116,143,0.08)] sm:grid-cols-2">
                 {locations.map((location, index) => (
                   <li
                     key={location.name}

@@ -362,7 +362,7 @@ export function EventNotFound() {
           page.
         </p>
         <a
-          href="/#impact"
+          href="/events"
           className="mt-10 inline-flex items-center justify-center rounded-full border border-brand-rose/70 bg-white/55 px-7 py-3.5 text-sm font-medium tracking-[0.18em] text-brand-deep transition duration-300 ease-out hover:-translate-y-1 hover:bg-brand-hover"
         >
           See our events

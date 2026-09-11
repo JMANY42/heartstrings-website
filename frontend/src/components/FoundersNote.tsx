@@ -45,50 +45,26 @@ export function FoundersNote() {
         </p>
       </motion.div>
 
-      <div className="mt-12 grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch lg:gap-16">
-        {/* Left — the photo of the two of them. */}
-        {foundersPhoto.src ? (
-          <motion.div
-            variants={fadeUp}
-            className="overflow-hidden rounded-[2.5rem] border border-brand-rose/45 bg-white shadow-[0_28px_90px_rgba(201,116,143,0.16)]"
-          >
-            <img
-              src={foundersPhoto.src}
-              alt={foundersPhoto.alt}
-              loading="lazy"
-              className="aspect-[4/3] w-full object-cover object-center lg:aspect-[3/2]"
-            />
-          </motion.div>
-        ) : null}
+      <div className="mt-12 grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+        {/* Left — the photo of the two of them at the top of the column, with
+            the invitation to the rest of the ensemble underneath it. */}
+        <div className="flex flex-col gap-8">
+          {foundersPhoto.src ? (
+            <motion.div
+              variants={fadeUp}
+              className="overflow-hidden rounded-[2.5rem] border border-brand-rose/45 shadow-[0_28px_90px_rgba(201,116,143,0.16)]"
+            >
+              <img
+                src={foundersPhoto.src}
+                alt={foundersPhoto.alt}
+                loading="lazy"
+                className="block aspect-[4/3] w-full object-cover object-center lg:aspect-[3/2]"
+              />
+            </motion.div>
+          ) : null}
 
-        {/* Right — their words, in their own voice, signed underneath, with
-            the invitation held at the foot of the column so it comes to rest
-            level with the bottom of the photo. */}
-        <motion.div variants={fadeUp} className="flex h-full flex-col">
-          <h4 className="font-display text-3xl text-brand-deep sm:text-4xl">
-            Why we started Heartstrings
-          </h4>
-
-          <blockquote className="mt-6 border-l-2 border-brand-deep/20 pl-6">
-            {missionStatement.map((paragraph, index) => (
-              <p
-                key={index}
-                className="change mt-6 text-lg leading-8 text-brand-deep/78 first:mt-0 sm:text-xl"
-              >
-                {paragraph}
-              </p>
-            ))}
-
-            <footer className="mt-7 text-xs uppercase tracking-[0.24em] text-brand-deep/55">
-              {/* Signed by whoever the roster marks as a founder. */}
-                Anishka Desai & Shadai Haeri
-            </footer>
-          </blockquote>
-
-          {/* The rest of the ensemble gets a page of its own. The wrapper
-              takes the `mt-auto` that drops the card to the foot of the
-              column, so the card itself keeps its own size untouched. */}
-          <motion.div variants={fadeUp} className="mt-auto flex pt-10">
+          {/* The rest of the ensemble gets a page of its own. */}
+          <motion.div variants={fadeUp} className="flex">
             <div className="flex w-full flex-col gap-4 rounded-[1.5rem] border border-brand-rose/40 bg-brand-pink/45 px-5 py-3 sm:w-auto sm:flex-row sm:items-center">
               {/* Held to a width that breaks the line in two — two short
                   lines keep the card as short as it was. */}
@@ -109,6 +85,29 @@ export function FoundersNote() {
               </a>
             </div>
           </motion.div>
+        </div>
+
+        {/* Right — their words, in their own voice, signed underneath. */}
+        <motion.div variants={fadeUp} className="flex flex-col">
+          <h4 className="font-display text-3xl text-brand-deep sm:text-4xl">
+            Why we started Heartstrings
+          </h4>
+
+          <blockquote className="mt-6 border-l-2 border-brand-deep/20 pl-6">
+            {missionStatement.map((paragraph, index) => (
+              <p
+                key={index}
+                className="mt-6 text-lg leading-8 text-brand-deep/78 first:mt-0 sm:text-xl"
+              >
+                {paragraph}
+              </p>
+            ))}
+
+            <footer className="mt-7 text-xs uppercase tracking-[0.24em] text-brand-deep/55">
+              {/* Signed by whoever the roster marks as a founder. */}
+                Anishka Desai & Shadai Haeri
+            </footer>
+          </blockquote>
         </motion.div>
       </div>
     </motion.div>
