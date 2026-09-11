@@ -37,6 +37,10 @@ const locations = [
     href: 'https://www.bswhealth.com/locations/sammons-cancer-center-dallas'
   },
   {
+    name: 'Allergy Asthma & Immunology Center',
+    href: 'https://murphyplanoallergy.com/'
+  },
+  {
     name: 'Dallas Hope Lodge',
     href: 'https://www.cancer.org/support-programs-and-services/patient-lodging/hope-lodge/dallas.html'
   },
@@ -47,10 +51,6 @@ const locations = [
   {
     name: 'Prestonwood Court',
     href: 'https://www.prestonwoodcourt.com/'
-  },
-  {
-    name: 'Allergy Asthma & Immunology Center',
-    href: 'https://murphyplanoallergy.com/'
   },
   {
     name: 'Lewisville Estates',
