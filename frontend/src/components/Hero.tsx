@@ -106,7 +106,7 @@ export function Hero() {
               variants={settle}
               className="mt-9 text-[0.55rem] font-medium uppercase tracking-[0.24em] text-[#6d4c5e]/70 sm:mt-12 sm:text-xs sm:tracking-[0.46em]"
             >
-              Music where it is needed most
+              Music where It Matters
             </motion.p>
           </div>
 

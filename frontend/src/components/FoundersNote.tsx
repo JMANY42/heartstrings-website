@@ -92,7 +92,7 @@ export function FoundersNote() {
             <div className="flex w-full flex-col gap-4 rounded-[1.5rem] border border-brand-rose/40 bg-brand-pink/45 px-5 py-3 sm:w-auto sm:flex-row sm:items-center">
               {/* Held to a width that breaks the line in two — two short
                   lines keep the card as short as it was. */}
-              <p className="change text-xs leading-5 text-brand-deep/78 sm:max-w-[24rem]">
+              <p className="text-xs leading-5 text-brand-deep/78 sm:max-w-[24rem]">
                 Heartstrings is far more than the two of us. Every performance
                 is played by volunteers who give their evenings and weekends to
                 it.

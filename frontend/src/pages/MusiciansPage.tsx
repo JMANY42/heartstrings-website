@@ -106,7 +106,7 @@ function MusicianCard({ musician }: { musician: Musician }) {
   const photo = photoFor(musician)
   const instruments = musician.instruments.join(' · ')
   // "Computer Science · Music minor" — or just whichever half they have.
-  const studies = [musician.major, musician.minor && `${musician.minor} minor`]
+  const studies = [musician.major, musician.minor && `${musician.minor}`]
     .filter(Boolean)
     .join(' · ')
 

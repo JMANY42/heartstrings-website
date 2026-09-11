@@ -41,13 +41,12 @@ export type Musician = {
   joined: string
   /** Two or three sentences, in their own voice where possible. Not shown on
       the card at the moment — kept so the words aren't lost. */
-  blurb: string
 }
 
 /* Photos are picked up at build time and matched to a musician by filename, so
    dropping `ava-nguyen.jpg` in the folder is the whole job of adding a photo. */
 const photoModules = import.meta.glob<string>(
-  '../assets/musicians/*.{jpg,jpeg,png,webp,avif,gif}',
+  '../assets/musicians/*.{jpg,jpeg,png,webp,avif,gif,JPG,JPEG,PNG,WEBP,AVIF,GIF}',
   { eager: true, import: 'default', query: '?url' },
 )
 
@@ -79,30 +78,26 @@ export const musicians: Musician[] = [
     name: 'Anishka Desai',
     role: 'President',
     instruments: ['Violin'],
-    major: 'Biology',
+    major: 'Healthcare Studies',
     joined: 'Fall 2025',
-    blurb:
-      'Founded heartstrings as a way to reach out to the people who need music most. Plays first violin and finds/arranges pieces for the group.',
   },
   {
     slug: 'shadai-haeri',
     name: 'Shadai Haeri',
     role: 'President',
     instruments: ['Violin'],
-    major: 'Neuroscience',
+    major: 'Biology',
+    minor: 'Healthcare Studies',
     joined: 'Fall 2025',
-    blurb:
-      'Founded heartstrings as a way to reach out to the people who need music most. Plays first violin and finds/arranges pieces for the group.',
   },
   {
     slug: 'stephen-pereira',
     name: 'Stephen Pereira',
     instruments: ['Violin'],
-    major: 'Music',
+    major: 'Neuroscience',
+    minor: 'Music',
     role: 'Secretary',
     joined: 'Fall 2025',
-    blurb:
-      'Accompanies whatever the room has a piano for, and arranges pieces down to whichever three or four of us made it that afternoon.',
   },
   {
     slug: 'jonathan-lewis',
@@ -111,8 +106,6 @@ export const musicians: Musician[] = [
     instruments: ['Cello'],
     major: 'Computer Science',
     joined: 'Fall 2025',
-    blurb:
-      'Loves seeing the smile on patient\'s faces when we play. Maintaines the website as a small side project.',
   },
   {
     slug: 'habeen-kim',
@@ -121,18 +114,15 @@ export const musicians: Musician[] = [
     instruments: ['Cello'],
     major: 'Biochemistry',
     joined: 'Fall 2025',
-    blurb:
-      'The reason we get through the door anywhere. Writes to hospitals and care homes across the Dallas area and turns a maybe into a date on the calendar.',
   },
   {
     slug: 'ashhad-qazi',
     name: 'Ashhad Qazi',
     role: 'Clinical Outreach',
     instruments: ['Viola'],
-    major: 'Business',
+    major: 'Neuroscience',
+    minor: 'Music',
     joined: 'Fall 2025',
-    blurb:
-      'Plays second violin and sight-reads anything put in front of her, which has saved more than one set list on the drive over.',
   },
   {
     slug: 'jason-nguyen',
@@ -141,27 +131,42 @@ export const musicians: Musician[] = [
     major: 'Neuroscience',
     role: 'Mentorship and Education',
     joined: 'Fall 2025',
-    blurb:
-      'Accompanies whatever the room has a piano for, and arranges pieces down to whichever three or four of us made it that afternoon.',
   },
   {
     slug: 'olivia-lee',
     name: 'Olivia Lee',
     instruments: ['Cello'],
-    major: 'Psychology',
+    major: 'Neuroscience',
     role: 'Clinical Outreach',
     joined: 'Fall 2025',
-    blurb:
-      'Accompanies whatever the room has a piano for, and arranges pieces down to whichever three or four of us made it that afternoon.',
   },
   {
     slug: 'saimanasaa-viswanathan',
     name: 'Saimanasaa Viswanathan',
     instruments: ['Violin'],
-    major: 'Biochemistry',
+    major: 'Neuroscience',
     role: 'Philanthropy',
     joined: 'Fall 2025',
-    blurb:
-      'Accompanies whatever the room has a piano for, and arranges pieces down to whichever three or four of us made it that afternoon.',
+  },
+  {
+    slug: 'audrey-kolega',
+    name: 'Audrey Kolega',
+    instruments: ['Violin'],
+    major: 'Speech, Language, and Hearing Sciences',
+    joined: 'Fall 2026',
+  },
+{
+    slug: 'nicole-barnhart',
+    name: 'Nicole Barnhart',
+    instruments: ['Violin'],
+    major: 'Neuroscience',
+    joined: 'Fall 2026',
+  },
+{
+    slug: 'ian-ignacio',
+    name: 'Ian Ignacio',
+    instruments: ['Viola'],
+    major: 'Biology',
+    joined: 'Fall 2026',
   },
 ]
