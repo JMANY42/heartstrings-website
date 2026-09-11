@@ -4,7 +4,7 @@ import { Gallery } from '@/components/Gallery'
 import { Hero } from '@/components/Hero'
 import { Impact } from '@/components/Impact'
 import { Join } from '@/components/Join'
-import { Testimonials } from '@/components/Testimonials'
+// import { Testimonials } from '@/components/Testimonials'
 
 export function Home() {
   return (
