@@ -96,9 +96,15 @@ export function MusiciansPage() {
 
 /** Photo on top, name under it, officer role as the subtitle under the name,
     then — pinned to the foot of the card — what they play, their major and the
-    term they joined on one line. */
+    term they joined, one to a row.
+
+    Every text region is a fixed number of lines: the name always takes two,
+    the role one, the foot three. A short name reserves the space anyway and a
+    long one is clipped with an ellipsis (the full text sits in a `title`
+    tooltip), so no roster entry can push a card taller than its neighbours. */
 function MusicianCard({ musician }: { musician: Musician }) {
   const photo = photoFor(musician)
+  const instruments = musician.instruments.join(' · ')
 
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-[2rem] border border-brand-rose/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.84)_0%,rgba(255,248,244,0.96)_100%)] p-5 text-center shadow-[0_20px_60px_rgba(201,116,143,0.1)] transition duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_28px_80px_rgba(201,116,143,0.16)]">
@@ -123,43 +129,57 @@ function MusicianCard({ musician }: { musician: Musician }) {
       </div>
 
       <div className="mt-5 pb-5">
-        <p className="font-display text-2xl leading-tight text-brand-deep sm:text-3xl">
+        {/* Always two lines tall; a longer name ends in an ellipsis. */}
+        <p
+          title={musician.name}
+          className="line-clamp-2 min-h-[2lh] break-words font-display text-2xl leading-tight text-brand-deep sm:text-3xl"
+        >
           {musician.name}
         </p>
 
-        {musician.role ? (
-          <p className="mt-2 text-xs font-medium uppercase tracking-[0.24em] text-brand-deep/60">
-            {musician.role}
-          </p>
-        ) : null}
+        {/* Always rendered, so a musician without a role reserves the same
+            line an officer's title takes. */}
+        <p
+          title={musician.role}
+          className="mt-2 min-h-[1lh] truncate text-xs font-medium uppercase tracking-[0.24em] text-brand-deep/60"
+        >
+          {musician.role ?? '\u00A0'}
+        </p>
       </div>
 
-      {/* What they play, their major, and the joining term — all on one line,
-          with a second instrument reading as "Piano · Guitar". `mt-auto` keeps
-          this at the foot of the card, level across a row, whether or not the
-          name above it wrapped. */}
-      <div className="mt-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-brand-rose/35 pt-5 text-sm text-brand-deep/70">
-        <span className="inline-flex items-center gap-2">
+      {/* What they play, their major, and the joining term — one to a row, so
+          the foot is exactly three lines on every card. A second instrument
+          reads as "Piano · Guitar". `mt-auto` keeps this at the foot of the
+          card, level across a row. `min-w-0` on each row is what lets
+          `truncate` on the text inside it actually clip. */}
+      <div className="mt-auto flex flex-col gap-y-2 border-t border-brand-rose/35 pt-5 text-sm text-brand-deep/70">
+        <span className="flex min-w-0 items-center justify-center gap-2">
           <Music className="h-4 w-4 shrink-0 text-brand-deep/45" aria-hidden="true" />
-          {musician.instruments.join(' · ')}
-        </span>
-        {musician.major ? (
-          <span className="inline-flex items-center gap-2">
-            <GraduationCap
-              className="h-4 w-4 shrink-0 text-brand-deep/45"
-              aria-hidden="true"
-            />
-            <span className="sr-only">Major: </span>
-            {musician.major}
+          <span className="truncate" title={instruments}>
+            {instruments}
           </span>
-        ) : null}
-        <span className="inline-flex items-center gap-2">
+        </span>
+        <span className="flex min-h-[1lh] min-w-0 items-center justify-center gap-2">
+          {musician.major ? (
+            <>
+              <GraduationCap
+                className="h-4 w-4 shrink-0 text-brand-deep/45"
+                aria-hidden="true"
+              />
+              <span className="sr-only">Major: </span>
+              <span className="truncate" title={musician.major}>
+                {musician.major}
+              </span>
+            </>
+          ) : null}
+        </span>
+        <span className="flex min-w-0 items-center justify-center gap-2">
           <CalendarDays
             className="h-4 w-4 shrink-0 text-brand-deep/45"
             aria-hidden="true"
           />
           <span className="sr-only">Joined </span>
-          {musician.joined}
+          <span className="truncate">{musician.joined}</span>
         </span>
       </div>
     </div>

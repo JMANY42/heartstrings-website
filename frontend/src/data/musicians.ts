@@ -29,7 +29,9 @@ export type Musician = {
   role?: string
   /** Everything they play, most-played first. One is a list of one. */
   instruments: string[]
-  /** Their major — or intended major — while they have one to give. */
+  /** Their major — or intended major — while they have one to give. The card
+      gives it one line: keep it under about 25 characters, abbreviating
+      ("SLHS", "CS") rather than letting it end in an ellipsis. */
   major?: string
   /** When they joined — a semester reads better than a date. */
   joined: string
