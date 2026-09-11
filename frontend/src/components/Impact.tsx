@@ -13,7 +13,7 @@ import { groupEvents, specialEvents } from '@/data/events'
 // the real totals before this goes live.
 // ---------------------------------------------------------------------------
 const patientsUplifted = 250
-const amountRaised = 1200
+const amountRaised = 330
 
 const locations = [
   {
@@ -32,6 +32,34 @@ const locations = [
     name: 'UT Dallas campus',
     href: 'https://www.utdallas.edu/',
   },
+  {
+    name: 'Dallas Scottsish Rite for Children',
+    href: 'https://scottishriteforchildren.org/'
+  },
+  {
+    name: 'Baylor Scott & White Charles A. Sammons Cancer Center',
+    href: 'https://www.bswhealth.com/locations/sammons-cancer-center-dallas'
+  },
+  {
+    name: 'Dallas Hope Lodge',
+    href: 'https://www.cancer.org/support-programs-and-services/patient-lodging/hope-lodge/dallas.html'
+  },
+  {
+    name: 'Windhaven Surgery Center????',
+    href: 'https://www.windhavensurgery.com/'
+  },
+  {
+    name: 'Prestonwood Court',
+    href: 'https://www.prestonwoodcourt.com/'
+  },
+  {
+    name: 'Allergy Asthma & Immunology Center',
+    href: 'https://murphyplanoallergy.com/'
+  },
+  {
+    name: 'Plano Community Home',
+    href: 'https://www.planocommunityhome.org/'
+  }
 ]
 
 const fadeUp = {
