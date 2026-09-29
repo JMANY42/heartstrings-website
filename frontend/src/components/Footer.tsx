@@ -24,9 +24,17 @@ export function Footer() {
               Instagram
             </span>
           </a>
-          <p className="text-[0.72rem] uppercase tracking-[0.32em] text-brand-deep/55">
-            © 2026 Heartstrings @ UTD
-          </p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[0.72rem] uppercase tracking-[0.32em] text-brand-deep/55">
+            <p>© 2026 Heartstrings @ UTD</p>
+            <a
+              href="https://github.com/JMANY42/heartstrings-website"
+              target="_blank"
+              rel="noreferrer"
+              className="transition-colors hover:text-brand-deep"
+            >
+              GitHub
+            </a>
+          </div>
         </div>
       </div>
     </footer>
