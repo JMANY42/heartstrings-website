@@ -25,7 +25,6 @@ export function Footer() {
             </span>
           </a>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[0.72rem] uppercase tracking-[0.32em] text-brand-deep/55">
-            <p>© 2026 Heartstrings @ UTD</p>
             <a
               href="https://github.com/JMANY42/heartstrings-website"
               target="_blank"
@@ -34,6 +33,7 @@ export function Footer() {
             >
               GitHub
             </a>
+            <p>© 2026 Heartstrings at UT Dallas</p>
           </div>
         </div>
       </div>
