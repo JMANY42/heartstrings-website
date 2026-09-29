@@ -49,11 +49,7 @@ export function MemberLinksPage() {
             variants={fadeUp}
             className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-brand-deep/72 sm:text-xl"
           >
-            Everything you need as a Heartstrings member, in one place. Register
-            as a member and catch up on anything you missed from our general
-            body meetings. We’ll add more here as the semester goes on, so
-            bookmark this page. If a link is missing or broken, let an officer
-            know.
+            Everything you need as a Heartstrings member, in one place.
           </motion.p>
         </motion.div>
       </section>

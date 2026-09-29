@@ -16,12 +16,12 @@ export type MemberLink = {
 export const memberLinks: MemberLink[] = [
   {
     label: 'Member registration',
-    description: 'The Google Form every member fills out to join the club.',
-    href: '',
+    description: 'The Google Form to join the club',
+    href: 'https://docs.google.com/forms/d/1LChZMxNYhPiG4xMKAX9LhhRG_Vt3Majj0nlcCoOlJSE/viewform',
   },
   {
     label: 'First general body meeting slides',
-    description: 'The Google Slides from our first general body meeting.',
-    href: '',
+    description: 'The slides from our first general body meeting.',
+    href: 'https://docs.google.com/presentation/d/1v1FHj5qsAGIs17HNhh9V432mgJLKMbogD08sbnwfPA8',
   },
 ]
