@@ -17,6 +17,7 @@ const links = [
 const pages = [
   { label: 'Musicians', href: '/musicians' },
   { label: 'Special Events', href: '/events' },
+  { label: 'Member Links', href: '/member-links' },
 ]
 
 export function Navbar() {

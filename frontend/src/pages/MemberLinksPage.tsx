@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 
-import { memberLinkGroups, type MemberLink } from '@/data/memberLinks'
+import { memberLinks, type MemberLink } from '@/data/memberLinks'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -17,9 +17,9 @@ const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.09 } }
 
 const isExternal = (href: string) => /^https?:\/\//.test(href)
 
-export function MemberInfoPage() {
+export function MemberLinksPage() {
   useEffect(() => {
-    document.title = 'Member info | Heartstrings'
+    document.title = 'Member links | Heartstrings'
     window.scrollTo(0, 0)
   }, [])
 
@@ -43,48 +43,39 @@ export function MemberInfoPage() {
             variants={fadeUp}
             className="mt-5 font-display text-[clamp(2.5rem,9vw,3.25rem)] leading-[0.95] tracking-[-0.04em] text-brand-deep sm:text-6xl lg:text-7xl"
           >
-            Member info
+            Member links
           </motion.h1>
           <motion.p
             variants={fadeUp}
             className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-brand-deep/72 sm:text-xl"
           >
-            Everything you need as a Heartstrings member, in one place. Bookmark
-            this page to find the group chat, sign up for visits, log your
-            volunteer hours, and grab the music we play. If a link is missing or
-            broken, let an officer know.
+            Everything you need as a Heartstrings member, in one place. Register
+            as a member and catch up on anything you missed from our general
+            body meetings. We’ll add more here as the semester goes on, so
+            bookmark this page. If a link is missing or broken, let an officer
+            know.
           </motion.p>
         </motion.div>
       </section>
 
-      {/* The links, a card of rows per group. */}
+      {/* The links, one card of rows. */}
       <section className="px-6 pb-14 pt-4 sm:px-8 lg:px-10 lg:pb-20 lg:pt-6 xl:px-14">
-        <motion.div
-          variants={stagger}
+        <motion.ul
+          variants={fadeUp}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.05 }}
-          className="mx-auto flex max-w-3xl flex-col gap-12"
+          className="mx-auto max-w-3xl overflow-hidden rounded-[1.75rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,248,244,0.95)_100%)] shadow-[0_16px_50px_rgba(201,116,143,0.08)]"
         >
-          {memberLinkGroups.map((group) => (
-            <motion.div key={group.heading} variants={fadeUp}>
-              <h2 className="font-display text-3xl text-brand-deep sm:text-4xl">
-                {group.heading}
-              </h2>
-
-              <ul className="mt-5 overflow-hidden rounded-[1.75rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,248,244,0.95)_100%)] shadow-[0_16px_50px_rgba(201,116,143,0.08)]">
-                {group.links.map((link) => (
-                  <li
-                    key={link.label}
-                    className="border-b border-brand-rose/30 last:border-b-0"
-                  >
-                    <LinkRow link={link} />
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+          {memberLinks.map((link) => (
+            <li
+              key={link.label}
+              className="border-b border-brand-rose/30 last:border-b-0"
+            >
+              <LinkRow link={link} />
+            </li>
           ))}
-        </motion.div>
+        </motion.ul>
       </section>
     </article>
   )

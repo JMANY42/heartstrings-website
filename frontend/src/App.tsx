@@ -6,25 +6,25 @@ import { findEvent } from '@/data/events'
 import { EventNotFound, EventPage } from '@/pages/EventPage'
 import { EventsPage } from '@/pages/EventsPage'
 import { Home } from '@/pages/Home'
-import { MemberInfoPage } from '@/pages/MemberInfoPage'
+import { MemberLinksPage } from '@/pages/MemberLinksPage'
 import { MusiciansPage } from '@/pages/MusiciansPage'
 
 /* Routing.
 
    The site is the home page, the musicians page, the events page, the member
-   info page, and a page per special event, and every link between them is a plain anchor, so there is nothing here to
+   links page, and a page per special event, and every link between them is a plain anchor, so there is nothing here to
    gain from a router library: the path is read once at load, and the matching
    page is rendered. `popstate` is listened for so the back and forward buttons
    still land on the right page if a restored history entry is served from the
    browser's cache rather than re-requested.
 
-   Deploy note: because none of /musicians, /member-info, /events, or
+   Deploy note: because none of /musicians, /member-links, /events, or
    /events/<slug> has a file of its own in the build, the web server has to
    serve index.html for them. See the README. */
 const eventPath = /^\/events\/([^/]+)\/?$/
 const eventsRoute = /^\/events\/?$/
 const musiciansRoute = /^\/musicians\/?$/
-const memberInfoRoute = /^\/member-info\/?$/
+const memberLinksRoute = /^\/member-links\/?$/
 
 function usePathname() {
   const [pathname, setPathname] = useState(() => window.location.pathname)
@@ -47,8 +47,8 @@ function Page() {
     return <MusiciansPage />
   }
 
-  if (memberInfoRoute.test(pathname)) {
-    return <MemberInfoPage />
+  if (memberLinksRoute.test(pathname)) {
+    return <MemberLinksPage />
   }
 
   if (eventsRoute.test(pathname)) {
