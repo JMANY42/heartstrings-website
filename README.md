@@ -72,7 +72,10 @@ location / {
 ## The member links page
 
 `/member-links` is a list of the links members need — right now the member
-registration form and the first general body meeting slides. It is linked from
+registration form, the GroupMe, and the first general body meeting slides. The
+GroupMe row sets `fetchHref` instead of `href`, so like the Join section it
+fetches the link from `GET /api/join/groupme` on click rather than putting it
+in the page source. It is linked from
 the navbar after Special Events. The links live in
 `frontend/src/data/memberLinks.ts`, and one with an empty `href` shows as "Link
 coming soon" until it's filled in.

@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 
 import { memberLinks, type MemberLink } from '@/data/memberLinks'
+import { openFetchedLink } from '@/lib/openFetchedLink'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -78,6 +79,9 @@ export function MemberLinksPage() {
 }
 
 function LinkRow({ link }: { link: MemberLink }) {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
   const body = (
     <div className="min-w-0">
       <p className="text-base font-medium leading-7 text-brand-deep">
@@ -88,10 +92,49 @@ function LinkRow({ link }: { link: MemberLink }) {
           {link.description}
         </p>
       ) : null}
+      {error ? (
+        <p className="mt-1 text-sm leading-6 text-red-700" role="alert">
+          {error}
+        </p>
+      ) : null}
     </div>
   )
 
   const rowClass = 'flex items-start justify-between gap-4 px-5 py-5 sm:px-6'
+
+  const arrow = (
+    <ArrowUpRight
+      className="mt-1.5 h-4 w-4 shrink-0 text-brand-deep/35 transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-deep/70"
+      aria-hidden="true"
+    />
+  )
+
+  const { fetchHref } = link
+  if (fetchHref) {
+    const open = async () => {
+      setError(null)
+      setLoading(true)
+      try {
+        await openFetchedLink(fetchHref)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Could not load this link.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    return (
+      <button
+        type="button"
+        onClick={open}
+        disabled={loading}
+        className={`group w-full text-left ${rowClass} transition hover:bg-brand-hover/40 disabled:cursor-wait disabled:opacity-70`}
+      >
+        {body}
+        {arrow}
+      </button>
+    )
+  }
 
   if (!link.href) {
     return (
@@ -112,10 +155,7 @@ function LinkRow({ link }: { link: MemberLink }) {
       className={`group ${rowClass} transition hover:bg-brand-hover/40`}
     >
       {body}
-      <ArrowUpRight
-        className="mt-1.5 h-4 w-4 shrink-0 text-brand-deep/35 transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-deep/70"
-        aria-hidden="true"
-      />
+      {arrow}
     </a>
   )
 }

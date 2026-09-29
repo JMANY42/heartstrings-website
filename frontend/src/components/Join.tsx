@@ -4,6 +4,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { api } from '@/services/api'
 import { musiciansPath } from '@/data/founders'
 import { registrationFormUrl } from '@/data/memberLinks'
+import { openFetchedLink } from '@/lib/openFetchedLink'
 
 const reveal = {
   hidden: { opacity: 0, y: 24 },
@@ -42,25 +43,14 @@ export function Join() {
   const [loadingGroupMe, setLoadingGroupMe] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  /* The GroupMe link is fetched on click so it never sits in the page source.
-     The tab is opened before the request, while the click still counts as a
-     user gesture, so popup blockers let it through; it is pointed at the link
-     once it arrives. */
+  /* Fetched on click so the link never sits in the page source. */
   const openGroupMe = async () => {
     setError(null)
     setLoadingGroupMe(true)
-    const tab = window.open('', '_blank')
-    if (tab) tab.opener = null
 
     try {
-      const url = await api.getGroupMeLink()
-      if (tab) {
-        tab.location.href = url
-      } else {
-        window.location.href = url
-      }
+      await openFetchedLink(api.getGroupMeLink)
     } catch (err) {
-      tab?.close()
       setError(err instanceof Error ? err.message : 'Could not load the GroupMe link.')
     } finally {
       setLoadingGroupMe(false)

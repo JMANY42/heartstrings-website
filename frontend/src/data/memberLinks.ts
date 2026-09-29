@@ -3,14 +3,21 @@
 
    A link with an empty `href` still shows up, marked "Link coming soon", so a
    placeholder can sit in the list until the real URL is ready.
+
+   A link that shouldn't be scrapable from the page source (the GroupMe) sets
+   `fetchHref` instead: its URL is fetched from the backend only when clicked.
 --------------------------------------------------------------------------- */
+
+import { api } from '@/services/api'
 
 export type MemberLink = {
   label: string
   /** One line on what the link is for. */
   description?: string
-  /** Leave empty to show the link as "coming soon". */
+  /** Leave empty to show the link as "coming soon". Ignored when `fetchHref` is set. */
   href: string
+  /** Fetches the URL at click time, so it never appears in the page source. */
+  fetchHref?: () => Promise<string>
 }
 
 /** The member registration form. The Join section on the home page links to it
@@ -23,6 +30,12 @@ export const memberLinks: MemberLink[] = [
     label: 'Member registration',
     description: 'The Google Form to join the club',
     href: registrationFormUrl,
+  },
+  {
+    label: 'GroupMe',
+    description: 'Rehearsal times, performance sign-ups, and day-to-day questions.',
+    href: '',
+    fetchHref: api.getGroupMeLink,
   },
   {
     label: 'First general body meeting slides',

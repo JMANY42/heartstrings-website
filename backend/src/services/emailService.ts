@@ -247,6 +247,7 @@ async function sendTemplatedEmail<TField extends string>(
   }
 }
 
+// OBSOLETE: only used by the obsolete `POST /api/join` route. See handleJoinRequest.
 const joinTemplate: EmailTemplate<'name' | 'email' | 'instrument' | 'experienceLevel'> = {
   kind: 'join',
   store: 'join',
@@ -399,6 +400,7 @@ const contactTemplate: EmailTemplate<'name' | 'email' | 'organization' | 'messag
 }
 
 export const emailService = {
+  /** @deprecated OBSOLETE — only used by the obsolete `POST /api/join` route. */
   async sendJoinEmail(payload: JoinPayload): Promise<ServiceResult> {
     return sendTemplatedEmail(joinTemplate, payload)
   },

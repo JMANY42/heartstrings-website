@@ -3,6 +3,12 @@ import { emailService } from '../services/emailService.js'
 
 const debugEnabled = process.env.DEBUG === 'true' || process.env.NODE_ENV !== 'production'
 
+/**
+ * @deprecated OBSOLETE — `POST /api/join`. The site no longer calls this: the
+ * Join section now links to the member registration Google Form and fetches
+ * the GroupMe link from `GET /api/join/groupme` instead of emailing it. Kept
+ * for now so nothing that still posts here breaks.
+ */
 export async function handleJoinRequest(request: Request, response: Response) {
   if (debugEnabled) {
     console.debug('[DEBUG][joinController] Request received', {
