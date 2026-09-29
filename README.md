@@ -51,14 +51,21 @@ the co-founders and their mission statement — lives in
 `frontend/src/data/founders.ts`.
 
 **Nginx must serve `index.html` for these paths.** The build has no file at
-`/events`, `/events/<slug>`, or `/musicians`, so without a fallback a direct
-visit or a refresh 404s. The server block needs:
+`/events`, `/events/<slug>`, `/musicians`, or `/member-info`, so without a
+fallback a direct visit or a refresh 404s. The server block needs:
 
 ```nginx
 location / {
   try_files $uri $uri/ /index.html;
 }
 ```
+
+## The member info page
+
+`/member-info` is a list of the links members need — group chat, visit
+sign-ups, sheet music, and so on. It isn't in the navbar; share the URL with
+members directly. The links live in `frontend/src/data/memberLinks.ts`, and one
+with an empty `href` shows as "Link coming soon" until it's filled in.
 
 ## Saved form submissions
 

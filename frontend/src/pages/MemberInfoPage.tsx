@@ -1,0 +1,134 @@
+import { useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { ArrowUpRight } from 'lucide-react'
+
+import { memberLinkGroups, type MemberLink } from '@/data/memberLinks'
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.75, ease: 'easeOut' },
+  },
+}
+
+const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.09 } } }
+
+const isExternal = (href: string) => /^https?:\/\//.test(href)
+
+export function MemberInfoPage() {
+  useEffect(() => {
+    document.title = 'Member info | Heartstrings'
+    window.scrollTo(0, 0)
+  }, [])
+
+  return (
+    <article>
+      {/* Title */}
+      <section className="px-6 pb-8 pt-32 text-center sm:px-8 lg:px-10 lg:pb-10 xl:px-14">
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          animate="visible"
+          className="mx-auto max-w-3xl"
+        >
+          <motion.p
+            variants={fadeUp}
+            className="text-xs font-medium uppercase tracking-[0.34em] text-brand-deep/55"
+          >
+            For members
+          </motion.p>
+          <motion.h1
+            variants={fadeUp}
+            className="mt-5 font-display text-[clamp(2.5rem,9vw,3.25rem)] leading-[0.95] tracking-[-0.04em] text-brand-deep sm:text-6xl lg:text-7xl"
+          >
+            Member info
+          </motion.h1>
+          <motion.p
+            variants={fadeUp}
+            className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-brand-deep/72 sm:text-xl"
+          >
+            Everything you need as a Heartstrings member, in one place. Bookmark
+            this page to find the group chat, sign up for visits, log your
+            volunteer hours, and grab the music we play. If a link is missing or
+            broken, let an officer know.
+          </motion.p>
+        </motion.div>
+      </section>
+
+      {/* The links, a card of rows per group. */}
+      <section className="px-6 pb-14 pt-4 sm:px-8 lg:px-10 lg:pb-20 lg:pt-6 xl:px-14">
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.05 }}
+          className="mx-auto flex max-w-3xl flex-col gap-12"
+        >
+          {memberLinkGroups.map((group) => (
+            <motion.div key={group.heading} variants={fadeUp}>
+              <h2 className="font-display text-3xl text-brand-deep sm:text-4xl">
+                {group.heading}
+              </h2>
+
+              <ul className="mt-5 overflow-hidden rounded-[1.75rem] border border-brand-rose/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,248,244,0.95)_100%)] shadow-[0_16px_50px_rgba(201,116,143,0.08)]">
+                {group.links.map((link) => (
+                  <li
+                    key={link.label}
+                    className="border-b border-brand-rose/30 last:border-b-0"
+                  >
+                    <LinkRow link={link} />
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
+    </article>
+  )
+}
+
+function LinkRow({ link }: { link: MemberLink }) {
+  const body = (
+    <div className="min-w-0">
+      <p className="text-base font-medium leading-7 text-brand-deep">
+        {link.label}
+      </p>
+      {link.description ? (
+        <p className="mt-1 text-sm leading-6 text-brand-deep/65">
+          {link.description}
+        </p>
+      ) : null}
+    </div>
+  )
+
+  const rowClass = 'flex items-start justify-between gap-4 px-5 py-5 sm:px-6'
+
+  if (!link.href) {
+    return (
+      <div className={rowClass}>
+        {body}
+        <span className="mt-1 shrink-0 text-xs uppercase tracking-[0.2em] text-brand-deep/45">
+          Link coming soon
+        </span>
+      </div>
+    )
+  }
+
+  return (
+    <a
+      href={link.href}
+      target={isExternal(link.href) ? '_blank' : undefined}
+      rel={isExternal(link.href) ? 'noreferrer' : undefined}
+      className={`group ${rowClass} transition hover:bg-brand-hover/40`}
+    >
+      {body}
+      <ArrowUpRight
+        className="mt-1.5 h-4 w-4 shrink-0 text-brand-deep/35 transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-deep/70"
+        aria-hidden="true"
+      />
+    </a>
+  )
+}
