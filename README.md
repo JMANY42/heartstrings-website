@@ -15,6 +15,15 @@ The backend now sends email through delegated Microsoft Graph access so it can u
 7. After auth succeeds, the backend stores refresh tokens under `backend/data/graph-tokens.json`.
 8. Optionally set `PUBLIC_SITE_URL` to the public site address. It is shown in the footer of the join email so recipients can see where their address was entered, which helps Outlook treat the message as legitimate transactional mail.
 
+## The Join section
+
+The Join section on the home page has two steps: the member registration Google
+Form (its URL is `registrationFormUrl` in `frontend/src/data/memberLinks.ts`,
+shared with the member links page) and the GroupMe. The GroupMe invite link is
+never written into the site: it comes from `GROUPME_LINK` in `backend/.env`, and
+the page fetches it from `GET /api/join/groupme` only when someone clicks the
+button, so it can't be scraped from the page source or the JS bundle.
+
 ## Special event pages
 
 Each special event gets its own page at `/events/<slug>`. Everything a page

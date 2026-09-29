@@ -29,3 +29,20 @@ export async function handleJoinRequest(request: Request, response: Response) {
     })
   }
 }
+
+/* The GroupMe invite link is kept out of the frontend bundle so it can't be
+   scraped from the page source; the Join section fetches it from here only
+   when someone clicks the button. */
+export function handleGroupMeLinkRequest(_request: Request, response: Response) {
+  const groupMeLink = process.env.GROUPME_LINK?.trim()
+
+  response.set('Cache-Control', 'no-store')
+  response.set('X-Robots-Tag', 'noindex, nofollow')
+
+  if (!groupMeLink) {
+    response.status(503).json({ message: 'GroupMe link is not configured.' })
+    return
+  }
+
+  response.json({ url: groupMeLink })
+}

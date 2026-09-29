@@ -4,13 +4,6 @@ const API_BASE_URL = import.meta.env.MODE === 'production'
         ? '/api'
         : (import.meta.env.VITE_DEV_API_URL ?? 'http://localhost:5003/api');
 
-export type JoinFormData = {
-  name: string
-  email: string
-  instrument: string
-  experienceLevel: string
-}
-
 export type CollaborateFormData = {
   name: string
   organization: string
@@ -34,16 +27,17 @@ async function handleApiResponse(response: Response): Promise<ApiResponse> {
 }
 
 export const api = {
-  async submitJoinForm(data: JoinFormData): Promise<ApiResponse> {
-    const response = await fetch(`${API_BASE_URL}/join`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
+  /** The GroupMe invite link is served by the backend rather than written
+      into the bundle, so scrapers reading the page source never see it. */
+  async getGroupMeLink(): Promise<string> {
+    const response = await fetch(`${API_BASE_URL}/join/groupme`)
+    const data = await response.json()
 
-    return handleApiResponse(response)
+    if (!response.ok || typeof data.url !== 'string') {
+      throw new Error(data.message || 'Could not load the GroupMe link.')
+    }
+
+    return data.url
   },
 
   async submitCollaborateForm(data: CollaborateFormData): Promise<ApiResponse> {

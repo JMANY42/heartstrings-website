@@ -13,11 +13,16 @@ export type MemberLink = {
   href: string
 }
 
+/** The member registration form. The Join section on the home page links to it
+    too, so it lives here once. */
+export const registrationFormUrl =
+  'https://docs.google.com/forms/d/1LChZMxNYhPiG4xMKAX9LhhRG_Vt3Majj0nlcCoOlJSE/viewform'
+
 export const memberLinks: MemberLink[] = [
   {
     label: 'Member registration',
     description: 'The Google Form to join the club',
-    href: 'https://docs.google.com/forms/d/1LChZMxNYhPiG4xMKAX9LhhRG_Vt3Majj0nlcCoOlJSE/viewform',
+    href: registrationFormUrl,
   },
   {
     label: 'First general body meeting slides',
