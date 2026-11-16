@@ -89,4 +89,4 @@ Every submission that passes validation is appended to a JSON file, so nothing i
 
 Each entry also carries an `id`, an ISO `submittedAt` timestamp, and `emailStatus` (`sent`, `failed`, `not_configured`, or `authorization_required`) so you can tell which submitters never received or generated an email. Submissions missing a required field are rejected and not stored, and a failed write is logged rather than failing the form.
 
-The files live in `backend/data/`, which is git-ignored. The directory is resolved from the process working directory, so in production (pm2 runs the server from `backend/dist`) set `SUBMISSION_STORE_DIR` in `backend/.env` to an absolute path such as `/var/www/heartstrings-website/backend/data` to keep the records outside the build output.
+The files live in `backend/data/`, which is git-ignored. The directory is resolved from the process working directory, so in production (pm2 runs the server from `backend/dist`) set `SUBMISSION_STORE_DIR` in `backend/.env` to an absolute path such as `/var/www/heartstrings-website/backend/data` to keep the records outside the build output. 
