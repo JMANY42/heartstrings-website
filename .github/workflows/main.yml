@@ -40,7 +40,7 @@ jobs:
 
       - uses: Boostport/setup-cloudflare-warp@v1
         with:
-          organization: davidpersonal
+          organization: jonathancloudflare
           auth_client_id: ${{ secrets.CLOUDFLARE_AUTH_CLIENT_ID }}
           auth_client_secret: ${{ secrets.CLOUDFLARE_AUTH_CLIENT_SECRET }}
 
